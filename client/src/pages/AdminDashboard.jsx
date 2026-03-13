@@ -27,8 +27,14 @@ const AdminDashboard = () => {
   }, []);
 
   const handleDeleteUser = async (id) => {
-    if (window.confirm('Delete this user account?')) {
-      // Logic for deleting user
+    if (window.confirm('Delete this user account? This cannot be undone.')) {
+      try {
+        await API.delete(`/users/${id}`);
+        setUsers(users.filter(u => u._id !== id));
+      } catch (err) {
+        console.error(err);
+        alert(err.response?.data?.message || 'Failed to delete user');
+      }
     }
   };
 
@@ -118,7 +124,10 @@ const AdminDashboard = () => {
                   <td className="px-6 py-4 text-slate-600">{u.university}</td>
                   <td className="px-6 py-4 text-slate-600">{new Date(u.createdAt).toLocaleDateString()}</td>
                   <td className="px-6 py-4 text-right">
-                    <button className="text-slate-400 hover:text-red-600 transition-colors">
+                    <button 
+                      onClick={() => handleDeleteUser(u._id)}
+                      className="text-slate-400 hover:text-red-600 transition-colors"
+                    >
                       <Trash2 className="w-5 h-5" />
                     </button>
                   </td>
