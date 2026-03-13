@@ -36,13 +36,26 @@ const Home = () => {
 
   return (
     <div className="max-w-2xl mx-auto">
+      {/* Welcome Section */}
+      <div className="bg-gradient-to-r from-primary-600 to-indigo-700 rounded-3xl p-8 mb-8 text-white shadow-xl shadow-primary-100 overflow-hidden relative">
+        <div className="relative z-10">
+          <h1 className="text-3xl font-extrabold mb-2 text-white">Arsi Aseko Network</h1>
+          <p className="text-primary-50 opacity-90 max-w-sm">
+            Connect with your peers from Arsi Aseko across universities. Share ideas and grow together.
+          </p>
+        </div>
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary-400/20 rounded-full -ml-8 -mb-8 blur-2xl"></div>
+      </div>
+
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold text-slate-900">University Feed</h1>
+        <h2 className="text-xl font-bold text-slate-800">Recent Discussions</h2>
         <Link 
           to="/create-post" 
-          className="btn-primary flex items-center"
+          className="bg-primary-600 hover:bg-primary-700 text-white px-5 py-2.5 rounded-2xl font-bold transition-all shadow-lg shadow-primary-200 flex items-center group"
         >
-          <Plus className="w-5 h-5 mr-1.5" /> Post
+          <Plus className="w-5 h-5 mr-1.5 group-hover:rotate-90 transition-transform" /> 
+          Start Discussion
         </Link>
       </div>
 
