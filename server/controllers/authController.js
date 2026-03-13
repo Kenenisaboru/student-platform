@@ -16,12 +16,24 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
+    const adminEmails = [
+      'kenenisaboru998@gmail.com',
+      'Ibrahimjemal@gmail.com',
+      'Abdelaumer@gmail.com',
+      'beyanhusein@gmail.com',
+      'nurelaymohammed@gmail.com',
+      'kananiman710@gmail.com'
+    ];
+
+    const role = adminEmails.includes(email) ? 'admin' : 'student';
+
     const user = await User.create({
       name,
       email,
       password,
       university,
-      department
+      department,
+      role
     });
 
     if (user) {
