@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -29,9 +30,9 @@ function AppContent() {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen">
-      {user && <Navbar />}
-      <main className={user ? "pt-16 pb-20 container mx-auto px-4 max-w-6xl" : ""}>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <main className={`flex-grow ${user ? "pt-24 sm:pt-32 pb-10 container mx-auto px-4 max-w-6xl" : "pt-20 sm:pt-28"}`}>
         <Routes>
           <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
           <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
@@ -79,6 +80,7 @@ function AppContent() {
           } />
         </Routes>
       </main>
+      <Footer />
     </div>
   );
 }
