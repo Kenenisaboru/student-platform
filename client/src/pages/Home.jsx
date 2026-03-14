@@ -85,6 +85,37 @@ const Home = () => {
         <div className="absolute top-1/2 left-2/3 w-32 h-32 bg-purple-500/30 rounded-full blur-2xl mix-blend-screen"></div>
       </motion.div>
 
+      {/* Daily Motivation & Tip */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-start gap-4"
+        >
+          <div className="w-10 h-10 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-500 shrink-0">
+            <Sparkles className="w-5 h-5" />
+          </div>
+          <div>
+            <h4 className="font-bold text-slate-800 text-sm">Quote of the Day</h4>
+            <p className="text-slate-500 text-xs italic mt-1">"The best way to predict your future is to create it."</p>
+          </div>
+        </motion.div>
+        
+        <motion.div 
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-start gap-4"
+        >
+          <div className="w-10 h-10 rounded-2xl bg-primary-50 flex items-center justify-center text-primary-500 shrink-0">
+            <Loader2 className="w-5 h-5" />
+          </div>
+          <div>
+            <h4 className="font-bold text-slate-800 text-sm">Study Tip</h4>
+            <p className="text-slate-500 text-xs mt-1">Use the Focus Hub (bottom right) to manage your study sessions effectively!</p>
+          </div>
+        </motion.div>
+      </div>
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 px-2 sm:px-1">
         <h2 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">Recent Discussions</h2>
         <Link
