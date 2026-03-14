@@ -11,6 +11,7 @@ import Notifications from './pages/Notifications';
 import AdminDashboard from './pages/AdminDashboard';
 import SearchResults from './pages/SearchResults';
 import PostDetail from './pages/PostDetail';
+import FloatingFocusHub from './components/FloatingFocusHub';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -80,6 +81,7 @@ function AppContent() {
           } />
         </Routes>
       </main>
+      <FloatingFocusHub />
       <Footer />
     </div>
   );
