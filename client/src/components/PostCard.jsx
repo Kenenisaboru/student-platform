@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import API from '../api/axios';
 import { formatDistanceToNow } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
+import confetti from 'canvas-confetti';
 
 const PostCard = ({ post, onUpdate, onDelete }) => {
   const { user } = useAuth();
@@ -14,9 +15,20 @@ const PostCard = ({ post, onUpdate, onDelete }) => {
 
   const handleLike = async () => {
     try {
-      // Optimistic updatet
-      setLiked(!liked);
-      setLikesCount(liked ? likesCount - 1 : likesCount + 1);
+      // Optimistic update
+      const newLikedStatus = !liked;
+      setLiked(newLikedStatus);
+      setLikesCount(newLikedStatus ? likesCount + 1 : likesCount - 1);
+      
+      if (newLikedStatus) {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#0369a1', '#4f46e5', '#ec4899']
+        });
+      }
+
       await API.post(`/posts/${post._id}/like`);
     } catch (err) {
       // Revert on error
