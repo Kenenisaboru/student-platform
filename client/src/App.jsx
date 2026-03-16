@@ -17,6 +17,8 @@ import Messages from './pages/Messages';
 import AdminDashboard from './pages/AdminDashboard';
 import SearchResults from './pages/SearchResults';
 import PostDetail from './pages/PostDetail';
+import NotFound from './pages/NotFound';
+import Settings from './pages/Settings';
 import FloatingFocusHub from './components/FloatingFocusHub';
 import { Toaster } from 'sonner';
 import { HelmetProvider } from 'react-helmet-async';
@@ -124,11 +126,17 @@ function AppContent() {
                       <PageTransition><SearchResults /></PageTransition>
                     </ProtectedRoute>
                   } />
+                  <Route path="/settings" element={
+                    <ProtectedRoute>
+                      <PageTransition><Settings /></PageTransition>
+                    </ProtectedRoute>
+                  } />
                   <Route path="/admin" element={
                     <AdminRoute>
                       <PageTransition><AdminDashboard /></PageTransition>
                     </AdminRoute>
                   } />
+                  <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
                 </Routes>
               </AnimatePresence>
             </main>
