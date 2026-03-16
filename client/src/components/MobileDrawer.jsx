@@ -13,6 +13,7 @@ import {
   BookOpen,
   Settings,
   Sparkles,
+  MessageSquare
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -30,6 +31,7 @@ const MobileDrawer = ({ isOpen, onClose }) => {
     { path: '/notifications', icon: Bell, label: 'Notifications' },
     { path: '/create-post', icon: PlusSquare, label: 'Create Post' },
     { path: `/profile/${user?._id}`, icon: User, label: 'My Profile' },
+    { path: '/messages', icon: MessageSquare, label: 'Messages' },
   ];
 
   const handleNavClick = () => {
@@ -142,10 +144,14 @@ const MobileDrawer = ({ isOpen, onClose }) => {
 
             {/* Bottom Section */}
             <div className="p-4 border-t border-white/[0.05] space-y-1">
-              <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:text-slate-300 hover:bg-white/[0.04] transition-all text-[13px] font-medium">
+              <Link 
+                to="/settings"
+                onClick={handleNavClick}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:text-slate-300 hover:bg-white/[0.04] transition-all text-[13px] font-medium"
+              >
                 <Settings className="w-4 h-4" />
                 Settings
-              </button>
+              </Link>
               <button
                 onClick={() => {
                   logout();
