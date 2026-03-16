@@ -40,7 +40,6 @@ const PostDetail = () => {
   const handleComment = async (e) => {
     e.preventDefault();
     if (!commentText.trim()) return;
-
     setSubmitting(true);
     try {
       const { data } = await API.post(`/comments/${id}`, { content: commentText });
@@ -50,7 +49,6 @@ const PostDetail = () => {
       toast.success('Comment added!');
     } catch (err) {
       toast.error('Could not post comment');
-      console.error(err);
     } finally {
       setSubmitting(false);
     }
@@ -64,106 +62,55 @@ const PostDetail = () => {
       toast.success('Comment deleted');
     } catch (err) {
       toast.error('Failed to delete comment');
-      console.error(err);
     }
   };
 
   if (loading) return (
     <div className="flex justify-center py-24">
-      <Loader2 className="w-10 h-10 animate-spin text-primary-500" />
+      <div className="w-8 h-8 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
     </div>
   );
 
   if (!post) return (
     <div className="max-w-2xl mx-auto py-20 px-4 text-center">
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        <h2 className="text-2xl font-bold text-slate-800 mb-4">Post not found</h2>
-        <button onClick={() => navigate('/')} className="btn-outline inline-flex items-center">
-          <ArrowLeft className="w-4 h-4 mr-2" /> Back to Feed
-        </button>
-      </motion.div>
+      <h2 className="text-2xl font-bold text-white mb-4">Post not found</h2>
+      <button onClick={() => navigate('/')} className="btn-outline inline-flex items-center"><ArrowLeft className="w-4 h-4 mr-2" /> Back to Feed</button>
     </div>
   );
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
+    show: { opacity: 1, transition: { staggerChildren: 0.08 } }
   };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0 }
-  };
+  const itemVariants = { hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } };
 
   return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="max-w-3xl mx-auto py-6 sm:py-8 px-4 sm:px-0 pb-20"
-    >
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-2xl mx-auto py-4 sm:py-6 px-2 sm:px-0 pb-20">
       <Helmet>
-        <title>{post ? `${post.title} | Arsi Network` : 'Loading... | Arsi Network'}</title>
+        <title>{post ? `${post.title} | Arsi Network` : 'Loading...'}</title>
       </Helmet>
-      <button 
-        onClick={() => navigate(-1)} 
-        className="mb-6 flex items-center text-slate-500 hover:text-primary-600 font-semibold transition-colors group"
-      >
-        <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" /> 
-        Back
+      <button onClick={() => navigate(-1)} className="mb-5 flex items-center text-slate-500 hover:text-blue-400 font-semibold transition-colors group text-sm">
+        <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" /> Back
       </button>
 
       <PostCard post={post} onDelete={() => navigate('/')} />
 
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="mt-8 bg-white/70 backdrop-blur-md rounded-[2.5rem] border border-slate-100 p-6 sm:p-10 shadow-xl shadow-slate-200/50"
-      >
-        <div className="flex items-center space-x-3 mb-8">
-          <div className="w-10 h-10 bg-primary-100 rounded-2xl flex items-center justify-center text-primary-600">
-            <MessageSquare className="w-5 h-5" />
-          </div>
-          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Discussion</h3>
-          <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-sm font-bold">
-            {post.commentsCount || 0}
-          </span>
+      <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-6 glass-card rounded-2xl p-5 sm:p-8">
+        <div className="flex items-center space-x-3 mb-6">
+          <div className="w-9 h-9 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-400"><MessageSquare className="w-4 h-4" /></div>
+          <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">Discussion</h3>
+          <span className="px-2.5 py-0.5 bg-white/[0.04] text-slate-400 rounded-lg text-xs font-bold border border-white/[0.04]">{post.commentsCount || 0}</span>
         </div>
 
         {/* Comment Form */}
-        <form onSubmit={handleComment} className="mb-10 group">
-          <div className="flex space-x-4">
-            <div className="flex-shrink-0">
-              <img 
-                src={user?.profilePicture} 
-                className="w-12 h-12 rounded-2xl object-cover ring-4 ring-slate-100 group-focus-within:ring-primary-100 transition-all" 
-                alt="" 
-              />
-            </div>
+        <form onSubmit={handleComment} className="mb-8 group">
+          <div className="flex space-x-3">
+            <img src={user?.profilePicture} className="w-10 h-10 rounded-xl object-cover ring-2 ring-white/[0.06] group-focus-within:ring-blue-500/20 transition-all shrink-0" alt="" />
             <div className="flex-1">
-              <textarea
-                className="w-full bg-slate-50 border border-transparent group-focus-within:border-primary-100 group-focus-within:bg-white rounded-2xl py-4 px-5 focus:ring-4 focus:ring-primary-500/5 outline-none resize-none transition-all duration-300 placeholder:text-slate-400 font-medium"
-                placeholder="Share your thoughts on this..."
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                rows="3"
-              ></textarea>
-              <div className="flex justify-end mt-3">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  type="submit"
-                  disabled={submitting || !commentText.trim()}
-                  className="bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2.5 px-8 rounded-xl flex items-center shadow-lg shadow-primary-500/20 transition-all"
-                >
-                  {submitting ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  ) : (
-                    <><Send className="w-4 h-4 mr-2" /> Post Comment</>
-                  )}
+              <textarea className="w-full bg-white/[0.03] border border-white/[0.06] group-focus-within:border-blue-500/20 group-focus-within:bg-white/[0.05] rounded-xl py-3 px-4 focus:ring-2 focus:ring-blue-500/10 outline-none resize-none transition-all duration-300 placeholder:text-slate-600 font-medium text-sm text-slate-300" placeholder="Share your thoughts..." value={commentText} onChange={(e) => setCommentText(e.target.value)} rows="3"></textarea>
+              <div className="flex justify-end mt-2">
+                <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} type="submit" disabled={submitting || !commentText.trim()} className="bg-gradient-to-r from-blue-500 to-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2 px-6 rounded-xl flex items-center shadow-lg shadow-blue-500/15 transition-all text-sm">
+                  {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Send className="w-3.5 h-3.5 mr-2" /> Post</>}
                 </motion.button>
               </div>
             </div>
@@ -171,48 +118,30 @@ const PostDetail = () => {
         </form>
 
         {/* Comments List */}
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-          className="space-y-4 sm:space-y-6"
-        >
+        <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-3">
           {comments.length > 0 ? (
             comments.map((comment) => (
-              <motion.div 
-                key={comment._id} 
-                variants={itemVariants}
-                className="flex space-x-3 sm:space-x-4 group"
-              >
-                <div className="flex-shrink-0">
-                  <img src={comment.author.profilePicture} className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl object-cover" alt="" />
-                </div>
+              <motion.div key={comment._id} variants={itemVariants} className="flex space-x-3 group">
+                <img src={comment.author.profilePicture} className="w-9 h-9 rounded-xl object-cover shrink-0" alt="" />
                 <div className="flex-1">
-                  <div className="bg-slate-50/80 rounded-[1.5rem] p-4 sm:p-5 hover:bg-white hover:shadow-md transition-all duration-300 border border-transparent hover:border-slate-100">
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="font-bold text-slate-900 text-sm sm:text-base">{comment.author.name}</p>
-                      <p className="text-[11px] sm:text-xs text-slate-500 font-medium bg-white px-2 py-1 rounded-full shadow-sm">
-                        {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
-                      </p>
+                  <div className="bg-white/[0.03] rounded-xl p-4 hover:bg-white/[0.05] transition-all duration-300 border border-white/[0.04] hover:border-white/[0.06]">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <p className="font-bold text-white text-sm">{comment.author.name}</p>
+                      <p className="text-[11px] text-slate-600 font-medium">{formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}</p>
                     </div>
-                    <p className="text-slate-700 text-sm sm:text-base leading-relaxed">{comment.content}</p>
+                    <p className="text-slate-400 text-sm leading-relaxed">{comment.content}</p>
                   </div>
                   {(user?._id === comment.author._id || user?.role === 'admin') && (
-                    <div className="flex items-center mt-1 ml-4 space-x-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button 
-                        onClick={() => deleteComment(comment._id)}
-                        className="text-[11px] text-red-500 hover:text-red-700 font-bold transition-colors uppercase tracking-wider"
-                      >
-                        Delete
-                      </button>
+                    <div className="flex items-center mt-1 ml-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button onClick={() => deleteComment(comment._id)} className="text-[11px] text-red-400 hover:text-red-300 font-bold transition-colors uppercase tracking-wider">Delete</button>
                     </div>
                   )}
                 </div>
               </motion.div>
             ))
           ) : (
-            <div className="text-center py-12 bg-slate-50/50 rounded-3xl border border-dashed border-slate-200">
-              <p className="text-slate-400 font-medium italic">No comments yet. Start the conversation!</p>
+            <div className="text-center py-10 bg-white/[0.02] rounded-xl border border-dashed border-white/[0.06]">
+              <p className="text-slate-500 font-medium italic text-sm">No comments yet. Start the conversation!</p>
             </div>
           )}
         </motion.div>
