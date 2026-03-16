@@ -6,6 +6,8 @@ import PostCard from '../components/PostCard';
 import { Loader2, Send, Trash2, MessageSquare, ArrowLeft } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
+import { Helmet } from 'react-helmet-async';
 
 const PostDetail = () => {
   const { id } = useParams();
@@ -45,7 +47,9 @@ const PostDetail = () => {
       setComments([data, ...comments]);
       setCommentText('');
       setPost({ ...post, commentsCount: (post.commentsCount || 0) + 1 });
+      toast.success('Comment added!');
     } catch (err) {
+      toast.error('Could not post comment');
       console.error(err);
     } finally {
       setSubmitting(false);
@@ -57,7 +61,9 @@ const PostDetail = () => {
       await API.delete(`/comments/${commentId}`);
       setComments(comments.filter(c => c._id !== commentId));
       setPost({ ...post, commentsCount: Math.max(0, post.commentsCount - 1) });
+      toast.success('Comment deleted');
     } catch (err) {
+      toast.error('Failed to delete comment');
       console.error(err);
     }
   };
@@ -98,6 +104,9 @@ const PostDetail = () => {
       animate={{ opacity: 1 }}
       className="max-w-3xl mx-auto py-6 sm:py-8 px-4 sm:px-0 pb-20"
     >
+      <Helmet>
+        <title>{post ? `${post.title} | Arsi Network` : 'Loading... | Arsi Network'}</title>
+      </Helmet>
       <button 
         onClick={() => navigate(-1)} 
         className="mb-6 flex items-center text-slate-500 hover:text-primary-600 font-semibold transition-colors group"
