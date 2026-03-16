@@ -13,6 +13,7 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import CreatePost from './pages/CreatePost';
 import Notifications from './pages/Notifications';
+import Messages from './pages/Messages';
 import AdminDashboard from './pages/AdminDashboard';
 import SearchResults from './pages/SearchResults';
 import PostDetail from './pages/PostDetail';
@@ -106,6 +107,16 @@ function AppContent() {
                   <Route path="/notifications" element={
                     <ProtectedRoute>
                       <PageTransition><Notifications /></PageTransition>
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/messages" element={
+                    <ProtectedRoute>
+                      <PageTransition><Messages /></PageTransition>
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/messages/:id" element={
+                    <ProtectedRoute>
+                      <PageTransition><Messages /></PageTransition>
                     </ProtectedRoute>
                   } />
                   <Route path="/search" element={
