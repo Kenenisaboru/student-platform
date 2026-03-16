@@ -1,28 +1,32 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-50: #f0f9ff;
-  --color-primary-100: #e0f2fe;
-  --color-primary-200: #bae6fd;
-  --color-primary-300: #7dd3fc;
-  --color-primary-400: #38bdf8;
-  --color-primary-500: #0ea5e9;
-  --color-primary-600: #0284c7;
-  --color-primary-700: #0369a1;
-  --color-primary-800: #075985;
-  --color-primary-900: #0c4a6e;
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
 
-  --font-sans: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+/* ===========================
+   Nexus Pro Dark Mode System
+   =========================== */
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light;
-  color: #1e293b;
-  background-color: #f8fafc;
+  color-scheme: dark;
+  color: #e2e8f0;
+  background-color: #060a14;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -34,35 +38,69 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #f8fafc;
-  color: #1e293b;
+  background-color: #060a14;
+  color: #e2e8f0;
   overflow-x: hidden;
 }
 
-/* Custom Premium Scrollbar */
+/* ===========================
+   Premium Scrollbar
+   =========================== */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 10px;
-  border: 2px solid #f1f5f9;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: rgba(255, 255, 255, 0.15);
 }
 
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* ===========================
+   Glassmorphism Components
+   =========================== */
 @layer components {
   .glass {
-    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-xl shadow-slate-200/50;
+    @apply bg-white/[0.04] backdrop-blur-xl border border-white/[0.06] shadow-xl shadow-black/20;
   }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .glass-card-hover {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+  }
+
+  .glass-card-hover:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transform: translateY(-1px);
+  }
+
   .btn {
     padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    font-weight: 500;
+    border-radius: 0.75rem;
+    font-weight: 600;
     transition: all 0.15s ease;
     cursor: pointer;
   }
@@ -74,23 +112,30 @@ body {
     cursor: not-allowed;
   }
   .btn-primary {
-    background-color: #4f46e5;
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
     color: white;
     border: none;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
   }
   .btn-primary:hover:not(:disabled) {
-    background-color: #4338ca;
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    transform: translateY(-1px);
   }
   .btn-outline {
     background-color: transparent;
-    border: 1px solid #cbd5e1;
-    color: #475569;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
   }
   .btn-outline:hover:not(:disabled) {
-    background-color: #f8fafc;
+    background-color: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: white;
   }
 }
 
+/* ===========================
+   Animations
+   =========================== */
 @layer utilities {
   .animate-blob {
     animation: blob 7s infinite;
@@ -129,7 +174,58 @@ body {
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.15); }
+  50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.25); }
+}
+
+.animate-glow {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* Page transition wrapper */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+/* ===========================
+   Mobile optimizations
+   =========================== */
+@media (max-width: 1024px) {
+  /* Add padding for bottom nav */
+  .mobile-padded {
+    padding-bottom: 5rem !important;
+  }
+}
+
+/* Touch-friendly tap targets */
+@media (pointer: coarse) {
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* ===========================
+   Selection color
+   =========================== */
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: white;
 }
