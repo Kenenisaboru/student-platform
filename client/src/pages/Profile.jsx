@@ -40,12 +40,21 @@ const Profile = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await updateProfile(editData);
-      setUser({ ...user, ...editData });
+      // Create a clean update object
+      const updateData = {
+        name: editData.name,
+        bio: editData.bio,
+        university: editData.university,
+        department: editData.department,
+        profilePicture: editData.profilePicture
+      };
+      
+      await updateProfile(updateData);
+      setUser({ ...user, ...updateData });
       setEditing(false);
-      toast.success('Profile updated successfully!');
+      toast.success('Your profile has been updated!');
     } catch (err) {
-      toast.error('Failed to update profile');
+      toast.error(err.response?.data?.message || 'Failed to update profile');
       console.error(err);
     }
   };
@@ -54,8 +63,14 @@ const Profile = () => {
     const file = e.target.files[0];
     if (!file) return;
 
+    // Check file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+
     if (file.size > 5 * 1024 * 1024) {
-      toast.error('File is too large (max 5MB)');
+      toast.error('Image is too large (max 5MB)');
       return;
     }
 
@@ -63,14 +78,16 @@ const Profile = () => {
     formData.append('image', file);
 
     setUploading(true);
+    const toastId = toast.loading('Uploading your photo...');
+    
     try {
       const { data } = await API.post('/users/upload-profile', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setEditData({ ...editData, profilePicture: data.url });
-      toast.success('Image uploaded! Save profile to finalize.');
+      toast.success('Photo uploaded successfully!', { id: toastId });
     } catch (err) {
-      toast.error('Image upload failed');
+      toast.error(err.response?.data?.message || 'Upload failed. Check your Cloudinary keys!', { id: toastId });
       console.error(err);
     } finally {
       setUploading(false);
@@ -252,21 +269,30 @@ const Profile = () => {
                     </div>
                   </div>
                   <div className="group">
-                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 ml-1 group-focus-within:text-primary-500 transition-colors">Profile Image Link</label>
-                    <div className="relative flex items-center space-x-4">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 ml-1 group-focus-within:text-primary-500 transition-colors">Choose Profile Photo</label>
+                    <div className="flex flex-wrap gap-3">
+                      <label className={`flex items-center space-x-2 px-5 py-3.5 bg-white border-2 border-slate-100 rounded-2xl cursor-pointer hover:border-primary-200 hover:bg-primary-50 transition-all font-bold text-slate-700 text-sm ${uploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                        <Camera className="w-5 h-5 text-primary-500" />
+                        <span>Camera / Browser</span>
+                        <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
+                      </label>
+                      
+                      <label className={`flex items-center space-x-2 px-5 py-3.5 bg-white border-2 border-slate-100 rounded-2xl cursor-pointer hover:border-indigo-200 hover:bg-indigo-50 transition-all font-bold text-slate-700 text-sm ${uploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                        <Edit3 className="w-5 h-5 text-indigo-500" />
+                        <span>Gallery / Photos</span>
+                        <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
+                      </label>
+                    </div>
+                    
+                    <div className="mt-4 group relative">
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 ml-1">Or Paste Image URL</label>
                       <input 
                         type="text" 
-                        className="flex-1 bg-white border-2 border-slate-100 rounded-2xl py-4 px-6 focus:border-primary-200 focus:ring-4 focus:ring-primary-500/5 outline-none transition-all font-semibold text-slate-600 text-sm"
+                        className="w-full bg-white border-2 border-slate-100 rounded-xl py-3 px-4 focus:border-primary-200 focus:ring-4 focus:ring-primary-500/5 outline-none transition-all font-medium text-slate-600 text-xs"
+                        placeholder="https://example.com/photo.jpg"
                         value={editData.profilePicture}
                         onChange={(e) => setEditData({...editData, profilePicture: e.target.value})}
                       />
-                      <label 
-                        className={`bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-4 rounded-xl cursor-pointer transition-all ${uploading ? 'opacity-50 pointer-events-none' : ''}`}
-                        title="Choose from Gallery"
-                      >
-                        {uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Camera className="w-5 h-5" />}
-                        <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
-                      </label>
                     </div>
                   </div>
                 </div>
