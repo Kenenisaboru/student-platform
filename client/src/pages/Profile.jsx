@@ -3,8 +3,9 @@ import { useParams } from 'react-router-dom';
 import API from '../api/axios';
 import PostCard from '../components/PostCard';
 import { useAuth } from '../context/AuthContext';
-import { Loader2, Calendar, MapPin, Book, Edit3, User, Mail, AtSign, ArrowLeft } from 'lucide-react';
+import { Loader2, Calendar, MapPin, Book, Edit3, User, Mail, AtSign, ArrowLeft, Camera } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 
 const Profile = () => {
   const { id } = useParams();
@@ -14,6 +15,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [editData, setEditData] = useState({});
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -41,8 +43,37 @@ const Profile = () => {
       await updateProfile(editData);
       setUser({ ...user, ...editData });
       setEditing(false);
+      toast.success('Profile updated successfully!');
     } catch (err) {
+      toast.error('Failed to update profile');
       console.error(err);
+    }
+  };
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('File is too large (max 5MB)');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    setUploading(true);
+    try {
+      const { data } = await API.post('/users/upload-profile', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      setEditData({ ...editData, profilePicture: data.url });
+      toast.success('Image uploaded! Save profile to finalize.');
+    } catch (err) {
+      toast.error('Image upload failed');
+      console.error(err);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -98,13 +129,29 @@ const Profile = () => {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2, type: 'spring' }}
-              className="relative"
+              className="relative group"
             >
-              <img 
-                src={user.profilePicture} 
-                className="w-32 h-32 sm:w-40 sm:h-40 rounded-[2.5rem] border-8 border-white object-cover shadow-2xl bg-white" 
-                alt={user.name} 
-              />
+              <div className="relative overflow-hidden rounded-[2.5rem] border-8 border-white shadow-2xl">
+                <img 
+                  src={editing ? editData.profilePicture : user.profilePicture} 
+                  className={`w-32 h-32 sm:w-40 sm:h-40 object-cover bg-white transition-all ${uploading ? 'opacity-50 grayscale' : ''}`} 
+                  alt={user.name} 
+                />
+                
+                {editing && (
+                  <label className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 text-white cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity">
+                    {uploading ? (
+                      <Loader2 className="w-8 h-8 animate-spin" />
+                    ) : (
+                      <>
+                        <Camera className="w-8 h-8 mb-1" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider">Change Photo</span>
+                      </>
+                    )}
+                    <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} disabled={uploading} />
+                  </label>
+                )}
+              </div>
               <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-green-500 border-4 border-white rounded-2xl shadow-lg"></div>
             </motion.div>
             
@@ -206,14 +253,20 @@ const Profile = () => {
                   </div>
                   <div className="group">
                     <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 ml-1 group-focus-within:text-primary-500 transition-colors">Profile Image Link</label>
-                    <div className="relative">
+                    <div className="relative flex items-center space-x-4">
                       <input 
                         type="text" 
-                        className="w-full bg-white border-2 border-slate-100 rounded-2xl py-4 pl-12 pr-6 focus:border-primary-200 focus:ring-4 focus:ring-primary-500/5 outline-none transition-all font-semibold text-slate-600 text-sm"
+                        className="flex-1 bg-white border-2 border-slate-100 rounded-2xl py-4 px-6 focus:border-primary-200 focus:ring-4 focus:ring-primary-500/5 outline-none transition-all font-semibold text-slate-600 text-sm"
                         value={editData.profilePicture}
                         onChange={(e) => setEditData({...editData, profilePicture: e.target.value})}
                       />
-                      <AtSign className="absolute left-4 top-4 text-slate-300 group-focus-within:text-primary-400 w-5 h-5 transition-colors" />
+                      <label 
+                        className={`bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-4 rounded-xl cursor-pointer transition-all ${uploading ? 'opacity-50 pointer-events-none' : ''}`}
+                        title="Choose from Gallery"
+                      >
+                        {uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Camera className="w-5 h-5" />}
+                        <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
+                      </label>
                     </div>
                   </div>
                 </div>
