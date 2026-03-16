@@ -1,9 +1,12 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Home, Bell, User, PlusSquare, Search, LogOut, ShieldCheck, Sparkles, Menu } from 'lucide-react';
+import { Home, Bell, User, PlusSquare, Search, LogOut, ShieldCheck, Sparkles, Menu, MessageSquare } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import axios from 'axios';
 import API from '../api/axios';
+import io from 'socket.io-client';
+import { toast } from 'sonner';
 
 const Navbar = ({ onMenuToggle }) => {
   const { user, logout } = useAuth();
@@ -12,10 +15,51 @@ const Navbar = ({ onMenuToggle }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [serverStatus, setServerStatus] = useState('loading');
   const [scrolled, setScrolled] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [unreadMessages, setUnreadMessages] = useState(0);
 
+  // Initial fetch for unread counts & socket setup
   useEffect(() => {
-    API.get('/').then(() => setServerStatus('online')).catch(() => setServerStatus('offline'));
-  }, []);
+    if (!user) return;
+
+    // Fetch initial counts
+    API.get('/notifications').then(res => {
+      const unread = res.data.filter(n => !n.read).length;
+      setUnreadCount(unread);
+    }).catch(console.error);
+
+    API.get('/messages/unread-count').then(res => {
+      setUnreadMessages(res.data.unreadCount);
+    }).catch(console.error);
+
+    // Socket.io connection
+    const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    const serverRoot = apiBase.replace('/api', '');
+    
+    axios.get(serverRoot).then(() => setServerStatus('online')).catch(() => setServerStatus('offline'));
+
+    const socket = io(serverRoot);
+    if (user) {
+      socket.emit('setup', user._id);
+    }
+
+    socket.on('new_notification', (notification) => {
+      setUnreadCount(prev => prev + 1);
+      toast(notification.message, { icon: '🔔' });
+    });
+
+    socket.on('new_message', (data) => {
+      // Don't show toast if we are currently chatting with this user
+      if (!location.pathname.includes(`/messages/${data.conversationId}`)) {
+        setUnreadMessages(prev => prev + 1);
+        toast(`New message from ${data.message.sender.name}`, { icon: '💬' });
+      }
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [user, location.pathname]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -106,9 +150,13 @@ const Navbar = ({ onMenuToggle }) => {
                   <Link to="/" title="Home" className={`p-2.5 rounded-xl transition-all duration-300 ${isActive('/') ? 'text-blue-400 bg-blue-500/10' : 'text-slate-500 hover:text-blue-400 hover:bg-white/[0.04]'}`}>
                     <Home className="w-5 h-5" />
                   </Link>
+                  <Link to="/messages" title="Messages" className={`p-2.5 rounded-xl transition-all duration-300 relative group ${isActive('/messages') ? 'text-blue-400 bg-blue-500/10' : 'text-slate-500 hover:text-blue-400 hover:bg-white/[0.04]'}`}>
+                    <MessageSquare className="w-5 h-5" />
+                    {unreadMessages > 0 && <span className="absolute top-2 right-2.5 w-2 h-2 bg-blue-500 border-2 border-[#0a0f1e] rounded-full"></span>}
+                  </Link>
                   <Link to="/notifications" title="Notifications" className={`p-2.5 rounded-xl transition-all duration-300 relative group ${isActive('/notifications') ? 'text-blue-400 bg-blue-500/10' : 'text-slate-500 hover:text-blue-400 hover:bg-white/[0.04]'}`}>
-                    <Bell className={`w-5 h-5 ${!isActive('/notifications') && 'group-hover:animate-[wiggle_1s_ease-in-out_infinite]'}`} />
-                    <span className="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 border-2 border-[#0a0f1e] rounded-full"></span>
+                    <Bell className={`w-5 h-5 ${(unreadCount > 0 && !isActive('/notifications')) && 'group-hover:animate-[wiggle_1s_ease-in-out_infinite]'}`} />
+                    {unreadCount > 0 && <span className="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 border-2 border-[#0a0f1e] rounded-full"></span>}
                   </Link>
                   <Link to="/create-post" title="Create Post" className={`p-2.5 rounded-xl transition-all duration-300 ${isActive('/create-post') ? 'text-blue-400 bg-blue-500/10' : 'text-slate-500 hover:text-blue-400 hover:bg-white/[0.04]'}`}>
                     <PlusSquare className="w-5 h-5" />
