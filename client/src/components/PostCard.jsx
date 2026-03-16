@@ -13,7 +13,7 @@ const PostCard = ({ post, onUpdate, onDelete }) => {
   const [liked, setLiked] = useState(post.likes.includes(user?._id));
   const [likesCount, setLikesCount] = useState(post.likes.length);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [bookmarked, setBookmarked] = useState(false);
+  const [bookmarked, setBookmarked] = useState(user?.savedPosts?.includes(post._id) || false);
 
   const handleLike = async () => {
     try {
@@ -46,6 +46,18 @@ const PostCard = ({ post, onUpdate, onDelete }) => {
       toast.error('Failed to copy link');
     });
     setMenuOpen(false);
+  };
+
+  const handleBookmark = async () => {
+    try {
+      const prevBookmarked = bookmarked;
+      setBookmarked(!prevBookmarked);
+      const { data } = await API.post(`/users/save/${post._id}`);
+      setBookmarked(data.isSaved);
+      toast.success(data.isSaved ? 'Saved to bookmarks!' : 'Removed from bookmarks');
+    } catch (err) {
+      toast.error('Failed to update bookmark');
+    }
   };
 
   const isAuthor = user?._id === post.author._id;
@@ -116,7 +128,7 @@ const PostCard = ({ post, onUpdate, onDelete }) => {
                     <Share2 className="w-4 h-4 mr-2.5" /> Copy Link
                   </button>
                   <button 
-                    onClick={() => { setBookmarked(!bookmarked); setMenuOpen(false); toast.success(bookmarked ? 'Removed from saved' : 'Saved!'); }}
+                    onClick={() => { handleBookmark(); setMenuOpen(false); }}
                     className="w-full px-4 py-2.5 text-left text-slate-400 hover:bg-white/[0.04] flex items-center text-sm font-medium transition-colors"
                   >
                     <Bookmark className={`w-4 h-4 mr-2.5 ${bookmarked ? 'fill-current text-blue-400' : ''}`} /> {bookmarked ? 'Unsave' : 'Save Post'}
@@ -188,7 +200,7 @@ const PostCard = ({ post, onUpdate, onDelete }) => {
 
           <motion.button
             whileTap={{ scale: 0.85 }}
-            onClick={() => { setBookmarked(!bookmarked); toast.success(bookmarked ? 'Removed' : 'Saved!'); }}
+            onClick={handleBookmark}
             className={`p-2 rounded-xl transition-all ${bookmarked ? 'text-blue-400 bg-blue-500/10' : 'text-slate-600 hover:bg-white/[0.04] hover:text-blue-400'}`}
           >
             <Bookmark className={`w-[18px] h-[18px] ${bookmarked ? 'fill-current' : ''}`} />
