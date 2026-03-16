@@ -12,6 +12,8 @@ import {
   BookOpen,
   Hash,
   Sparkles,
+  MessageSquare,
+  Settings
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -29,6 +31,8 @@ const LeftSidebar = () => {
     { path: '/notifications', icon: Bell, label: 'Notifications', badge: true },
     { path: '/create-post', icon: PlusSquare, label: 'Create Post' },
     { path: `/profile/${user?._id}`, icon: User, label: 'My Profile' },
+    { path: '/messages', icon: MessageSquare, label: 'Messages' },
+    { path: '/settings', icon: Settings, label: 'Settings' },
   ];
 
   const quickLinks = [
