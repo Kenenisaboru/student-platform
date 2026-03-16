@@ -12,6 +12,8 @@ import AdminDashboard from './pages/AdminDashboard';
 import SearchResults from './pages/SearchResults';
 import PostDetail from './pages/PostDetail';
 import FloatingFocusHub from './components/FloatingFocusHub';
+import { Toaster } from 'sonner';
+import { HelmetProvider } from 'react-helmet-async';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -89,11 +91,14 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <AppContent />
-      </Router>
-    </AuthProvider>
+    <HelmetProvider>
+      <AuthProvider>
+        <Router>
+          <Toaster position="top-center" richColors />
+          <AppContent />
+        </Router>
+      </AuthProvider>
+    </HelmetProvider>
   );
 }
 
