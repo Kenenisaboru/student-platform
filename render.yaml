@@ -1,0 +1,38 @@
+services:
+  # Backend Service
+  - type: web
+    name: student-platform-api
+    env: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: node index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        fromConfig: true
+      - key: JWT_SECRET
+        fromConfig: true
+      - key: CLIENT_URL
+        fromConfig: true
+      - key: CLOUDINARY_CLOUD_NAME
+        fromConfig: true
+      - key: CLOUDINARY_API_KEY
+        fromConfig: true
+      - key: CLOUDINARY_API_SECRET
+        fromConfig: true
+
+  # Frontend Service
+  - type: static
+    name: student-platform-client
+    env: static
+    rootDir: client
+    buildCommand: npm install && npm run build
+    publishDir: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        fromConfig: true
