@@ -4,6 +4,9 @@ import PostCard from '../components/PostCard';
 import { Loader2, Plus, Sparkles, MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { PostSkeleton } from '../components/Skeleton';
+import { toast } from 'sonner';
+import { Helmet } from 'react-helmet-async';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -29,7 +32,9 @@ const Home = () => {
       try {
         await API.delete(`/posts/${id}`);
         setPosts(posts.filter(p => p._id !== id));
+        toast.success('Post deleted successfully');
       } catch (err) {
+        toast.error('Failed to delete post');
         console.error(err);
       }
     }
@@ -46,6 +51,10 @@ const Home = () => {
 
   return (
     <div className="max-w-3xl mx-auto px-2 sm:px-0 pb-12">
+      <Helmet>
+        <title>Home | Arsi Aseko Student Network</title>
+        <meta name="description" content="Connect with students across Arsi Aseko universities." />
+      </Helmet>
       {/* Welcome Section */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.95, y: -20 }}
@@ -128,8 +137,8 @@ const Home = () => {
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-24">
-          <Loader2 className="w-10 h-10 animate-spin text-primary-500" />
+        <div className="space-y-6">
+          {[1, 2, 3].map(i => <PostSkeleton key={i} />)}
         </div>
       ) : posts.length > 0 ? (
         <motion.div 
