@@ -132,7 +132,18 @@ const PostCard = ({ post, onUpdate, onDelete }) => {
           <Link to={`/post/${post._id}`}>
             <h2 className="text-[16px] font-bold text-white mb-1.5 hover:text-blue-400 transition-colors leading-snug">{post.title}</h2>
           </Link>
-          <p className="text-slate-400 whitespace-pre-wrap leading-relaxed text-[14px] line-clamp-3">{post.content}</p>
+          <p className="text-slate-400 whitespace-pre-wrap leading-relaxed text-[14px] line-clamp-3 mb-3">{post.content}</p>
+          
+          {/* Post Images */}
+          {post.images && post.images.length > 0 && (
+            <div className={`grid gap-2 mb-3 ${post.images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+              {post.images.map((img, i) => (
+                <div key={i} className="relative rounded-xl overflow-hidden border border-white/[0.06] max-h-80 group/image cursor-pointer">
+                  <img src={img} alt="Post attachment" className="w-full h-full object-cover transition-transform duration-500 group-hover/image:scale-105" />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Tags */}
