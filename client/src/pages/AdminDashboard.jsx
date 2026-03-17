@@ -16,7 +16,7 @@ const AdminDashboard = () => {
           API.get('/posts')
         ]);
         setUsers(usersRes.data);
-        setPosts(postsRes.data);
+        setPosts(postsRes.data.posts || postsRes.data);
       } catch (err) {
         console.error(err);
       } finally {
