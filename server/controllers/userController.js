@@ -18,11 +18,11 @@ exports.updateProfile = async (req, res) => {
     const user = await User.findById(req.user._id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    user.name = req.body.name || user.name;
-    user.bio = req.body.bio || user.bio;
-    user.university = req.body.university || user.university;
-    user.department = req.body.department || user.department;
-    user.profilePicture = req.body.profilePicture || user.profilePicture;
+    user.name = req.body.name !== undefined ? req.body.name : user.name;
+    user.bio = req.body.bio !== undefined ? req.body.bio : user.bio;
+    user.university = req.body.university !== undefined ? req.body.university : user.university;
+    user.department = req.body.department !== undefined ? req.body.department : user.department;
+    user.profilePicture = req.body.profilePicture !== undefined ? req.body.profilePicture : user.profilePicture;
 
     if (req.body.password) {
       user.password = req.body.password;
