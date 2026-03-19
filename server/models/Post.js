@@ -1,5 +1,17 @@
 const mongoose = require('mongoose');
 
+const pollOptionSchema = new mongoose.Schema({
+  text: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  votes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }]
+}, { _id: true });
+
 const postSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -28,6 +40,21 @@ const postSchema = new mongoose.Schema({
   commentsCount: {
     type: Number,
     default: 0
+  },
+  // Poll feature
+  poll: {
+    question: { type: String, trim: true },
+    options: [pollOptionSchema],
+    endsAt: Date,
+  },
+  // Report tracking
+  reportCount: {
+    type: Number,
+    default: 0
+  },
+  isHidden: {
+    type: Boolean,
+    default: false
   }
 }, { timestamps: true });
 
