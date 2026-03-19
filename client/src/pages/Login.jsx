@@ -111,7 +111,7 @@ const Login = () => {
             <div>
               <div className="flex items-center justify-between mb-2 ml-1">
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">Password</label>
-                <a href="#" className="text-[11px] font-semibold text-blue-400 hover:text-blue-300 transition-all">Forgot?</a>
+                <Link to="/forgot-password" title="Forgot Password" className="text-[11px] font-semibold text-blue-400 hover:text-blue-300 transition-all cursor-pointer">Forgot?</Link>
               </div>
               <div className="relative group">
                 <input
