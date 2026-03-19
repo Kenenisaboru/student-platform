@@ -14,7 +14,17 @@ const commentSchema = new mongoose.Schema({
   content: {
     type: String,
     required: true
-  }
+  },
+  // Threaded replies
+  parentComment: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Comment',
+    default: null
+  },
+  likes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }]
 }, { timestamps: true });
 
 module.exports = mongoose.model('Comment', commentSchema);
