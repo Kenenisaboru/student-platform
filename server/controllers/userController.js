@@ -3,7 +3,7 @@ const User = require('../models/User');
 exports.getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
-      .select('-password')
+      .select('-password -verificationToken -verificationTokenExpires -resetPasswordToken -resetPasswordExpires')
       .populate('followers', 'name profilePicture university')
       .populate('following', 'name profilePicture university');
     if (!user) return res.status(404).json({ message: 'User not found' });
@@ -37,7 +37,8 @@ exports.updateProfile = async (req, res) => {
       department: updatedUser.department,
       bio: updatedUser.bio,
       profilePicture: updatedUser.profilePicture,
-      role: updatedUser.role
+      role: updatedUser.role,
+      isVerified: updatedUser.isVerified
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -55,7 +56,7 @@ exports.followUser = async (req, res) => {
       return res.status(400).json({ message: 'You cannot follow yourself' });
     }
 
-    const isFollowing = currentUser.following.includes(req.params.id);
+    const isFollowing = currentUser.following.some(id => id.toString() === req.params.id);
 
     if (isFollowing) {
       // Unfollow
@@ -99,8 +100,13 @@ exports.followUser = async (req, res) => {
   }
 };
 
+// Paginated search
 exports.searchUsers = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+
     const keyword = req.query.search ? {
       $or: [
         { name: { $regex: req.query.search, $options: 'i' } },
@@ -109,17 +115,46 @@ exports.searchUsers = async (req, res) => {
       ]
     } : {};
 
-    const users = await User.find(keyword).find({ _id: { $ne: req.user._id } }).select('name profilePicture university department');
-    res.json(users);
+    const total = await User.countDocuments({ ...keyword, _id: { $ne: req.user._id } });
+    const users = await User.find(keyword)
+      .find({ _id: { $ne: req.user._id } })
+      .select('name profilePicture university department isOnline lastSeen')
+      .skip(skip)
+      .limit(limit);
+
+    res.json({
+      users,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      total,
+      hasMore: page * limit < total
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
+// Paginated admin user list
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().select('-password');
-    res.json(users);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+
+    const total = await User.countDocuments();
+    const users = await User.find()
+      .select('-password -verificationToken -resetPasswordToken')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.json({
+      users,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      total,
+      hasMore: page * limit < total
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -128,8 +163,8 @@ exports.getAllUsers = async (req, res) => {
 exports.getActiveUsers = async (req, res) => {
   try {
     const users = await User.find()
-      .select('name profilePicture university department')
-      .sort({ createdAt: -1 })
+      .select('name profilePicture university department isOnline lastSeen')
+      .sort({ lastSeen: -1 })
       .limit(10);
     res.json(users);
   } catch (error) {
@@ -151,7 +186,7 @@ exports.toggleSavePost = async (req, res) => {
     const user = await User.findById(req.user._id);
     const postId = req.params.postId;
     
-    const isSaved = user.savedPosts.includes(postId);
+    const isSaved = user.savedPosts.some(id => id.toString() === postId);
     
     if (isSaved) {
       user.savedPosts = user.savedPosts.filter(id => id.toString() !== postId);
