@@ -83,12 +83,12 @@ const Notifications = () => {
               
               <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2.5 mb-1">
-                  <Link to={`/profile/${notif.sender._id}`} className="flex-shrink-0">
-                    <img src={notif.sender.profilePicture} className="w-8 h-8 rounded-lg object-cover ring-1 ring-white/[0.06]" alt="" />
+                  <Link to={`/profile/${notif.sender?._id}`} className="flex-shrink-0">
+                    <img src={notif.sender?.profilePicture || '/default-avatar.png'} className="w-8 h-8 rounded-lg object-cover ring-1 ring-white/[0.06]" alt="" />
                   </Link>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-white leading-tight">
-                      <Link to={`/profile/${notif.sender._id}`} className="font-bold hover:text-blue-400 transition-colors">{notif.sender.name}</Link>
+                      <Link to={`/profile/${notif.sender?._id}`} className="font-bold hover:text-blue-400 transition-colors">{notif.sender?.name || 'Deleted User'}</Link>
                       <span className="text-slate-500 font-medium ml-1">
                         {notif.type === 'like' && 'liked your post'}
                         {notif.type === 'comment' && 'commented on your post'}
@@ -105,7 +105,7 @@ const Notifications = () => {
                 {notif.post && (
                   <Link to={`/post/${notif.post._id}`} className="block mt-2 p-3 bg-white/[0.02] border border-white/[0.04] rounded-xl hover:border-blue-500/10 hover:bg-white/[0.03] transition-all">
                     <p className="text-[13px] font-semibold text-slate-400 italic flex items-center">
-                      <MessageCircle className="w-3 h-3 mr-2 text-blue-400/50" /> "{notif.post.title}"
+                      <MessageCircle className="w-3 h-3 mr-2 text-blue-400/50" /> "{notif.post.title || 'View Post'}"
                     </p>
                   </Link>
                 )}
