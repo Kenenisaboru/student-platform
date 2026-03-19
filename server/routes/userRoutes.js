@@ -13,10 +13,11 @@ const {
 } = require('../controllers/userController');
 const { protect, admin } = require('../middleware/authMiddleware');
 const { upload } = require('../config/cloudinary');
+const { validate, updateProfileRules, searchRules, paginationRules } = require('../middleware/validation');
 
 // Public routes (auth-protected but not admin)
 router.get('/active', protect, getActiveUsers);
-router.get('/search', protect, searchUsers);
+router.get('/search', protect, searchRules, paginationRules, validate, searchUsers);
 router.get('/saved', protect, getSavedPosts);
 
 // Follow/Unfollow & Saved Posts
@@ -24,11 +25,11 @@ router.post('/:id/follow', protect, followUser);
 router.post('/save/:postId', protect, toggleSavePost);
 
 // Admin only
-router.get('/all', protect, admin, getAllUsers);
+router.get('/all', protect, admin, paginationRules, validate, getAllUsers);
 
 // User profile
 router.get('/:id', protect, getProfile);
-router.put('/profile', protect, updateProfile);
+router.put('/profile', protect, updateProfileRules, validate, updateProfile);
 router.post('/upload-profile', protect, upload.single('image'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded' });
