@@ -41,9 +41,10 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const { data } = await API.post('/auth/login', { email, password });
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      setUser(data.user);
+      const { token, ...userData } = data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(userData));
+      setUser(userData);
       return data;
     } catch (err) {
       throw err;
@@ -53,9 +54,10 @@ export const AuthProvider = ({ children }) => {
   const register = async (formData) => {
     try {
       const { data } = await API.post('/auth/register', formData);
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      setUser(data.user);
+      const { token, ...userData } = data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(userData));
+      setUser(userData);
       return data;
     } catch (err) {
       throw err;
