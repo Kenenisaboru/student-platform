@@ -17,8 +17,7 @@ const registerRules = [
   body('name').trim().notEmpty().withMessage('Name is required')
     .isLength({ min: 2, max: 50 }).withMessage('Name must be 2-50 characters'),
   body('email').trim().isEmail().withMessage('Valid email is required').normalizeEmail(),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
-    .matches(/\d/).withMessage('Password must contain at least one number'),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
   body('university').trim().notEmpty().withMessage('University is required'),
   body('department').trim().notEmpty().withMessage('Department is required'),
 ];
