@@ -21,9 +21,14 @@ const SearchResults = () => {
           API.get(`/users/search?search=${query}`),
           API.get('/posts')
         ]);
+        
+        // Both endpoints return { users/posts: [], ... } objects
+        const users = usersRes.data.users || [];
+        const posts = postsRes.data.posts || [];
+
         setResults({
-          users: usersRes.data,
-          posts: postsRes.data.filter(p =>
+          users,
+          posts: posts.filter(p =>
             p.title.toLowerCase().includes(query.toLowerCase()) ||
             p.content.toLowerCase().includes(query.toLowerCase())
           )
