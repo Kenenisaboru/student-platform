@@ -19,6 +19,9 @@ import SearchResults from './pages/SearchResults';
 import PostDetail from './pages/PostDetail';
 import NotFound from './pages/NotFound';
 import Settings from './pages/Settings';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import VerifyEmail from './pages/VerifyEmail';
 import FloatingFocusHub from './components/FloatingFocusHub';
 import { Toaster } from 'sonner';
 import { HelmetProvider } from 'react-helmet-async';
@@ -47,7 +50,10 @@ const AdminRoute = ({ children }) => {
 };
 
 // Pages that should NOT show the 3-column layout
-const FULL_WIDTH_PAGES = ['/login', '/register'];
+const isFullWidthPath = (path) => {
+  const prefixes = ['/login', '/register', '/forgot-password', '/reset-password', '/verify-email'];
+  return prefixes.some(prefix => path.startsWith(prefix));
+};
 
 function PageTransition({ children }) {
   return (
@@ -67,8 +73,7 @@ function AppContent() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const location = useLocation();
 
-  const isFullWidthPage = FULL_WIDTH_PAGES.includes(location.pathname);
-  const showLayout = user && !isFullWidthPage;
+  const showLayout = user && !isFullWidthPath(location.pathname);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#060a14]">
@@ -79,78 +84,36 @@ function AppContent() {
         /* ===== 3-Column Layout ===== */
         <div className="flex-grow pt-[6.5rem] sm:pt-[7.5rem]">
           <div className="mx-auto max-w-7xl px-4 flex gap-6">
-            {/* Left Sidebar */}
             <LeftSidebar />
-
-            {/* Main Content */}
             <main className="flex-1 min-w-0 pb-24 lg:pb-10">
               <AnimatePresence mode="wait">
                 <Routes location={location} key={location.pathname}>
-                  <Route path="/" element={
-                    <ProtectedRoute>
-                      <PageTransition><Home /></PageTransition>
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/profile/:id" element={
-                    <ProtectedRoute>
-                      <PageTransition><Profile /></PageTransition>
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/create-post" element={
-                    <ProtectedRoute>
-                      <PageTransition><CreatePost /></PageTransition>
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/post/:id" element={
-                    <ProtectedRoute>
-                      <PageTransition><PostDetail /></PageTransition>
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/notifications" element={
-                    <ProtectedRoute>
-                      <PageTransition><Notifications /></PageTransition>
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/messages" element={
-                    <ProtectedRoute>
-                      <PageTransition><Messages /></PageTransition>
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/messages/:id" element={
-                    <ProtectedRoute>
-                      <PageTransition><Messages /></PageTransition>
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/search" element={
-                    <ProtectedRoute>
-                      <PageTransition><SearchResults /></PageTransition>
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/settings" element={
-                    <ProtectedRoute>
-                      <PageTransition><Settings /></PageTransition>
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/admin" element={
-                    <AdminRoute>
-                      <PageTransition><AdminDashboard /></PageTransition>
-                    </AdminRoute>
-                  } />
+                  <Route path="/" element={<ProtectedRoute><PageTransition><Home /></PageTransition></ProtectedRoute>} />
+                  <Route path="/profile/:id" element={<ProtectedRoute><PageTransition><Profile /></PageTransition></ProtectedRoute>} />
+                  <Route path="/create-post" element={<ProtectedRoute><PageTransition><CreatePost /></PageTransition></ProtectedRoute>} />
+                  <Route path="/post/:id" element={<ProtectedRoute><PageTransition><PostDetail /></PageTransition></ProtectedRoute>} />
+                  <Route path="/notifications" element={<ProtectedRoute><PageTransition><Notifications /></PageTransition></ProtectedRoute>} />
+                  <Route path="/messages" element={<ProtectedRoute><PageTransition><Messages /></PageTransition></ProtectedRoute>} />
+                  <Route path="/messages/:id" element={<ProtectedRoute><PageTransition><Messages /></PageTransition></ProtectedRoute>} />
+                  <Route path="/search" element={<ProtectedRoute><PageTransition><SearchResults /></PageTransition></ProtectedRoute>} />
+                  <Route path="/settings" element={<ProtectedRoute><PageTransition><Settings /></PageTransition></ProtectedRoute>} />
+                  <Route path="/admin" element={<AdminRoute><PageTransition><AdminDashboard /></PageTransition></AdminRoute>} />
                   <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
                 </Routes>
               </AnimatePresence>
             </main>
-
-            {/* Right Sidebar */}
             <RightSidebar />
           </div>
         </div>
       ) : (
-        /* ===== Full Width (Login/Register) ===== */
+        /* ===== Full Width (Auth Pages) ===== */
         <main className="flex-grow">
           <Routes location={location} key={location.pathname}>
             <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
             <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
+            <Route path="/verify-email/:token" element={<VerifyEmail />} />
             <Route path="*" element={<Navigate to={user ? "/" : "/login"} />} />
           </Routes>
         </main>
@@ -173,9 +136,10 @@ function App() {
             richColors 
             toastOptions={{
               style: {
-                background: '#0f172a',
+                background: '#0a0f1e',
                 border: '1px solid rgba(255,255,255,0.06)',
                 color: '#e2e8f0',
+                borderRadius: '16px',
               }
             }}
           />
