@@ -3,7 +3,7 @@ const Notification = require('../models/Notification');
 
 exports.createPost = async (req, res) => {
   try {
-    const { title, content, tags } = req.body;
+    const { title, content, tags, poll } = req.body;
     // Handle image URL from Cloudinary upload or direct URL
     const images = [];
     if (req.file) {
@@ -13,13 +13,27 @@ exports.createPost = async (req, res) => {
       images.push(req.body.imageUrl);
     }
 
-    const post = await Post.create({
+    const postData = {
       title,
       content,
       tags,
       images,
       author: req.user._id
-    });
+    };
+
+    // Add poll if provided
+    if (poll && poll.question && poll.options && poll.options.length >= 2) {
+      postData.poll = {
+        question: poll.question,
+        options: poll.options.map(opt => ({
+          text: typeof opt === 'string' ? opt : opt.text,
+          votes: []
+        })),
+        endsAt: poll.endsAt || null
+      };
+    }
+
+    const post = await Post.create(postData);
     const populatedPost = await post.populate('author', 'name profilePicture university');
     res.status(201).json(populatedPost);
   } catch (error) {
@@ -34,8 +48,8 @@ exports.getPosts = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const total = await Post.countDocuments();
-    const posts = await Post.find()
+    const total = await Post.countDocuments({ isHidden: { $ne: true } });
+    const posts = await Post.find({ isHidden: { $ne: true } })
       .populate('author', 'name profilePicture university')
       .sort({ createdAt: -1 })
       .skip(skip)
@@ -63,6 +77,7 @@ exports.getPostById = async (req, res) => {
   }
 };
 
+// Secure update — only whitelisted fields
 exports.updatePost = async (req, res) => {
   try {
     let post = await Post.findById(req.params.id);
@@ -72,7 +87,17 @@ exports.updatePost = async (req, res) => {
       return res.status(401).json({ message: 'User not authorized' });
     }
 
-    post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    // Whitelist allowed fields
+    const allowedFields = ['title', 'content', 'tags'];
+    const updates = {};
+    for (const field of allowedFields) {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
+      }
+    }
+
+    post = await Post.findByIdAndUpdate(req.params.id, updates, { new: true })
+      .populate('author', 'name profilePicture university');
     res.json(post);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -130,9 +155,51 @@ exports.likePost = async (req, res) => {
   }
 };
 
+// Vote on poll
+exports.votePoll = async (req, res) => {
+  try {
+    const { optionId } = req.body;
+    const post = await Post.findById(req.params.id);
+    
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+    if (!post.poll || !post.poll.question) {
+      return res.status(400).json({ message: 'This post has no poll' });
+    }
+
+    // Check if poll has ended
+    if (post.poll.endsAt && new Date(post.poll.endsAt) < new Date()) {
+      return res.status(400).json({ message: 'This poll has ended' });
+    }
+
+    // Check if user already voted on any option
+    const hasVoted = post.poll.options.some(opt => 
+      opt.votes.some(v => v.toString() === req.user._id.toString())
+    );
+
+    if (hasVoted) {
+      // Remove previous vote
+      post.poll.options.forEach(opt => {
+        opt.votes = opt.votes.filter(v => v.toString() !== req.user._id.toString());
+      });
+    }
+
+    // Add vote to selected option
+    const option = post.poll.options.id(optionId);
+    if (!option) return res.status(404).json({ message: 'Poll option not found' });
+    
+    option.votes.push(req.user._id);
+    await post.save();
+
+    res.json(post);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 exports.getTrendingTags = async (req, res) => {
   try {
     const trending = await Post.aggregate([
+      { $match: { isHidden: { $ne: true } } },
       { $unwind: '$tags' },
       { $group: { _id: '$tags', count: { $sum: 1 } } },
       { $sort: { count: -1 } },
