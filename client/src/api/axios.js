@@ -12,4 +12,21 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
+// Handle token expiry — auto-logout on 401
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        // Token exists but is invalid/expired — force logout
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default API;

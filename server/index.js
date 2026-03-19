@@ -19,6 +19,9 @@ const io = new Server(server, {
   }
 });
 
+// Export io to use in controllers (set BEFORE routes)
+app.set('socketio', io);
+
 // Middleware
 // Security headers
 app.use(helmet());
@@ -40,16 +43,49 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Track online users
+const onlineUsers = new Map(); // socketId -> userId
+
 // Socket.io connection
 io.on('connection', (socket) => {
   console.log('a user connected:', socket.id);
   
-  socket.on('join_room', (userId) => {
+  socket.on('join_room', async (userId) => {
     socket.join(userId);
+    onlineUsers.set(socket.id, userId);
+    
+    // Update user online status in DB
+    try {
+      const User = require('./models/User');
+      await User.findByIdAndUpdate(userId, { isOnline: true, lastSeen: new Date() });
+      // Broadcast online status to all clients
+      io.emit('user_online', { userId, isOnline: true });
+    } catch (err) {
+      console.error('Error updating online status:', err);
+    }
+    
     console.log(`User ${userId} joined their notification room`);
   });
 
-  socket.on('disconnect', () => {
+  socket.on('disconnect', async () => {
+    const userId = onlineUsers.get(socket.id);
+    onlineUsers.delete(socket.id);
+    
+    if (userId) {
+      // Check if user has other active connections
+      const isStillOnline = Array.from(onlineUsers.values()).includes(userId);
+      
+      if (!isStillOnline) {
+        try {
+          const User = require('./models/User');
+          await User.findByIdAndUpdate(userId, { isOnline: false, lastSeen: new Date() });
+          io.emit('user_online', { userId, isOnline: false });
+        } catch (err) {
+          console.error('Error updating offline status:', err);
+        }
+      }
+    }
+    
     console.log('user disconnected');
   });
 });
@@ -61,6 +97,7 @@ const commentRoutes = require('./routes/commentRoutes');
 const userRoutes = require('./routes/userRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const reportRoutes = require('./routes/reportRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
@@ -68,6 +105,7 @@ app.use('/api/comments', commentRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/reports', reportRoutes);
 
 app.get('/', (req, res) => {
   res.send('Arsi Aseko Student Network API is running...');
@@ -87,9 +125,6 @@ mongoose.connect(MONGODB_URI)
   .catch((err) => {
     console.error('MongoDB connection error:', err);
   });
-
-// Export io to use in controllers
-app.set('socketio', io);
 
 // Global Error Handler
 app.use((err, req, res, next) => {
