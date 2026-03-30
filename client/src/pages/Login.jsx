@@ -27,6 +27,15 @@ const Login = () => {
     }
   };
 
+  const handleQuickLogin = (emailStr, passStr) => {
+    setEmail(emailStr);
+    setPassword(passStr);
+    // Allow state to update before submitting
+    setTimeout(() => {
+      document.querySelector('form').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+    }, 100);
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#060a14] p-4 sm:p-8 relative overflow-hidden">
       {/* Background Decorative Shapes */}
@@ -61,16 +70,27 @@ const Login = () => {
               "The beautiful thing about learning is that no one can take it away from you."
             </p>
 
-            <div className="p-5 bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.06]">
-              <div className="flex items-center space-x-4 mb-3">
-                <div className="flex -space-x-3">
-                  <img className="w-9 h-9 rounded-lg border-2 border-[#0d1220] object-cover" src="https://i.pravatar.cc/100?img=1" alt="User 1" />
-                  <img className="w-9 h-9 rounded-lg border-2 border-[#0d1220] object-cover" src="https://i.pravatar.cc/100?img=2" alt="User 2" />
-                  <img className="w-9 h-9 rounded-lg border-2 border-[#0d1220] object-cover" src="https://i.pravatar.cc/100?img=3" alt="User 3" />
-                </div>
-                <p className="text-white font-semibold text-sm">Join 1,000+ active students</p>
+            {/* Quick Access for Admins/Testers */}
+            <div className="mt-8 p-5 bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.06]">
+              <div className="flex items-center space-x-2 mb-3">
+                <Sparkles className="w-4 h-4 text-blue-400" />
+                <p className="text-white font-bold text-xs uppercase tracking-widest">Quick Sign-In</p>
               </div>
-              <p className="text-slate-500 text-sm">Your friends and study partners are waiting for you inside.</p>
+              <div className="grid grid-cols-2 gap-3">
+                <button 
+                  onClick={() => handleQuickLogin('student@example.com', 'Password123!')}
+                  className="bg-white/[0.05] hover:bg-white/[0.1] text-white py-2.5 rounded-xl text-[11px] font-bold transition-all border border-white/[0.05]"
+                >
+                  Student Demo
+                </button>
+                <button 
+                  onClick={() => handleQuickLogin('kananiman710@gmail.com', 'AdminPassword123!')}
+                  className="bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 py-2.5 rounded-xl text-[11px] font-bold transition-all border border-blue-500/20"
+                >
+                  Admin Demo
+                </button>
+              </div>
+              <p className="mt-3 text-[10px] text-slate-500 text-center font-medium">One-click access for platform testing</p>
             </div>
           </div>
         </div>
