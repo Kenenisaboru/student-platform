@@ -5,7 +5,8 @@ exports.getProfile = async (req, res) => {
     const user = await User.findById(req.params.id)
       .select('-password -verificationToken -verificationTokenExpires -resetPasswordToken -resetPasswordExpires')
       .populate('followers', 'name profilePicture university')
-      .populate('following', 'name profilePicture university');
+      .populate('following', 'name profilePicture university')
+      .lean();
     if (!user) return res.status(404).json({ message: 'User not found' });
     res.json(user);
   } catch (error) {
@@ -120,7 +121,8 @@ exports.searchUsers = async (req, res) => {
       .find({ _id: { $ne: req.user._id } })
       .select('name profilePicture university department isOnline lastSeen')
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .lean();
 
     res.json({
       users,
@@ -146,7 +148,8 @@ exports.getAllUsers = async (req, res) => {
       .select('-password -verificationToken -resetPasswordToken')
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .lean();
 
     res.json({
       users,
