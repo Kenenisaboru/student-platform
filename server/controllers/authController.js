@@ -92,7 +92,37 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    let user = await User.findOne({ email });
+
+    // EMERGENCY AUTO-SEED for Demo Accounts
+    if (!user) {
+      const demoAccounts = {
+        'student@example.com': {
+          name: 'Sample Student',
+          password: 'Password123!',
+          university: 'AAU',
+          department: 'Computer Science',
+          role: 'student'
+        },
+        'kananiman710@gmail.com': {
+          name: 'Arsi Aseko Admin',
+          password: 'AdminPassword123!',
+          university: 'Adama Science & Tech',
+          department: 'Administration',
+          role: 'admin'
+        }
+      };
+
+      const demo = demoAccounts[email.toLowerCase()];
+      // Only auto-create if password matches the Hardcoded Demo Password
+      if (demo && password === demo.password) {
+        user = await User.create({
+          ...demo,
+          isVerified: true // Auto-verify demo accounts
+        });
+        console.log(`Failsafe: Auto-seeded demo account for ${email}`);
+      }
+    }
 
     if (user && (await user.comparePassword(password))) {
       res.json({
