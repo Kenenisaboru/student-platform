@@ -12,10 +12,11 @@ import DOMPurify from 'dompurify';
 const PostCard = ({ post: initialPost, onDelete }) => {
   const { user } = useAuth();
   const [post, setPost] = useState(initialPost);
-  const [liked, setLiked] = useState(post.likes.includes(user?._id));
-  const [likesCount, setLikesCount] = useState(post.likes.length);
+  const likes = Array.isArray(post?.likes) ? post.likes : [];
+  const [liked, setLiked] = useState(likes.includes(user?._id));
+  const [likesCount, setLikesCount] = useState(likes.length);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [bookmarked, setBookmarked] = useState(user?.savedPosts?.includes(post._id) || false);
+  const [bookmarked, setBookmarked] = useState(Array.isArray(user?.savedPosts) ? user.savedPosts.includes(post?._id) : false);
   const [voting, setVoting] = useState(false);
   const [reporting, setReporting] = useState(false);
 
