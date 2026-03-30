@@ -19,9 +19,12 @@ const RightSidebar = () => {
           API.get('/posts/trending-tags').catch(() => ({ data: [] })),
           API.get('/posts/community-stats').catch(() => ({ data: { totalStudents: 0, totalPosts: 0, totalTags: 0, activeToday: 0 } }))
         ]);
-        setTopUsers(usersRes.data.slice(0, 6));
-        setTrendingTags(tagsRes.data.slice(0, 5));
-        setStats(statsRes.data);
+        const usersData = Array.isArray(usersRes.data) ? usersRes.data : [];
+        const tagsData = Array.isArray(tagsRes.data) ? tagsRes.data : [];
+        
+        setTopUsers(usersData.slice(0, 6));
+        setTrendingTags(tagsData.slice(0, 5));
+        setStats(statsRes.data || { totalStudents: 0, totalPosts: 0, totalTags: 0, activeToday: 0 });
       } catch (err) {
         console.error(err);
       } finally {
