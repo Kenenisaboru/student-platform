@@ -24,22 +24,27 @@ const Navbar = ({ onMenuToggle }) => {
 
     // Fetch initial counts
     API.get('/notifications').then(res => {
-      const unread = res.data.filter(n => !n.read).length;
+      const notifications = Array.isArray(res.data) ? res.data : [];
+      const unread = notifications.filter(n => n && !n.read).length;
       setUnreadCount(unread);
-    }).catch(console.error);
+    }).catch(err => {
+      console.warn('Notifications fetch failed:', err.message);
+      setUnreadCount(0);
+    });
 
     API.get('/messages/unread-count').then(res => {
       setUnreadMessages(res.data.unreadCount);
     }).catch(console.error);
 
-    // Socket.io connection
+    // Socket.io & Server Health configuration
     const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-    const serverRoot = apiBase.replace('/api', '');
+    const serverRoot = apiBase.split('/api')[0] || 'http://localhost:5000';
     
+    // Safety check: Use vanilla axios for health-check to avoid interceptor AUTH loops
     axios.get(serverRoot).then(() => setServerStatus('online')).catch(() => setServerStatus('offline'));
 
     const socket = io(serverRoot);
-    if (user) {
+    if (user && user._id) {
       socket.emit('setup', user._id);
     }
 
