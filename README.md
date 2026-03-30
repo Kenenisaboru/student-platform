@@ -1,5 +1,4 @@
 # Arsi Aseko Student Network
-
 A full-stack community platform designed for students from Arsi Aseko studying in different universities to connect, share ideas, and collaborate.
 
 ## Tech Stack
