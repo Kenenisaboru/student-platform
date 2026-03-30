@@ -128,10 +128,37 @@ mongoose.connect(MONGODB_URI)
 
 // Global Error Handler
 app.use((err, req, res, next) => {
-  console.error('Unhandled Server Error:', err.stack);
-  const status = err.status || 500;
+  let error = { ...err };
+  error.message = err.message;
+
+  // Log error for developers
+  if (process.env.NODE_ENV !== 'production') {
+    console.error('SERVER ERROR:', err);
+  }
+
+  // Mongoose bad ObjectId
+  if (err.name === 'CastError') {
+    const message = `Resource not found with id of ${err.value}`;
+    error = { message, status: 404 };
+  }
+
+  // Mongoose duplicate key
+  if (err.code === 11000) {
+    const field = Object.keys(err.keyValue)[0];
+    const message = `Duplicate field value entered: ${field}. Please use another value.`;
+    error = { message, status: 400 };
+  }
+
+  // Mongoose validation error
+  if (err.name === 'ValidationError') {
+    const message = Object.values(err.errors).map(val => val.message).join(', ');
+    error = { message, status: 400 };
+  }
+
+  const status = error.status || 500;
   res.status(status).json({
-    message: err.message || 'Internal Server Error',
-    error: process.env.NODE_ENV === 'production' ? {} : err
+    success: false,
+    message: error.message || 'Internal Server Error',
+    stack: process.env.NODE_ENV === 'production' ? null : err.stack
   });
 });
