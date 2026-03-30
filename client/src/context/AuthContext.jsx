@@ -17,19 +17,30 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkLoggedIn = async () => {
+      setLoading(true);
       try {
         const token = localStorage.getItem('token');
+        const storedUser = localStorage.getItem('user');
+
         if (!token) {
-          setLoading(false);
+          setUser(null);
           return;
+        }
+
+        if (storedUser) {
+          try {
+            setUser(JSON.parse(storedUser));
+          } catch (e) {
+            console.warn('Malformed stored user data');
+          }
         }
 
         const { data } = await API.get('/auth/me');
         setUser(data);
+        localStorage.setItem('user', JSON.stringify(data));
       } catch (err) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        setUser(null);
+        console.error('Session validation failed:', err.message);
+        logout();
       } finally {
         setLoading(false);
       }
