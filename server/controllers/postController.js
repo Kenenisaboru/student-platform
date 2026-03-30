@@ -53,7 +53,8 @@ exports.getPosts = async (req, res) => {
       .populate('author', 'name profilePicture university')
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .lean();
 
     res.json({
       posts,
@@ -69,7 +70,9 @@ exports.getPosts = async (req, res) => {
 
 exports.getPostById = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id).populate('author', 'name profilePicture university department bio');
+    const post = await Post.findById(req.params.id)
+      .populate('author', 'name profilePicture university department bio')
+      .lean();
     if (!post) return res.status(404).json({ message: 'Post not found' });
     res.json(post);
   } catch (error) {
