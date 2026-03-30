@@ -14,12 +14,32 @@ const Register = () => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState({
+    length: false,
+    uppercase: false,
+    lowercase: false,
+    number: false,
+    special: false
+  });
+
+  const checkPasswordStrength = (pass) => {
+    setPasswordStrength({
+      length: pass.length >= 8,
+      uppercase: /[A-Z]/.test(pass),
+      lowercase: /[a-z]/.test(pass),
+      number: /\d/.test(pass),
+      special: /[!@#$%^&*]/.test(pass)
+    });
+  };
   
   const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === 'password') {
+      checkPasswordStrength(e.target.value);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -149,6 +169,26 @@ const Register = () => {
                 <input name="password" type="password" required className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] focus:border-blue-500/30 focus:bg-white/[0.06] rounded-xl py-3 pl-11 pr-4 text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 placeholder:text-slate-600 text-sm" placeholder="••••••••" value={formData.password} onChange={handleChange} />
                 <Lock className="absolute left-3.5 top-3 text-slate-600 group-focus-within:text-blue-400 w-4.5 h-4.5 transition-colors" />
               </div>
+              
+              {/* Password Strength Checklist */}
+              {formData.password && (
+                <div className="mt-3 grid grid-cols-2 gap-2 p-3 bg-white/[0.02] border border-white/[0.04] rounded-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300">
+                  {[
+                    { key: 'length', label: '8+ Characters' },
+                    { key: 'uppercase', label: 'Uppercase' },
+                    { key: 'lowercase', label: 'Lowercase' },
+                    { key: 'number', label: 'Number' },
+                    { key: 'special', label: 'Special Icon' }
+                  ].map((rule) => (
+                    <div key={rule.key} className="flex items-center space-x-2">
+                      <div className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${passwordStrength[rule.key] ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]' : 'bg-slate-700'}`} />
+                      <span className={`text-[10px] font-bold tracking-tight uppercase ${passwordStrength[rule.key] ? 'text-emerald-400' : 'text-slate-600'}`}>
+                        {rule.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <motion.button
