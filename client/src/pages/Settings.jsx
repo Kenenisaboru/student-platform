@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import API from '../api/axios';
-import { UserCog, KeySquare, BellRing, Trash2, Loader2, Save } from 'lucide-react';
+import { UserCog, KeySquare, BellRing, Trash2, Loader2, Save, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 
 const Settings = () => {
   const { user, logout } = useAuth();
+  const { isDarkMode, toggleTheme } = useTheme();
   const [activeTab, setActiveTab] = useState('account');
   const [passwordData, setPasswordData] = useState({ current: '', new: '', confirm: '' });
   const [loading, setLoading] = useState(false);
@@ -89,6 +91,33 @@ const Settings = () => {
                   <p className="text-slate-500 text-sm">{user?.email}</p>
                 </div>
                 <div className="px-3 py-1 bg-emerald-500/10 text-emerald-400 text-xs font-bold rounded-lg border border-emerald-500/20">Verified</div>
+              </div>
+
+              <div className="p-6 bg-white/[0.02] border border-white/[0.04] rounded-2xl">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-white font-bold mb-1">Theme Preference</h4>
+                  <div className={`px-2 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${isDarkMode ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'bg-amber-500/10 text-amber-500 border border-amber-500/20'}`}>
+                    {isDarkMode ? 'Dark Mode' : 'Light Mode'}
+                  </div>
+                </div>
+                <p className="text-slate-500 text-sm mb-4">Choose your preferred appearance for the entire platform.</p>
+                
+                <div className="flex gap-3 mt-4">
+                  <button 
+                    onClick={() => !isDarkMode && toggleTheme()}
+                    className={`flex-1 flex items-center justify-center gap-3 px-4 py-3 rounded-xl font-bold transition-all border ${isDarkMode ? 'bg-indigo-600/20 border-indigo-500/30 text-white shadow-lg shadow-indigo-500/10' : 'bg-white/[0.04] border-white/[0.06] text-slate-400 hover:bg-white/[0.08]'}`}
+                  >
+                    <Moon className="w-5 h-5 focus:animate-pulse" />
+                    <span>Dark</span>
+                  </button>
+                  <button 
+                    onClick={() => isDarkMode && toggleTheme()}
+                    className={`flex-1 flex items-center justify-center gap-3 px-4 py-3 rounded-xl font-bold transition-all border ${!isDarkMode ? 'bg-amber-500/10 border-amber-500/30 text-amber-500 shadow-lg shadow-amber-500/10' : 'bg-white/[0.04] border-white/[0.06] text-slate-400 hover:bg-white/[0.08]'}`}
+                  >
+                    <Sun className="w-5 h-5 focus:animate-pulse" />
+                    <span>Light</span>
+                  </button>
+                </div>
               </div>
 
               <div className="p-6 bg-white/[0.02] border border-white/[0.04] rounded-2xl">

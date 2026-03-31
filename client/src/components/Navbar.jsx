@@ -7,6 +7,7 @@ import axios from 'axios';
 import API from '../api/axios';
 import io from 'socket.io-client';
 import { toast } from 'sonner';
+import ThemeToggle from './ThemeToggle';
 
 const Navbar = ({ onMenuToggle }) => {
   const { user, logout } = useAuth();
@@ -187,6 +188,7 @@ const Navbar = ({ onMenuToggle }) => {
                   </Link>
                 )}
 
+                <ThemeToggle />
                 <button 
                   onClick={logout}
                   title="Logout"
@@ -197,6 +199,7 @@ const Navbar = ({ onMenuToggle }) => {
               </>
             ) : (
               <>
+                <ThemeToggle />
                 <Link to="/login" className="px-4 py-2 text-sm font-bold text-slate-400 hover:text-white transition-colors">
                   Log in
                 </Link>
