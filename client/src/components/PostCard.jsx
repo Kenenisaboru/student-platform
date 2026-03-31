@@ -94,7 +94,7 @@ const PostCard = ({ post: initialPost, onDelete }) => {
     }
   };
 
-  const isAuthor = user?._id === post.author._id;
+  const isAuthor = user?._id === post.author?._id;
   const isAdmin = user?.role === 'admin';
   const hasVoted = post.poll?.options?.some(opt => opt.votes.includes(user?._id));
   const totalVotes = post.poll?.options?.reduce((acc, opt) => acc + opt.votes.length, 0) || 0;
@@ -110,22 +110,28 @@ const PostCard = ({ post: initialPost, onDelete }) => {
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
-            <Link to={`/profile/${post.author._id}`} className="relative">
-              <img 
-                src={post.author.profilePicture} 
-                alt={post.author.name} 
-                className="w-10 h-10 rounded-xl object-cover ring-2 ring-white/[0.06]" 
-              />
-              {post.author.isOnline && (
+            <Link to={`/profile/${post.author?._id || ''}`} className="relative pointer-events-auto">
+              {post.author ? (
+                <img 
+                  src={post.author.profilePicture} 
+                  alt={post.author.name} 
+                  className="w-10 h-10 rounded-xl object-cover ring-2 ring-white/[0.06]" 
+                />
+              ) : (
+                <div className="w-10 h-10 bg-slate-800 rounded-xl ring-2 ring-white/[0.06] flex items-center justify-center text-slate-500 font-bold uppercase">
+                  U
+                </div>
+              )}
+              {post.author?.isOnline && (
                 <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-[1.5px] border-[#0d1220]" title="Online" />
               )}
             </Link>
             <div>
-              <Link to={`/profile/${post.author._id}`} className="font-bold text-white hover:text-blue-400 transition-colors text-[14px]">
-                {post.author.name}
+              <Link to={`/profile/${post.author?._id || ''}`} className="font-bold text-white hover:text-blue-400 transition-colors text-[14px]">
+                {post.author?.name || 'Unknown User'}
               </Link>
               <div className="flex items-center text-[11px] text-slate-600 font-medium">
-                <span>{post.author.university}</span>
+                <span>{post.author?.university || 'Unknown Institution'}</span>
                 <span className="mx-1.5 opacity-30">•</span>
                 <span>{formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}</span>
               </div>

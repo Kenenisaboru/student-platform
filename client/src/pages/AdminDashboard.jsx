@@ -246,7 +246,7 @@ const AdminDashboard = () => {
                           </div>
                           <div>
                              <h4 className="text-sm font-bold text-white mb-1">{p.title}</h4>
-                             <p className="text-[11px] text-slate-500">By {p.author.name} • {new Date(p.createdAt).toLocaleDateString()}</p>
+                             <p className="text-[11px] text-slate-500">By {p.author?.name || 'Unknown User'} • {new Date(p.createdAt).toLocaleDateString()}</p>
                           </div>
                        </div>
                        <button onClick={() => handleDeletePost(p._id)} className="p-2 text-slate-600 hover:text-red-400 hover:bg-red-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-all">
