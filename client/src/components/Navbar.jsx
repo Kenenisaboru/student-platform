@@ -1,11 +1,11 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Home, Bell, User, PlusSquare, Search, LogOut, ShieldCheck, Sparkles, Menu, MessageSquare } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import API from '../api/axios';
-import io from 'socket.io-client';
+import sharedSocket from '../utils/socket';
 import { toast } from 'sonner';
 import ThemeToggle from './ThemeToggle';
 
@@ -18,6 +18,11 @@ const Navbar = ({ onMenuToggle }) => {
   const [scrolled, setScrolled] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [unreadMessages, setUnreadMessages] = useState(0);
+
+  const pathnameRef = useRef(location.pathname);
+  useEffect(() => {
+    pathnameRef.current = location.pathname;
+  }, [location.pathname]);
 
   // Initial fetch for unread counts & socket setup
   useEffect(() => {
@@ -44,28 +49,35 @@ const Navbar = ({ onMenuToggle }) => {
     // Safety check: Use vanilla axios for health-check to avoid interceptor AUTH loops
     axios.get(serverRoot).then(() => setServerStatus('online')).catch(() => setServerStatus('offline'));
 
-    const socket = io(serverRoot);
+    if (!sharedSocket.connected) {
+      sharedSocket.connect();
+    }
+    
     if (user && user._id) {
-      socket.emit('setup', user._id);
+      sharedSocket.emit('join_room', user._id);
     }
 
-    socket.on('new_notification', (notification) => {
+    const handleNewNotification = (notification) => {
       setUnreadCount(prev => prev + 1);
       toast(notification.message, { icon: '🔔' });
-    });
+    };
 
-    socket.on('new_message', (data) => {
+    const handleNewMessage = (data) => {
       // Don't show toast if we are currently chatting with this user
-      if (!location.pathname.includes(`/messages/${data.conversationId}`)) {
+      if (!pathnameRef.current.includes(`/messages/${data.conversationId}`)) {
         setUnreadMessages(prev => prev + 1);
         toast(`New message from ${data.message.sender.name}`, { icon: '💬' });
       }
-    });
+    };
+
+    sharedSocket.on('new_notification', handleNewNotification);
+    sharedSocket.on('new_message', handleNewMessage);
 
     return () => {
-      socket.disconnect();
+      sharedSocket.off('new_notification', handleNewNotification);
+      sharedSocket.off('new_message', handleNewMessage);
     };
-  }, [user, location.pathname]);
+  }, [user?._id]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
