@@ -76,7 +76,7 @@ function AppContent() {
   const showLayout = user && !isFullWidthPath(location.pathname);
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-[#060a14] text-slate-900 dark:text-slate-100 transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300">
       <Navbar onMenuToggle={() => setDrawerOpen(true)} />
       <MobileDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
 
