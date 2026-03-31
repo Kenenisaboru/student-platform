@@ -12,12 +12,19 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(() => {
+    try {
+      const stored = localStorage.getItem('user');
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  });
+  // If we already have a user and token, don't block the UI with a spinner
+  const [loading, setLoading] = useState(() => !localStorage.getItem('token'));
 
   useEffect(() => {
     const checkLoggedIn = async () => {
-      setLoading(true);
       try {
         const token = localStorage.getItem('token');
         const storedUser = localStorage.getItem('user');
@@ -27,7 +34,7 @@ export const AuthProvider = ({ children }) => {
           return;
         }
 
-        if (storedUser) {
+        if (storedUser && !user) {
           try {
             setUser(JSON.parse(storedUser));
           } catch (e) {
@@ -40,7 +47,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('user', JSON.stringify(data));
       } catch (err) {
         console.error('Session validation failed:', err.message);
-        logout();
+        // Do not force logout on network errors (only on 401 handled by interceptor)
       } finally {
         setLoading(false);
       }
