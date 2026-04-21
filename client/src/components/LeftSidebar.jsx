@@ -142,9 +142,9 @@ const LeftSidebar = () => {
           <div className="w-9 h-9 bg-blue-500/20 rounded-xl flex items-center justify-center mb-3">
             <Sparkles className="w-4 h-4 text-blue-400" />
           </div>
-          <h4 className="font-bold text-white text-sm mb-1">Nexus Pro</h4>
+          <h4 className="font-bold text-white text-sm mb-1">CP Pro</h4>
           <p className="text-[11px] text-slate-500 leading-relaxed mb-3">
-            You're using the premium version of Arsi Aseko Network.
+            You're using the premium version of the Communication Platform.
           </p>
           <div className="flex items-center gap-1.5">
             <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
