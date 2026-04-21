@@ -13,7 +13,8 @@ exports.register = async (req, res) => {
   try {
     const { name, email, password, university, department } = req.body;
 
-    const userExists = await User.findOne({ email });
+    const emailLower = email.toLowerCase();
+    const userExists = await User.findOne({ email: emailLower });
     if (userExists) {
       return res.status(400).json({ message: 'User already exists' });
     }
@@ -22,9 +23,9 @@ exports.register = async (req, res) => {
     const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase());
     const role = adminEmails.includes(email.toLowerCase()) ? 'admin' : 'student';
 
-    const user = await User.create({
+    const user = new User({
       name,
-      email,
+      email: email.toLowerCase(),
       password,
       university,
       department,
@@ -33,18 +34,18 @@ exports.register = async (req, res) => {
 
     // Generate verification token
     const verificationToken = user.createVerificationToken();
-    await user.save({ validateBeforeSave: false });
+    await user.save();
 
     // Send verification email
     const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
     try {
       await sendEmail({
         to: user.email,
-        subject: 'Verify your email - Arsi Aseko Network',
+        subject: 'Verify your email - Communication Platform',
         html: `
           <div style="font-family: 'Inter', sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
             <div style="text-align: center; margin-bottom: 30px;">
-              <h1 style="color: #3b82f6; font-size: 24px;">Arsi Aseko Network</h1>
+              <h1 style="color: #3b82f6; font-size: 24px;">Communication Platform</h1>
             </div>
             <h2 style="color: #1e293b;">Welcome, ${user.name}! 🎉</h2>
             <p style="color: #475569; line-height: 1.6;">
@@ -92,7 +93,8 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    let user = await User.findOne({ email });
+    const emailLower = email.toLowerCase();
+    let user = await User.findOne({ email: emailLower });
 
     // EMERGENCY AUTO-SEED for Demo Accounts
     if (!user) {
@@ -104,10 +106,10 @@ exports.login = async (req, res) => {
           department: 'Computer Science',
           role: 'student'
         },
-        'kananiman710@gmail.com': {
-          name: 'Arsi Aseko Admin',
+        'kenenisaboru998@gmail.com': {
+          name: 'Communication Admin',
           password: 'AdminPassword123!',
-          university: 'Adama Science & Tech',
+          university: 'Science & Tech',
           department: 'Administration',
           role: 'admin'
         }
@@ -201,7 +203,7 @@ exports.resendVerification = async (req, res) => {
     const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
     await sendEmail({
       to: user.email,
-      subject: 'Verify your email - Arsi Aseko Network',
+      subject: 'Verify your email - Communication Platform',
       html: `
         <div style="font-family: 'Inter', sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
           <h2 style="color: #1e293b;">Verify Your Email</h2>
@@ -239,11 +241,11 @@ exports.forgotPassword = async (req, res) => {
 
     await sendEmail({
       to: user.email,
-      subject: 'Password Reset - Arsi Aseko Network',
+      subject: 'Password Reset - Communication Platform',
       html: `
         <div style="font-family: 'Inter', sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #3b82f6; font-size: 24px;">Arsi Aseko Network</h1>
+            <h1 style="color: #3b82f6; font-size: 24px;">Communication Platform</h1>
           </div>
           <h2 style="color: #1e293b;">Reset Your Password</h2>
           <p style="color: #475569; line-height: 1.6;">
