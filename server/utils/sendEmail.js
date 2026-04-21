@@ -12,7 +12,7 @@ const sendEmail = async ({ to, subject, html }) => {
   });
 
   await transporter.sendMail({
-    from: `"Arsi Aseko Network" <${process.env.EMAIL_USER}>`,
+    from: `"Communication Platform" <${process.env.EMAIL_USER}>`,
     to,
     subject,
     html,
