@@ -9,7 +9,8 @@ const {
   followUser,
   deleteUser,
   getSavedPosts,
-  toggleSavePost
+  toggleSavePost,
+  getDepartmentLeaderboard
 } = require('../controllers/userController');
 const { protect, admin } = require('../middleware/authMiddleware');
 const { upload } = require('../config/cloudinary');
@@ -19,6 +20,7 @@ const { validate, updateProfileRules, searchRules, paginationRules } = require('
 router.get('/active', protect, getActiveUsers);
 router.get('/search', protect, searchRules, paginationRules, validate, searchUsers);
 router.get('/saved', protect, getSavedPosts);
+router.get('/leaderboard', protect, getDepartmentLeaderboard);
 
 // Follow/Unfollow & Saved Posts
 router.post('/:id/follow', protect, followUser);
