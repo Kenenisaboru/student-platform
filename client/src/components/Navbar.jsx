@@ -102,7 +102,7 @@ const Navbar = ({ onMenuToggle }) => {
           <div className="flex items-center space-x-3 text-blue-300/80">
             <div className="flex items-center space-x-1.5">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Empowering the students of Arsi Aseko</span>
+              <span>Empowering the modern student community</span>
             </div>
             <span className="opacity-20">|</span>
             <div className="flex items-center space-x-1.5">
@@ -135,11 +135,11 @@ const Navbar = ({ onMenuToggle }) => {
 
             <Link to="/" className="flex items-center space-x-3 group">
               <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-500/20 group-hover:shadow-blue-500/40 group-hover:scale-105 transition-all duration-300">
-                <span className="font-extrabold text-sm">AA</span>
+                <span className="font-extrabold text-sm">CP</span>
               </div>
               <div className="hidden sm:flex flex-col">
-                <span className="text-base font-extrabold text-white leading-none tracking-tight">Arsi Aseko</span>
-                <span className="text-[9px] font-bold text-blue-400 uppercase tracking-[0.2em] mt-0.5">Nexus Pro</span>
+                <span className="text-base font-extrabold text-white leading-none tracking-tight">Communication</span>
+                <span className="text-[9px] font-bold text-blue-400 uppercase tracking-[0.2em] mt-0.5">Platform Pro</span>
               </div>
             </Link>
           </div>
