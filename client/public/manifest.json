@@ -1,7 +1,7 @@
 {
-  "name": "Arsi Aseko Student Network",
-  "short_name": "Nexus Pro",
-  "description": "Connect with your peers across Arsi Aseko universities. Share ideas, collaborate, and grow together.",
+  "name": "Student Communication Platform",
+  "short_name": "CP Pro",
+  "description": "Connect with your peers across modern universities. Share ideas, collaborate, and grow together.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#060a14",
@@ -9,13 +9,13 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/vite.svg",
-      "sizes": "192x192",
+      "src": "/favicon.svg",
+      "sizes": "any",
       "type": "image/svg+xml"
     },
     {
-      "src": "/vite.svg",
-      "sizes": "512x512",
+      "src": "/favicon.svg",
+      "sizes": "any",
       "type": "image/svg+xml"
     }
   ]
