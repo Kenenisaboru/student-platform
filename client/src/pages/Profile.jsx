@@ -7,6 +7,7 @@ import { Loader2, Calendar, MapPin, Book, Edit3, User, Mail, AtSign, Camera, Use
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { ProfileSkeleton } from '../components/Skeleton';
+import EmptyState from '../components/EmptyState';
 
 const Profile = () => {
   const { id } = useParams();
@@ -271,10 +272,15 @@ const Profile = () => {
               {posts.map(post => <PostCard key={post._id} post={post} onDelete={() => setPosts(posts.filter(p => p._id !== post._id))} />)}
             </motion.div>
           ) : (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16 glass-card rounded-2xl">
-              <div className="w-14 h-14 bg-white/[0.04] rounded-2xl flex items-center justify-center mx-auto mb-4"><User className="w-7 h-7 text-slate-600" /></div>
-              <p className="text-slate-500 font-semibold italic text-sm">No posts yet.</p>
-            </motion.div>
+            <EmptyState 
+              icon={User}
+              title={isOwnProfile ? "No Activity Yet" : "Silence is Golden"}
+              description={isOwnProfile 
+                ? "You haven't shared any discussions yet. Your thoughts could inspire someone today!" 
+                : "This student hasn't shared any discussions with the community yet."}
+              actionText={isOwnProfile ? "Create your first post" : null}
+              actionLink={isOwnProfile ? "/create-post" : null}
+            />
           )
         ) : (
           savedPosts.length > 0 ? (
@@ -282,10 +288,13 @@ const Profile = () => {
               {savedPosts.map(post => <PostCard key={post._id} post={post} />)}
             </motion.div>
           ) : (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16 glass-card rounded-2xl">
-              <div className="w-14 h-14 bg-white/[0.04] rounded-2xl flex items-center justify-center mx-auto mb-4"><Bookmark className="w-7 h-7 text-slate-600" /></div>
-              <p className="text-slate-500 font-semibold italic text-sm">You haven't saved any posts yet.</p>
-            </motion.div>
+            <EmptyState 
+              icon={Bookmark}
+              title="Nothing Saved Yet"
+              description="Save interesting posts to your shelf so you can revisit them later. Your saved collection is private."
+              actionText="Explore Feed"
+              actionLink="/"
+            />
           )
         )}
       </div>
