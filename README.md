@@ -1,5 +1,5 @@
-# Arsi Aseko Student Network
-A full-stack community platform designed for students from Arsi Aseko studying in different universities to connect, share ideas, and collaborate.
+# Communication Platform
+A full-stack community platform designed for users to connect, share ideas, and collaborate.
 
 ## Tech Stack
 - **Frontend**: React.js, Tailwind CSS, Vite, Lucide Icons, Framer Motion
