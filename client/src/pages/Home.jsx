@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { PostSkeleton } from '../components/Skeleton';
 import { toast } from 'sonner';
 import { Helmet } from 'react-helmet-async';
+import EmptyState from '../components/EmptyState';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -97,8 +98,8 @@ const Home = () => {
   return (
     <div className="max-w-2xl mx-auto px-0 pb-12">
       <Helmet>
-        <title>Home | Arsi Aseko Student Network</title>
-        <meta name="description" content="Connect with students across Arsi Aseko universities." />
+        <title>Home | Communication Platform</title>
+        <meta name="description" content="Connect, share, and collaborate with your academic community." />
       </Helmet>
 
       {/* Welcome Header */}
@@ -112,18 +113,18 @@ const Home = () => {
           <div className="max-w-lg">
             <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
               className="inline-flex items-center px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/10 text-[11px] font-bold mb-3 text-blue-400 uppercase tracking-wider">
-              <Sparkles className="w-3 h-3 mr-1.5" /> Welcome to Nexus
+              <Sparkles className="w-3 h-3 mr-1.5" /> Welcome to the Network
             </motion.div>
             <h1 className="text-2xl sm:text-3xl font-extrabold mb-2 text-white tracking-tight leading-tight">
-              Arsi Aseko <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Network</span>
+              Communication <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Platform</span>
             </h1>
             <p className="text-slate-400 text-[13px] sm:text-sm leading-relaxed">
-              Connect with your peers across Arsi Aseko universities. Share ideas, collaborate, and grow together.
+              A premium space to connect with your peers. Share ideas, collaborate on projects, and grow your professional network together.
             </p>
           </div>
           <div className="hidden md:flex relative w-24 h-24 justify-center items-center shrink-0">
              <div className="w-20 h-20 bg-white/[0.04] rounded-2xl backdrop-blur-lg border border-white/[0.06] shadow-xl flex items-center justify-center rotate-6">
-               <h1 className="text-3xl font-black text-white -rotate-6">AAN</h1>
+               <h1 className="text-3xl font-black text-white -rotate-6">CP</h1>
              </div>
           </div>
         </div>
@@ -185,16 +186,13 @@ const Home = () => {
           </div>
         </>
       ) : (
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-16 glass-card rounded-2xl">
-          <div className="w-14 h-14 bg-white/[0.04] rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <MessageCircle className="w-7 h-7 text-slate-600" />
-          </div>
-          <h3 className="text-lg font-bold text-white mb-2">No Discussions Yet</h3>
-          <p className="text-slate-500 mb-6 text-sm">Be the first to share an idea!</p>
-          <Link to="/create-post" className="inline-flex items-center justify-center bg-white/[0.06] hover:bg-white/[0.1] text-white px-5 py-2.5 rounded-xl font-semibold transition-all border border-white/[0.06] text-sm">
-            Create a post
-          </Link>
-        </motion.div>
+        <EmptyState 
+          icon={MessageCircle}
+          title="No Discussions Yet"
+          description="Be the first to share an idea! Start a conversation with your community today."
+          actionText="Create a post"
+          actionLink="/create-post"
+        />
       )}
     </div>
   );
