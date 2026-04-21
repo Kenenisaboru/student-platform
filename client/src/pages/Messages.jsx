@@ -3,15 +3,19 @@ import { useParams, useNavigate } from 'react-router-dom';
 import API from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import { Loader2, Send, ArrowLeft, MessageSquare, Search } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { MessageSkeleton } from '../components/Skeleton';
+import EmptyState from '../components/EmptyState';
+import Skeleton from '../components/Skeleton';
+import { useSocket } from '../context/SocketContext';
 
 const Messages = () => {
   const { id } = useParams(); // The user ID to message, or empty for just the inbox
   const { user } = useAuth();
   const navigate = useNavigate();
   
+  const { socket } = useSocket();
   const [conversations, setConversations] = useState([]);
   const [activeConversation, setActiveConversation] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -19,6 +23,8 @@ const Messages = () => {
   const [loadingConv, setLoadingConv] = useState(true);
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [search, setSearch] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const typingTimeoutRef = useRef(null);
   
   const messagesEndRef = useRef(null);
 
@@ -42,11 +48,49 @@ const Messages = () => {
     fetchConversations();
   }, []);
 
+  // Socket listeners
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleNewMessage = ({ message, conversationId }) => {
+      if (activeConversation?._id === conversationId) {
+        setMessages(prev => {
+          if (prev.find(m => m._id === message._id)) return prev;
+          return [...prev, message];
+        });
+      }
+      
+      // Update conversations list snippet
+      setConversations(prev => prev.map(c => {
+        if (c._id === conversationId) {
+          return { ...c, lastMessage: message, lastMessageAt: message.createdAt };
+        }
+        return c;
+      }).sort((a,b) => new Date(b.lastMessageAt) - new Date(a.lastMessageAt)));
+    };
+
+    const handleTypingStatus = ({ senderId, isTyping: remoteTyping }) => {
+      const otherUser = activeConversation?.participants.find(p => p._id !== user._id);
+      if (otherUser?._id === senderId) {
+        setIsTyping(remoteTyping);
+      }
+    };
+
+    socket.on('new_message', handleNewMessage);
+    socket.on('typing_status', handleTypingStatus);
+
+    return () => {
+      socket.off('new_message', handleNewMessage);
+      socket.off('typing_status', handleTypingStatus);
+    };
+  }, [socket, activeConversation, user]);
+
   // Fetch active conversation if ID is provided
   useEffect(() => {
     const fetchActiveConversation = async () => {
       if (!id) {
         setActiveConversation(null);
+        setIsTyping(false);
         return;
       }
       
@@ -80,9 +124,31 @@ const Messages = () => {
     fetchActiveConversation();
   }, [id, navigate]);
 
+  const handleInputChange = (e) => {
+    setNewMessage(e.target.value);
+    
+    if (!socket || !activeConversation) return;
+
+    const otherUser = activeConversation.participants.find(p => p._id !== user._id);
+    if (!otherUser) return;
+
+    socket.emit('typing', { senderId: user._id, receiverId: otherUser._id });
+
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    
+    typingTimeoutRef.current = setTimeout(() => {
+      socket.emit('stop_typing', { senderId: user._id, receiverId: otherUser._id });
+    }, 2000);
+  };
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!newMessage.trim() || !activeConversation) return;
+
+    const otherUser = activeConversation.participants.find(p => p._id !== user._id);
+    if (socket && otherUser) {
+        socket.emit('stop_typing', { senderId: user._id, receiverId: otherUser._id });
+    }
 
     try {
       const content = newMessage;
@@ -112,7 +178,6 @@ const Messages = () => {
       
     } catch (err) {
       toast.error('Failed to send message');
-      // Revert optimistic clear (not perfect state management but works for demo)
     }
   };
 
@@ -178,7 +243,10 @@ const Messages = () => {
                 );
               })
             ) : (
-              <div className="text-center p-8 text-slate-500 text-sm font-semibold">No conversations yet.<br/>Go to a profile to send a message.</div>
+              <div className="px-4 py-10 text-center">
+                 <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-2 opacity-50">No Conversations</p>
+                 <p className="text-slate-600 text-[11px] font-medium leading-relaxed">Go to a student's profile to start a direct message.</p>
+              </div>
             )}
           </div>
         </div>
@@ -213,7 +281,7 @@ const Messages = () => {
                   <div className="space-y-4">
                     {[...Array(3)].map((_, i) => (
                        <div key={i} className={`flex ${i%2===0 ? 'justify-end' : 'justify-start'}`}>
-                         <div className={`w-2/3 h-10 rounded-2xl animate-shimmer ${i%2===0 ? 'rounded-tr-sm bg-blue-500/20' : 'rounded-tl-sm bg-white/5'}`}></div>
+                         <Skeleton className={`w-2/3 h-12 rounded-2xl ${i%2===0 ? 'rounded-tr-sm' : 'rounded-tl-sm'}`} />
                        </div>
                     ))}
                   </div>
@@ -237,6 +305,23 @@ const Messages = () => {
                     <p className="font-semibold text-sm">Say hello! 👋</p>
                   </div>
                 )}
+                
+                {/* Typing Indicator */}
+                <AnimatePresence>
+                  {isTyping && (
+                    <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 5 }} className="flex justify-start">
+                      <div className="bg-white/[0.04] px-4 py-2.5 rounded-2xl rounded-tl-sm border border-white/[0.04] flex items-center gap-1.5">
+                        <div className="flex gap-1">
+                          <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 1 }} className="w-1.5 h-1.5 bg-blue-400/50 rounded-full" />
+                          <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 1, delay: 0.2 }} className="w-1.5 h-1.5 bg-blue-400/50 rounded-full" />
+                          <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 1, delay: 0.4 }} className="w-1.5 h-1.5 bg-blue-400/50 rounded-full" />
+                        </div>
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Typing</span>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                
                 <div ref={messagesEndRef} />
               </div>
 
@@ -246,7 +331,7 @@ const Messages = () => {
                   <input 
                     type="text"
                     value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
+                    onChange={handleInputChange}
                     placeholder="Type a message..."
                     className="flex-1 bg-white/[0.03] border border-white/[0.08] rounded-xl py-3 pl-4 pr-12 text-sm text-white font-medium focus:outline-none focus:border-blue-500/40"
                   />
@@ -262,12 +347,12 @@ const Messages = () => {
               </div>
             </>
           ) : (
-            <div className="h-full flex flex-col items-center justify-center text-slate-500">
-               <div className="w-20 h-20 bg-white/[0.03] rounded-full flex items-center justify-center mb-4">
-                 <MessageSquare className="w-10 h-10 text-slate-600" />
-               </div>
-               <h3 className="text-xl font-bold text-white mb-2">Your Messages</h3>
-               <p className="text-sm font-medium">Select a conversation to start chatting</p>
+            <div className="h-full flex items-center justify-center p-8">
+              <EmptyState 
+                icon={MessageSquare}
+                title="Your Inbox"
+                description="Select a conversation from the sidebar to view your messages or start a new discussion."
+              />
             </div>
           )}
         </div>
