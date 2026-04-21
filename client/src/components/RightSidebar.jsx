@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, TrendingUp, Sparkles, BookOpen, ExternalLink, BarChart3, Clock } from 'lucide-react';
+import { Users, TrendingUp, Sparkles, BookOpen, ExternalLink, BarChart3, Clock, Smartphone } from 'lucide-react';
 import API from '../api/axios';
 import socket from '../utils/socket';
 import { formatDistanceToNow } from 'date-fns';
@@ -8,22 +8,28 @@ import { formatDistanceToNow } from 'date-fns';
 const RightSidebar = () => {
   const [topUsers, setTopUsers] = useState([]);
   const [trendingTags, setTrendingTags] = useState([]);
+  const [leaderboard, setLeaderboard] = useState([]);
   const [stats, setStats] = useState({ totalStudents: 0, totalPosts: 0, totalTags: 0, activeToday: 0 });
   const [loading, setLoading] = useState(true);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [usersRes, tagsRes, statsRes] = await Promise.all([
+        const [usersRes, tagsRes, statsRes, leaderRes] = await Promise.all([
           API.get('/users/active').catch(() => ({ data: [] })),
           API.get('/posts/trending-tags').catch(() => ({ data: [] })),
-          API.get('/posts/community-stats').catch(() => ({ data: { totalStudents: 0, totalPosts: 0, totalTags: 0, activeToday: 0 } }))
+          API.get('/posts/community-stats').catch(() => ({ data: { totalStudents: 0, totalPosts: 0, totalTags: 0, activeToday: 0 } })),
+          API.get('/users/leaderboard').catch(() => ({ data: [] }))
         ]);
         const usersData = Array.isArray(usersRes.data) ? usersRes.data : [];
         const tagsData = Array.isArray(tagsRes.data) ? tagsRes.data : [];
+        const leaderData = Array.isArray(leaderRes.data) ? leaderRes.data : [];
         
         setTopUsers(usersData.slice(0, 6));
         setTrendingTags(tagsData.slice(0, 5));
+        setLeaderboard(leaderData);
         setStats(statsRes.data || { totalStudents: 0, totalPosts: 0, totalTags: 0, activeToday: 0 });
       } catch (err) {
         console.error(err);
@@ -43,8 +49,17 @@ const RightSidebar = () => {
       }));
     });
 
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setIsInstallable(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
     return () => {
       socket.off('user_online');
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     };
   }, []);
 
@@ -176,6 +191,71 @@ const RightSidebar = () => {
         )}
       </div>
 
+      {/* Department Leaderboard */}
+      <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.05] backdrop-blur-sm">
+        <div className="flex items-center gap-2.5 mb-4">
+          <div className="w-8 h-8 bg-blue-500/10 rounded-xl flex items-center justify-center">
+            <TrendingUp className="w-4 h-4 text-blue-400" />
+          </div>
+          <h3 className="font-bold text-white text-sm">Community Ranking</h3>
+        </div>
+
+        {leaderboard.length > 0 ? (
+          <div className="space-y-3">
+            {leaderboard.map((dept, i) => (
+              <div key={dept._id} className="relative group">
+                <div className="flex items-center justify-between mb-1.5 px-1">
+                  <div className="flex items-center gap-2">
+                    <span className={`text-[10px] font-black w-4 text-center ${i === 0 ? 'text-amber-400' : 'text-slate-600'}`}>{i + 1}</span>
+                    <span className="text-[11px] font-bold text-slate-300 truncate max-w-[120px]">{dept._id}</span>
+                  </div>
+                  <span className="text-[10px] font-bold text-slate-500">{dept.students} Active</span>
+                </div>
+                <div className="h-1.5 w-full bg-white/[0.03] rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(dept.students / leaderboard[0].students) * 100}%` }}
+                    className={`h-full rounded-full ${i === 0 ? 'bg-gradient-to-r from-blue-500 to-indigo-500' : 'bg-slate-700'}`}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-slate-600 text-sm text-center py-4 italic">Calculating rankings...</p>
+        )}
+      </div>
+
+      {/* PWA Install Card */}
+      {isInstallable && (
+        <div className="p-5 rounded-2xl bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-500/10 relative overflow-hidden group">
+          <div className="absolute -right-4 -top-4 w-20 h-20 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all" />
+          <div className="flex items-center gap-2.5 mb-3">
+            <Smartphone className="w-4 h-4 text-blue-400" />
+            <h3 className="font-bold text-white text-sm tracking-tight">CP Pro Mobile</h3>
+          </div>
+          <p className="text-[12px] text-slate-500 leading-relaxed mb-4 font-medium">
+            Install Communication Platform on your home screen for a faster, native experience.
+          </p>
+          <button
+            onClick={() => {
+              if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                  if (choiceResult.outcome === 'accepted') {
+                    setIsInstallable(false);
+                  }
+                  setDeferredPrompt(null);
+                });
+              }
+            }}
+            className="w-full text-[12px] font-bold text-white bg-blue-600 hover:bg-blue-500 py-3 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/20"
+          >
+            Install App
+          </button>
+        </div>
+      )}
+
       {/* Study Resources */}
       <div className="p-5 rounded-2xl bg-gradient-to-br from-indigo-600/5 to-purple-600/5 border border-indigo-500/10 relative overflow-hidden group">
         <div className="absolute -right-4 -top-4 w-20 h-20 bg-indigo-500/5 rounded-full blur-2xl group-hover:bg-indigo-500/10 transition-all" />
@@ -198,7 +278,7 @@ const RightSidebar = () => {
       {/* Footer */}
       <div className="px-5 pt-2">
         <p className="text-[10px] text-slate-700 leading-relaxed font-bold uppercase tracking-widest">
-          © {new Date().getFullYear()} Arsi Aseko Network · V2.0
+          © {new Date().getFullYear()} Communication Platform · V2.0
         </p>
       </div>
     </aside>
