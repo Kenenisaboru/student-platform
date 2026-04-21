@@ -1,3 +1,4 @@
+// Rebranding to Communication Platform - Triggering Restart
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -67,6 +68,14 @@ io.on('connection', (socket) => {
     console.log(`User ${userId} joined their notification room`);
   });
 
+  socket.on('typing', ({ senderId, receiverId }) => {
+    io.to(receiverId).emit('typing_status', { senderId, isTyping: true });
+  });
+
+  socket.on('stop_typing', ({ senderId, receiverId }) => {
+    io.to(receiverId).emit('typing_status', { senderId, isTyping: false });
+  });
+
   socket.on('disconnect', async () => {
     const userId = onlineUsers.get(socket.id);
     onlineUsers.delete(socket.id);
@@ -108,19 +117,20 @@ app.use('/api/messages', messageRoutes);
 app.use('/api/reports', reportRoutes);
 
 app.get('/', (req, res) => {
-  res.send('Arsi Aseko Student Network API is running...');
+  res.send('Communication Platform API is running...');
 });
 
 // Connect to MongoDB
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
 mongoose.connect(MONGODB_URI)
   .then(() => {
     console.log('Connected to MongoDB');
-    server.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
   })
   .catch((err) => {
     console.error('MongoDB connection error:', err);
