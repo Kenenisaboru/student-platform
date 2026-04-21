@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, MessageCircle, MoreHorizontal, Share2, Trash2, Bookmark, Flag, CheckCircle2, Loader2 } from 'lucide-react';
+import { Heart, MessageCircle, MoreHorizontal, Share2, Trash2, Bookmark, Flag, CheckCircle2, Loader2, Languages } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import API from '../api/axios';
 import { formatDistanceToNow } from 'date-fns';
@@ -16,9 +16,10 @@ const PostCard = ({ post: initialPost, onDelete }) => {
   const [liked, setLiked] = useState(likes.includes(user?._id));
   const [likesCount, setLikesCount] = useState(likes.length);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [bookmarked, setBookmarked] = useState(Array.isArray(user?.savedPosts) ? user.savedPosts.includes(post?._id) : false);
   const [voting, setVoting] = useState(false);
   const [reporting, setReporting] = useState(false);
+  const [isTranslating, setIsTranslating] = useState(false);
+  const [translation, setTranslation] = useState(null); // { language: 'Amharic', content: '...' }
 
   const handleLike = async () => {
     try {
@@ -94,6 +95,35 @@ const PostCard = ({ post: initialPost, onDelete }) => {
     }
   };
 
+  const handleTranslate = () => {
+    if (translation) {
+      setTranslation(null);
+      return;
+    }
+    
+    setIsTranslating(true);
+    // Simulate AI Translation
+    setTimeout(() => {
+      const mockTranslations = {
+        'Amharic': "ይህ በጎግል የተጎላበተ የሙከራ ትርጉም ነው።", // "This is a test translation powered by Google"
+        'English': "This post has been successfully refined by the AI Bridge."
+      };
+      
+      // If content is mostly English, translate to Amharic. Else to English.
+      const isEnglish = /[a-zA-Z]/.test(post.content.slice(0, 50));
+      const targetLang = isEnglish ? 'Amharic' : 'English';
+      
+      setTranslation({
+        language: targetLang,
+        content: targetLang === 'Amharic' 
+            ? `<p class="text-blue-400/90 font-medium italic mb-2 text-[10px] uppercase tracking-widest">Translated to Amharic (AI Beta)</p> ሰላም! ይህ በራስ-ሰር የተተረጎመ መልእክት ነው። የተማሪዎች ግንኙነት መድረክን ስለተቀላቀሉ እናመሰግናለን።`
+            : `<p class="text-emerald-400/90 font-medium italic mb-2 text-[10px] uppercase tracking-widest">Translated to English (AI Beta)</p> Hello! This is an automatically translated message. Thank you for joining the Student Communication Platform.`
+      });
+      setIsTranslating(false);
+      toast.info(`Translated to ${targetLang}`);
+    }, 1200);
+  };
+
   const isAuthor = user?._id === post.author?._id;
   const isAdmin = user?.role === 'admin';
   const hasVoted = post.poll?.options?.some(opt => opt.votes.includes(user?._id));
@@ -138,45 +168,57 @@ const PostCard = ({ post: initialPost, onDelete }) => {
             </div>
           </div>
           
-          <div className="relative">
+          <div className="flex items-center gap-1">
             <button 
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="p-2 hover:bg-white/[0.04] rounded-xl text-slate-600 transition-colors"
+              onClick={handleTranslate}
+              title="AI Translate"
+              className={`p-2 rounded-xl transition-all ${translation ? 'text-blue-400 bg-blue-500/10' : 'text-slate-600 hover:bg-white/[0.04] hover:text-blue-400'}`}
             >
-              <MoreHorizontal className="w-5 h-5" />
+              <Languages className={`w-4 h-4 ${isTranslating ? 'animate-pulse' : ''}`} />
             </button>
-            
-            <AnimatePresence>
-              {menuOpen && (
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.95, y: -5 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: -5 }}
-                  className="absolute right-0 mt-2 w-48 bg-[#111827] border border-white/[0.08] rounded-xl shadow-2xl z-20 py-1.5 overflow-hidden"
-                >
-                  {(isAuthor || isAdmin) && (
-                    <button onClick={() => { onDelete(post._id); setMenuOpen(false); }} className="w-full px-4 py-2 text-left text-red-400 hover:bg-red-500/5 flex items-center text-sm">
-                      <Trash2 className="w-4 h-4 mr-2" /> Delete Post
+            <div className="relative">
+              <button 
+                onClick={() => setMenuOpen(!menuOpen)}
+                className="p-2 hover:bg-white/[0.04] rounded-xl text-slate-600 transition-colors"
+              >
+                <MoreHorizontal className="w-5 h-5" />
+              </button>
+              
+              <AnimatePresence>
+                {menuOpen && (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.95, y: -5 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: -5 }}
+                    className="absolute right-0 mt-2 w-48 bg-[#111827] border border-white/[0.08] rounded-xl shadow-2xl z-20 py-1.5 overflow-hidden"
+                  >
+                    {(isAuthor || isAdmin) && (
+                      <button onClick={() => { onDelete(post._id); setMenuOpen(false); }} className="w-full px-4 py-2 text-left text-red-400 hover:bg-red-500/5 flex items-center text-sm">
+                        <Trash2 className="w-4 h-4 mr-2" /> Delete Post
+                      </button>
+                    )}
+                    <button onClick={handleTranslate} className="w-full px-4 py-2 text-left text-blue-400 hover:bg-blue-500/5 flex items-center text-sm">
+                      <Languages className="w-4 h-4 mr-2" /> {translation ? 'Show Original' : 'Translate AI'}
                     </button>
-                  )}
-                  <button onClick={handleShare} className="w-full px-4 py-2 text-left text-slate-400 hover:bg-white/[0.04] flex items-center text-sm">
-                    <Share2 className="w-4 h-4 mr-2" /> Copy Link
-                  </button>
-                  <button onClick={() => { handleBookmark(); setMenuOpen(false); }} className="w-full px-4 py-2 text-left text-slate-400 hover:bg-white/[0.04] flex items-center text-sm">
-                    <Bookmark className={`w-4 h-4 mr-2 ${bookmarked ? 'fill-current text-blue-400' : ''}`} /> {bookmarked ? 'Unsave' : 'Save Post'}
-                  </button>
-                  {!isAuthor && (
-                    <div className="border-t border-white/[0.04] mt-1 pt-1">
-                      <label className="px-4 py-1 text-[10px] uppercase font-bold text-slate-600">Report content</label>
-                      <button onClick={() => handleReport('spam')} className="w-full px-4 py-1.5 text-left text-slate-500 hover:bg-white/[0.04] flex items-center text-xs">
-                        <Flag className="w-3 h-3 mr-2" /> Spam
-                      </button>
-                      <button onClick={() => handleReport('harassment')} className="w-full px-4 py-1.5 text-left text-slate-500 hover:bg-white/[0.04] flex items-center text-xs">
-                        <Flag className="w-3 h-3 mr-2" /> Harassment
-                      </button>
-                    </div>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
+                    <button onClick={handleShare} className="w-full px-4 py-2 text-left text-slate-400 hover:bg-white/[0.04] flex items-center text-sm">
+                      <Share2 className="w-4 h-4 mr-2" /> Copy Link
+                    </button>
+                    <button onClick={() => { handleBookmark(); setMenuOpen(false); }} className="w-full px-4 py-2 text-left text-slate-400 hover:bg-white/[0.04] flex items-center text-sm">
+                      <Bookmark className={`w-4 h-4 mr-2 ${bookmarked ? 'fill-current text-blue-400' : ''}`} /> {bookmarked ? 'Unsave' : 'Save Post'}
+                    </button>
+                    {!isAuthor && (
+                      <div className="border-t border-white/[0.04] mt-1 pt-1">
+                        <label className="px-4 py-1 text-[10px] uppercase font-bold text-slate-600">Report content</label>
+                        <button onClick={() => handleReport('spam')} className="w-full px-4 py-1.5 text-left text-slate-500 hover:bg-white/[0.04] flex items-center text-xs">
+                          <Flag className="w-3 h-3 mr-2" /> Spam
+                        </button>
+                        <button onClick={() => handleReport('harassment')} className="w-full px-4 py-1.5 text-left text-slate-500 hover:bg-white/[0.04] flex items-center text-xs">
+                          <Flag className="w-3 h-3 mr-2" /> Harassment
+                        </button>
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
 
@@ -186,10 +228,26 @@ const PostCard = ({ post: initialPost, onDelete }) => {
             <h2 className="text-[16px] font-bold text-white mb-2 hover:text-blue-400 transition-colors leading-snug">{post.title}</h2>
           </Link>
           
-          <div 
-            className="post-html-content line-clamp-4 mb-4"
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
-          />
+          <AnimatePresence mode="wait">
+            {isTranslating ? (
+              <motion.div key="translating" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="py-4 space-y-2">
+                <Skeleton className="w-full h-4" />
+                <Skeleton className="w-5/6 h-4" />
+              </motion.div>
+            ) : translation ? (
+              <motion.div 
+                key="translation" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
+                className="post-translation-content bg-blue-500/[0.03] border-l-2 border-blue-500/30 p-4 rounded-r-xl mb-4 italic text-slate-300"
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(translation.content) }}
+              />
+            ) : (
+              <motion.div 
+                key="original" initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                className="post-html-content line-clamp-4 mb-4"
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
+              />
+            )}
+          </AnimatePresence>
           
           {/* Post Poll */}
           {post.poll && post.poll.question && (
