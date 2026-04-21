@@ -4,6 +4,8 @@ import { Bell, Heart, MessageCircle, UserPlus, Loader2, Check, Sparkles } from '
 import { formatDistanceToNow } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import EmptyState from '../components/EmptyState';
+import Skeleton from '../components/Skeleton';
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
@@ -67,8 +69,16 @@ const Notifications = () => {
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-24">
-          <div className="w-8 h-8 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
+        <div className="space-y-4">
+          {[1, 2, 3, 4, 5].map(i => (
+            <div key={i} className="glass-card rounded-2xl p-4 sm:p-6 flex items-center space-x-4">
+              <Skeleton className="w-10 h-10 rounded-xl" />
+              <div className="flex-1 space-y-2">
+                <Skeleton className="w-1/3 h-4" />
+                <Skeleton className="w-1/4 h-2.5" />
+              </div>
+            </div>
+          ))}
         </div>
       ) : notifications.length > 0 ? (
         <motion.div variants={containerVariants} initial="hidden" animate="show" className="glass-card rounded-2xl overflow-hidden divide-y divide-white/[0.03]">
@@ -120,14 +130,13 @@ const Notifications = () => {
           ))}
         </motion.div>
       ) : (
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-20 glass-card rounded-2xl">
-          <div className="w-16 h-16 bg-white/[0.03] rounded-2xl flex items-center justify-center mx-auto mb-5">
-            <Bell className="w-8 h-8 text-slate-700" />
-          </div>
-          <h3 className="text-lg font-bold text-slate-400 tracking-tight">Quiet as a library...</h3>
-          <p className="text-slate-600 font-medium mt-2 text-sm">No notifications yet. Interact to see updates!</p>
-          <Link to="/" className="inline-flex items-center justify-center mt-6 bg-white/[0.06] hover:bg-white/[0.1] text-white px-6 py-2.5 rounded-xl font-bold transition-all border border-white/[0.06] text-sm">Back to Feed</Link>
-        </motion.div>
+        <EmptyState 
+          icon={Bell}
+          title="Quiet as a library..."
+          description="It's peaceful here. No notifications yet, but stick around—the community moves fast!"
+          actionText="Back to Feed"
+          actionLink="/"
+        />
       )}
     </motion.div>
   );
