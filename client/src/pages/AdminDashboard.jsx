@@ -77,7 +77,7 @@ const AdminDashboard = () => {
   return (
     <div className="py-4 sm:py-8 max-w-6xl mx-auto space-y-8">
       <Helmet>
-        <title>Admin Command Center | Arsi Aseko</title>
+        <title>Admin Command Center | Communication Platform</title>
       </Helmet>
 
       <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
