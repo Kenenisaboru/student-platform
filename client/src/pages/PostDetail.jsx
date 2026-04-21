@@ -225,7 +225,7 @@ const PostDetail = () => {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-2xl mx-auto py-4 sm:py-6 px-2 sm:px-0 pb-20">
       <Helmet>
-        <title>{post ? `${post.title} | Arsi Aseko Network` : 'Loading...'}</title>
+        <title>{post ? `${post.title} | Communication Platform` : 'Loading...'}</title>
       </Helmet>
       
       <button onClick={() => navigate(-1)} className="mb-5 flex items-center text-slate-500 hover:text-blue-400 font-semibold transition-colors group text-sm">
