@@ -65,12 +65,12 @@ const MobileDrawer = ({ isOpen, onClose }) => {
             <div className="flex items-center justify-between p-5 border-b border-white/[0.05]">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                  <span className="font-extrabold text-white text-sm">AA</span>
+                  <span className="font-extrabold text-white text-sm">CP</span>
                 </div>
                 <div>
-                  <p className="font-extrabold text-white text-sm leading-none">Arsi Aseko</p>
+                  <p className="font-extrabold text-white text-sm leading-none">Communication</p>
                   <p className="text-[10px] font-bold text-blue-400 uppercase tracking-widest mt-0.5">
-                    Nexus Pro
+                    Platform Pro
                   </p>
                 </div>
               </div>
