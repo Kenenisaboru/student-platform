@@ -78,7 +78,7 @@ const Register = () => {
               transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
               className="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mb-8 flex items-center justify-center -rotate-3 shadow-xl shadow-blue-500/20"
             >
-              <h1 className="text-2xl font-extrabold text-white rotate-3">AA</h1>
+              <h1 className="text-2xl font-extrabold text-white rotate-3">CP</h1>
             </motion.div>
 
             <h2 className="text-3xl lg:text-4xl font-extrabold text-white mb-5 leading-tight tracking-tight">
@@ -96,7 +96,7 @@ const Register = () => {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-white font-bold text-base">Unite Academic Minds</h3>
-                  <p className="text-slate-500 text-sm">Connect with peers across Arsi Aseko universities.</p>
+                  <p className="text-slate-500 text-sm">Connect with peers across our network.</p>
                 </div>
               </div>
               <div className="flex items-center space-x-4">
