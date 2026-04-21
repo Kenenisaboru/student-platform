@@ -14,6 +14,20 @@ exports.getProfile = async (req, res) => {
   }
 };
 
+// Get department leaderboard
+exports.getDepartmentLeaderboard = async (req, res) => {
+  try {
+    const leaderboard = await User.aggregate([
+      { $group: { _id: "$department", students: { $sum: 1 } } },
+      { $sort: { students: -1 } },
+      { $limit: 4 }
+    ]);
+    res.json(leaderboard);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 exports.updateProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
