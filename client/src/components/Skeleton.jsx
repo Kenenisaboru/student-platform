@@ -1,7 +1,17 @@
-
 const Skeleton = ({ className }) => {
   return (
-    <div className={`animate-shimmer rounded-lg ${className}`} />
+    <div className={`relative overflow-hidden bg-white/[0.03] rounded-lg ${className}`}>
+      <motion.div
+        initial={{ x: '-100%' }}
+        animate={{ x: '100%' }}
+        transition={{ 
+          repeat: Infinity, 
+          duration: 1.5, 
+          ease: 'linear'
+        }}
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent"
+      />
+    </div>
   );
 };
 
