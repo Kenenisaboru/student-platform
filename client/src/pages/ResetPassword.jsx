@@ -41,7 +41,7 @@ const ResetPassword = () => {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-[#060a14]">
       <Helmet>
-        <title>Reset Password | Arsi Aseko Student Network</title>
+        <title>Reset Password | Student Communication Platform</title>
       </Helmet>
 
       <motion.div
