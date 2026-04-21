@@ -4,6 +4,7 @@ import API from '../api/axios';
 import PostCard from '../components/PostCard';
 import { Loader2, Search, User, ArrowLeft, Users, FileText, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
+import EmptyState from '../components/EmptyState';
 
 const SearchResults = () => {
   const [results, setResults] = useState({ users: [], posts: [] });
@@ -107,12 +108,11 @@ const SearchResults = () => {
               </motion.div>
             ))
           ) : (
-            <div className="p-10 glass-card rounded-xl text-center">
-              <div className="w-12 h-12 bg-white/[0.03] rounded-xl flex items-center justify-center mx-auto mb-3">
-                <FileText className="w-6 h-6 text-slate-700" />
-              </div>
-              <p className="text-slate-500 font-semibold italic text-sm">No matching posts found.</p>
-            </div>
+            <EmptyState 
+              icon={FileText}
+              title="No Discussions Found"
+              description={`We couldn't find any posts matching "${query}". Try searching for something else like "exam" or "internship".`}
+            />
           )}
         </motion.div>
       </div>
