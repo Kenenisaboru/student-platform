@@ -8,6 +8,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { toast } from 'sonner';
 import DOMPurify from 'dompurify';
+import Skeleton from './Skeleton';
+import ProBadge from './ProBadge';
+
 
 const PostCard = ({ post: initialPost, onDelete }) => {
   const { user } = useAuth();
@@ -19,7 +22,10 @@ const PostCard = ({ post: initialPost, onDelete }) => {
   const [voting, setVoting] = useState(false);
   const [reporting, setReporting] = useState(false);
   const [isTranslating, setIsTranslating] = useState(false);
-  const [translation, setTranslation] = useState(null); // { language: 'Amharic', content: '...' }
+  const [translation, setTranslation] = useState(null); 
+  const [bookmarked, setBookmarked] = useState(false);
+
+  if (!post) return null;
 
   const handleLike = async () => {
     try {
@@ -102,15 +108,8 @@ const PostCard = ({ post: initialPost, onDelete }) => {
     }
     
     setIsTranslating(true);
-    // Simulate AI Translation
     setTimeout(() => {
-      const mockTranslations = {
-        'Amharic': "ይህ በጎግል የተጎላበተ የሙከራ ትርጉም ነው።", // "This is a test translation powered by Google"
-        'English': "This post has been successfully refined by the AI Bridge."
-      };
-      
-      // If content is mostly English, translate to Amharic. Else to English.
-      const isEnglish = /[a-zA-Z]/.test(post.content.slice(0, 50));
+      const isEnglish = /[a-zA-Z]/.test(post.content?.slice(0, 50) || '');
       const targetLang = isEnglish ? 'Amharic' : 'English';
       
       setTranslation({
@@ -126,16 +125,17 @@ const PostCard = ({ post: initialPost, onDelete }) => {
 
   const isAuthor = user?._id === post.author?._id;
   const isAdmin = user?.role === 'admin';
-  const hasVoted = post.poll?.options?.some(opt => opt.votes.includes(user?._id));
-  const totalVotes = post.poll?.options?.reduce((acc, opt) => acc + opt.votes.length, 0) || 0;
+  const hasVoted = post.poll?.options?.some(opt => opt.votes?.includes(user?._id));
+  const totalVotes = post.poll?.options?.reduce((acc, opt) => acc + (opt.votes?.length || 0), 0) || 0;
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -1 }}
-      className="glass-card-hover rounded-2xl overflow-hidden mb-0 relative group"
+      whileHover={{ y: -4, transition: { duration: 0.3 } }}
+      className="glass-card mb-4 relative group overflow-hidden"
     >
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       <div className="p-4 sm:p-5">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
@@ -157,13 +157,16 @@ const PostCard = ({ post: initialPost, onDelete }) => {
               )}
             </Link>
             <div>
-              <Link to={`/profile/${post.author?._id || ''}`} className="font-bold text-white hover:text-blue-400 transition-colors text-[14px]">
-                {post.author?.name || 'Unknown User'}
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link to={`/profile/${post.author?._id || ''}`} className="font-bold text-white hover:text-blue-400 transition-colors text-[14px]">
+                  {post.author?.name || 'Unknown User'}
+                </Link>
+                {(post.author?.role === 'admin' || post.author?.isVerified) && <ProBadge className="scale-[0.6] origin-left" />}
+              </div>
               <div className="flex items-center text-[11px] text-slate-600 font-medium">
                 <span>{post.author?.university || 'Unknown Institution'}</span>
                 <span className="mx-1.5 opacity-30">•</span>
-                <span>{formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}</span>
+                <span>{post.createdAt ? formatDistanceToNow(new Date(post.createdAt), { addSuffix: true }) : 'Just now'}</span>
               </div>
             </div>
           </div>
@@ -225,7 +228,7 @@ const PostCard = ({ post: initialPost, onDelete }) => {
         {/* Content */}
         <div className="mb-4">
           <Link to={`/post/${post._id}`}>
-            <h2 className="text-[16px] font-bold text-white mb-2 hover:text-blue-400 transition-colors leading-snug">{post.title}</h2>
+            <h2 className="text-[16px] font-bold text-white mb-2 hover:text-blue-400 transition-colors leading-snug">{post.title || 'No Title'}</h2>
           </Link>
           
           <AnimatePresence mode="wait">
@@ -238,13 +241,13 @@ const PostCard = ({ post: initialPost, onDelete }) => {
               <motion.div 
                 key="translation" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
                 className="post-translation-content bg-blue-500/[0.03] border-l-2 border-blue-500/30 p-4 rounded-r-xl mb-4 italic text-slate-300"
-                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(translation.content) }}
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(translation.content || '') }}
               />
             ) : (
               <motion.div 
                 key="original" initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                 className="post-html-content line-clamp-4 mb-4"
-                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content || '') }}
               />
             )}
           </AnimatePresence>
@@ -257,39 +260,33 @@ const PostCard = ({ post: initialPost, onDelete }) => {
                 {post.poll.question}
               </h3>
               <div className="space-y-2">
-                {post.poll.options.map((option) => {
-                  const percentage = totalVotes > 0 ? Math.round((option.votes.length / totalVotes) * 100) : 0;
-                  const votedThis = option.votes.includes(user?._id);
+                {post.poll.options?.map((option) => {
+                  const percentage = totalVotes > 0 ? Math.round(((option.votes?.length || 0) / totalVotes) * 100) : 0;
+                  const votedThis = option.votes?.includes(user?._id);
                   
                   return (
                     <button 
                       key={option._id}
                       onClick={() => handleVote(option._id)}
                       disabled={voting}
-                      className={`relative w-full text-left p-3 rounded-xl border transition-all overflow-hidden group/poll ${votedThis ? 'border-blue-500/30 bg-blue-500/5' : 'border-white/[0.06] hover:border-white/10'}`}
+                      className={`relative w-full text-left p-3.5 rounded-xl border transition-all overflow-hidden group/poll ${votedThis ? 'border-blue-500/30 bg-blue-500/5' : 'border-white/[0.04] hover:border-white/[0.1] hover:bg-white/[0.02]'}`}
                     >
                       {/* Progress Bar */}
                       <div 
-                        className={`absolute left-0 top-0 bottom-0 transition-all duration-1000 ${votedThis ? 'bg-blue-500/10' : 'bg-white/[0.03]'}`} 
+                        className={`absolute left-0 top-0 bottom-0 transition-all duration-1000 ${votedThis ? 'bg-gradient-to-r from-blue-600/20 to-indigo-600/20' : 'bg-white/[0.03]'}`} 
                         style={{ width: `${percentage}%` }}
                       />
                       
                       <div className="relative z-10 flex justify-between items-center text-xs">
-                        <span className={`font-bold ${votedThis ? 'text-blue-400' : 'text-slate-400'}`}>
+                        <span className={`font-bold tracking-tight ${votedThis ? 'text-blue-400' : 'text-slate-400 group-hover/poll:text-slate-300'}`}>
                           {option.text}
-                          {votedThis && <span className="ml-2 text-[10px] font-medium opacity-70">(your vote)</span>}
+                          {votedThis && <CheckCircle2 className="inline w-3 h-3 ml-2 text-blue-400" />}
                         </span>
-                        <span className="font-mono text-slate-500">{percentage}%</span>
+                        <span className={`font-black ${votedThis ? 'text-blue-400' : 'text-slate-500'}`}>{percentage}%</span>
                       </div>
                     </button>
                   );
                 })}
-              </div>
-              <div className="mt-3 flex justify-between items-center text-[10px] text-slate-600 font-bold uppercase tracking-wider">
-                <span>{totalVotes} total votes</span>
-                {post.poll.endsAt && (
-                   <span>Ends {formatDistanceToNow(new Date(post.poll.endsAt), { addSuffix: true })}</span>
-                )}
               </div>
             </div>
           )}
