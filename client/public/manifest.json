@@ -1,7 +1,7 @@
 {
-  "name": "Student Communication Platform",
-  "short_name": "CP Pro",
-  "description": "Connect with your peers across modern universities. Share ideas, collaborate, and grow together.",
+  "name": "Arsi Aseko University Platform",
+  "short_name": "AAU Portal",
+  "description": "Collaborate, share and excel with Arsi Aseko University's official student portal.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#060a14",
