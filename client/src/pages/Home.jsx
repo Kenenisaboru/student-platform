@@ -1,15 +1,17 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import API from '../api/axios';
 import PostCard from '../components/PostCard';
-import { Loader2, Plus, Sparkles, MessageCircle, TrendingUp, Zap } from 'lucide-react';
+import { Loader2, Plus, Sparkles, MessageCircle, TrendingUp, Zap, BookOpen, GraduationCap, Calendar, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { PostSkeleton } from '../components/Skeleton';
 import { toast } from 'sonner';
 import { Helmet } from 'react-helmet-async';
 import EmptyState from '../components/EmptyState';
+import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
+  const { user } = useAuth();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -25,7 +27,6 @@ const Home = () => {
 
       const { data } = await API.get(`/posts?page=${pageNum}&limit=10`);
       
-      // Handle both paginated and non-paginated response
       const newPosts = data.posts || data;
       const more = data.hasMore !== undefined ? data.hasMore : false;
 
@@ -47,7 +48,6 @@ const Home = () => {
     fetchPosts(1);
   }, []);
 
-  // Infinite scroll observer
   useEffect(() => {
     if (loading) return;
 
@@ -84,7 +84,7 @@ const Home = () => {
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { staggerChildren: 0.08 } }
+    show: { opacity: 1, transition: { staggerChildren: 0.1 } }
   };
 
   const quotes = [
@@ -96,101 +96,131 @@ const Home = () => {
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
   return (
-    <div className="max-w-2xl mx-auto px-0 pb-12">
+    <div className="max-w-2xl mx-auto px-0 pb-24">
       <Helmet>
-        <title>Home | Communication Platform</title>
-        <meta name="description" content="Connect, share, and collaborate with your academic community." />
+        <title>Dashboard | Arsi Aseko University</title>
+        <meta name="description" content="Connect, share, and collaborate with the Arsi Aseko University academic community." />
       </Helmet>
 
-      {/* Welcome Header */}
+      {/* Pro Welcome Header */}
       <motion.div 
-        initial={{ opacity: 0, scale: 0.97, y: -10 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
-        className="rounded-2xl p-6 sm:p-8 mb-6 overflow-hidden relative border border-white/[0.06] bg-gradient-to-br from-blue-600/10 via-indigo-600/8 to-purple-600/5"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative rounded-[2rem] p-8 mb-8 overflow-hidden bg-[#0d1428] border border-white/[0.05] shadow-2xl group"
       >
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="max-w-lg">
-            <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
-              className="inline-flex items-center px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/10 text-[11px] font-bold mb-3 text-blue-400 uppercase tracking-wider">
-              <Sparkles className="w-3 h-3 mr-1.5" /> Welcome to the Network
-            </motion.div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold mb-2 text-white tracking-tight leading-tight">
-              Communication <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Platform</span>
-            </h1>
-            <p className="text-slate-400 text-[13px] sm:text-sm leading-relaxed">
-              A premium space to connect with your peers. Share ideas, collaborate on projects, and grow your professional network together.
-            </p>
-          </div>
-          <div className="hidden md:flex relative w-24 h-24 justify-center items-center shrink-0">
-             <div className="w-20 h-20 bg-white/[0.04] rounded-2xl backdrop-blur-lg border border-white/[0.06] shadow-xl flex items-center justify-center rotate-6">
-               <h1 className="text-3xl font-black text-white -rotate-6">CP</h1>
+        {/* Animated background patterns */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] group-hover:bg-blue-500/20 transition-all duration-700"></div>
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-500/10 rounded-full blur-[60px] group-hover:bg-purple-500/20 transition-all duration-700"></div>
+        
+        <div className="relative z-10">
+          <div className="flex items-center gap-2 mb-4">
+             <div className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-[10px] font-black text-blue-400 uppercase tracking-[0.2em]">
+               Daily Directive
              </div>
+             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
+             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Portal Online</span>
+          </div>
+
+          <h1 className="text-3xl md:text-4xl font-black text-white mb-3 tracking-tighter leading-tight">
+            Greetings, <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">{user?.name?.split(' ')[0] || 'Scholar'}</span>.
+          </h1>
+          <p className="text-slate-400 text-sm font-medium leading-relaxed max-w-md opacity-80 mb-8">
+            Your centralized hub for academic excellence. {posts.length > 0 ? "You have new discussions waiting." : "Start your daily engagement now."}
+          </p>
+
+          <div className="flex flex-wrap gap-3">
+             <Link to="/create-post" className="flex items-center gap-2 px-5 py-2.5 bg-white text-[#060a14] rounded-xl font-bold text-xs hover:bg-blue-50 transition-all shadow-lg active:scale-95">
+                <Plus className="w-4 h-4" /> Start Discussion
+             </Link>
+             <Link to="/library" className="flex items-center gap-2 px-5 py-2.5 bg-white/[0.05] border border-white/10 text-white rounded-xl font-bold text-xs hover:bg-white/[0.1] transition-all active:scale-95">
+                <BookOpen className="w-4 h-4" /> Resource Vault
+             </Link>
           </div>
         </div>
-        <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-500/5 rounded-full -ml-10 -mb-10 blur-2xl"></div>
       </motion.div>
 
-      {/* Info Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-        <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="glass-card-hover p-4 rounded-xl flex items-start gap-3">
-          <div className="w-9 h-9 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 shrink-0"><Zap className="w-4 h-4" /></div>
-          <div>
-            <h4 className="font-bold text-white text-[13px]">Quote of the Day</h4>
-            <p className="text-slate-500 text-[12px] italic mt-0.5 leading-relaxed">"{randomQuote}"</p>
+      {/* Bento-style Status Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1 }}
+          className="md:col-span-2 glass-card-hover p-6 rounded-[2rem] relative overflow-hidden group border border-white/[0.04]"
+        >
+          <div className="flex items-start justify-between mb-4">
+             <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 border border-amber-500/20">
+                <Zap className="w-5 h-5" />
+             </div>
+             <Sparkles className="w-4 h-4 text-slate-700" />
           </div>
+          <h4 className="font-black text-white text-sm mb-2 tracking-tight uppercase tracking-[0.05em]">Perspective</h4>
+          <p className="text-slate-400 text-xs italic leading-relaxed font-medium">"{randomQuote}"</p>
+          <div className="absolute -bottom-6 -right-6 w-20 h-20 bg-amber-500/5 rounded-full blur-2xl group-hover:bg-amber-500/10 transition-all"></div>
         </motion.div>
-        <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="glass-card-hover p-4 rounded-xl flex items-start gap-3">
-          <div className="w-9 h-9 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0"><TrendingUp className="w-4 h-4" /></div>
+
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2 }}
+          className="glass-card-hover p-6 rounded-[2rem] border border-white/[0.04] bg-blue-600/5 flex flex-col justify-between"
+        >
+          <TrendingUp className="w-5 h-5 text-blue-400 mb-4" />
           <div>
-            <h4 className="font-bold text-white text-[13px]">Study Tip</h4>
-            <p className="text-slate-500 text-[12px] mt-0.5 leading-relaxed">Use the Focus Hub (bottom right) to manage your study sessions!</p>
+             <h4 className="font-black text-white text-xs mb-1 tracking-widest uppercase">Academics</h4>
+             <p className="text-[10px] text-slate-500 font-bold">Exam season approaching. Check guidelines.</p>
           </div>
         </motion.div>
       </div>
 
-      {/* Feed Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 px-1">
-        <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">Recent Discussions</h2>
-        <Link to="/create-post"
-          className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center group w-full sm:w-auto hover:shadow-blue-500/30 active:scale-95 text-sm">
-          <Plus className="w-4 h-4 mr-2 group-hover:rotate-90 transition-transform duration-300" /> Start Discussion
-        </Link>
+      {/* Active Discussions Tab Header */}
+      <div className="flex items-center justify-between mb-6 px-2">
+        <div className="flex items-center gap-3">
+           <div className="w-1 h-6 bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
+           <h2 className="text-xl font-black text-white tracking-tighter">Unified Feed</h2>
+        </div>
+        <div className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] bg-white/[0.03] px-3 py-1.5 rounded-lg border border-white/[0.05]">
+           Latest Updates
+        </div>
       </div>
 
       {/* Posts Feed with Infinite Scroll */}
       {loading ? (
-        <div className="space-y-4">
+        <div className="space-y-6">
           {[1, 2, 3].map(i => <PostSkeleton key={i} />)}
         </div>
       ) : posts.length > 0 ? (
         <>
-          <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-4">
+          <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-6">
             {posts.map(post => (
               <PostCard key={post._id} post={post} onDelete={handleDelete} onUpdate={() => fetchPosts(1)} />
             ))}
           </motion.div>
 
-          {/* Infinite Scroll Trigger */}
-          <div ref={loadMoreRef} className="py-8 flex justify-center">
+          <div ref={loadMoreRef} className="py-12 flex justify-center">
             {loadingMore && (
-              <div className="flex items-center gap-3 text-slate-500">
-                <div className="w-5 h-5 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
-                <span className="text-sm font-medium">Loading more...</span>
+              <div className="flex items-center gap-3 text-slate-500 bg-white/[0.03] px-6 py-3 rounded-2xl border border-white/[0.05]">
+                <div className="w-4 h-4 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
+                <span className="text-xs font-black uppercase tracking-widest">Syncing Feed...</span>
               </div>
             )}
             {!hasMore && posts.length > 5 && (
-              <p className="text-slate-600 text-sm font-medium">You've reached the end 🎉</p>
+              <div className="flex flex-col items-center gap-4 opacity-50">
+                 <div className="w-8 h-8 rounded-full bg-white/[0.05] flex items-center justify-center">
+                    <GraduationCap className="w-4 h-4 text-slate-500" />
+                 </div>
+                 <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-600 text-center px-4">
+                  End of transmissions. Start a new discussion to continue.
+                 </p>
+              </div>
             )}
           </div>
         </>
       ) : (
         <EmptyState 
           icon={MessageCircle}
-          title="No Discussions Yet"
-          description="Be the first to share an idea! Start a conversation with your community today."
-          actionText="Create a post"
+          title="Static Void Found"
+          description="The community is waiting for your insight. Be the pioneer and launch the first discussion."
+          actionText="Initialize Thread"
           actionLink="/create-post"
         />
       )}
