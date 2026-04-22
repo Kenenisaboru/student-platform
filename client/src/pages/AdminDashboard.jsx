@@ -3,6 +3,7 @@ import API from '../api/axios';
 import { Loader2, Users, FileText, Trash2, ShieldCheck, Flag, CheckCircle2, XCircle, AlertTriangle, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
+import { formatDistanceToNow } from 'date-fns';
 import { Helmet } from 'react-helmet-async';
 
 const AdminDashboard = () => {
@@ -261,15 +262,6 @@ const AdminDashboard = () => {
       </div>
     </div>
   );
-};
-
-// Standard formatDistanceToNow from date-fns
-const formatDistanceToNow = (date, options) => {
-  const diffInSeconds = Math.floor((new Date() - date) / 1000);
-  if (diffInSeconds < 60) return 'just now';
-  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
-  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
-  return `${Math.floor(diffInSeconds / 86400)}d ago`;
 };
 
 export default AdminDashboard;
