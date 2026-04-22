@@ -17,14 +17,14 @@ const Footer = () => {
               <Sparkles className="w-5 h-5 text-blue-400" />
               <span className="text-blue-400 font-bold uppercase tracking-[0.2em] text-xs">Join the Movement</span>
             </div>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-4">Elevate your academic journey.</h3>
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-4">Elevate your academic journey at AAU.</h3>
             <p className="text-slate-400 max-w-2xl text-sm sm:text-base font-medium leading-relaxed">
-              Don't navigate university alone. Join thousands of students collaborating, sharing resources, and building their professional legacy. Ignite your potential with the Communication Platform today.
+              Don't navigate university alone. Join Arsi Aseko students collaborating, sharing resources, and building their professional legacy. Ignite your potential with the university portal today.
             </p>
           </div>
           <div className="flex-shrink-0">
             <Link to="/register" className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm font-bold rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-1 transition-all duration-300">
-              Start Learning Today
+              Join the Portal Today
             </Link>
           </div>
         </div>
@@ -34,18 +34,18 @@ const Footer = () => {
           <div className="lg:col-span-2 lg:pr-8">
             <Link to="/" className="flex items-center space-x-3 mb-6 group w-fit">
               <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-500/20 group-hover:rotate-6 transition-transform">
-                <span className="font-extrabold text-sm">CP</span>
+                <span className="font-extrabold text-sm">AAU</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-lg font-extrabold text-white leading-none tracking-tight">Communication</span>
-                <span className="text-[10px] font-bold text-blue-400 uppercase tracking-[0.2em] mt-1">Platform Pro</span>
+                <span className="text-lg font-extrabold text-white leading-none tracking-tight">Arsi Aseko University</span>
+                <span className="text-[10px] font-bold text-blue-400 uppercase tracking-[0.2em] mt-1">Student Communication Platform</span>
               </div>
             </Link>
             
             {/* Tagline & Mission */}
-            <h4 className="text-white font-bold mb-2 text-sm">Built for students, by students.</h4>
+            <h4 className="text-white font-bold mb-2 text-sm">Empowering Arsi Aseko students.</h4>
             <p className="text-sm text-slate-500 leading-relaxed mb-6 font-medium">
-              We believe brilliant minds shouldn't operate in silos. Our mission is to bridge the gap between campuses, unlocking a centralized hub for knowledge, collaboration, and student success.
+              We believe brilliant minds shouldn't operate in silos. Our mission is to bridge the gap between departments at Arsi Aseko University, unlocking a centralized hub for knowledge, collaboration, and student success.
             </p>
             
             <div className="flex space-x-3">
@@ -66,31 +66,31 @@ const Footer = () => {
             <h4 className="text-white font-bold mb-6 text-sm tracking-wide">Resources</h4>
             <ul className="space-y-3.5 font-medium text-sm">
               <li><Link to="/" className="text-slate-500 hover:text-blue-400 transition-colors flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-blue-500/50 mr-2 opacity-0 -ml-3 transition-all hover:opacity-100 hover:ml-0"></span>Home Feed</Link></li>
-              <li><a href="#" className="text-slate-500 hover:text-blue-400 transition-colors flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-blue-500/50 mr-2 opacity-0 -ml-3 transition-all hover:opacity-100 hover:ml-0"></span>Universities</a></li>
+              <li><a href="#" className="text-slate-500 hover:text-blue-400 transition-colors flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-blue-500/50 mr-2 opacity-0 -ml-3 transition-all hover:opacity-100 hover:ml-0"></span>Faculty News</a></li>
               <li><a href="#" className="text-slate-500 hover:text-blue-400 transition-colors flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-blue-500/50 mr-2 opacity-0 -ml-3 transition-all hover:opacity-100 hover:ml-0"></span>Departments</a></li>
-              <li><a href="#" className="text-slate-500 hover:text-blue-400 transition-colors flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-blue-500/50 mr-2 opacity-0 -ml-3 transition-all hover:opacity-100 hover:ml-0"></span>Events & Webinars</a></li>
+              <li><a href="#" className="text-slate-500 hover:text-blue-400 transition-colors flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-blue-500/50 mr-2 opacity-0 -ml-3 transition-all hover:opacity-100 hover:ml-0"></span>Events & Announcements</a></li>
             </ul>
           </div>
 
           <div>
             <h4 className="text-white font-bold mb-6 text-sm tracking-wide">Support</h4>
             <ul className="space-y-3.5 font-medium text-sm">
-              <li><a href="#" className="text-slate-500 hover:text-blue-400 transition-colors flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-blue-500/50 mr-2 opacity-0 -ml-3 transition-all hover:opacity-100 hover:ml-0"></span>Help Center</a></li>
-              <li><a href="#" className="text-slate-500 hover:text-blue-400 transition-colors flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-blue-500/50 mr-2 opacity-0 -ml-3 transition-all hover:opacity-100 hover:ml-0"></span>Community Guidelines</a></li>
+              <li><a href="#" className="text-slate-500 hover:text-blue-400 transition-colors flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-blue-500/50 mr-2 opacity-0 -ml-3 transition-all hover:opacity-100 hover:ml-0"></span>Help Desk</a></li>
+              <li><a href="#" className="text-slate-500 hover:text-blue-400 transition-colors flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-blue-500/50 mr-2 opacity-0 -ml-3 transition-all hover:opacity-100 hover:ml-0"></span>Student Guidelines</a></li>
               <li><a href="#" className="text-slate-500 hover:text-blue-400 transition-colors flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-blue-500/50 mr-2 opacity-0 -ml-3 transition-all hover:opacity-100 hover:ml-0"></span>Privacy Policy</a></li>
-              <li><a href="#" className="text-slate-500 hover:text-blue-400 transition-colors flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-blue-500/50 mr-2 opacity-0 -ml-3 transition-all hover:opacity-100 hover:ml-0"></span>Terms of Service</a></li>
+              <li><a href="#" className="text-slate-500 hover:text-blue-400 transition-colors flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-blue-500/50 mr-2 opacity-0 -ml-3 transition-all hover:opacity-100 hover:ml-0"></span>Portal Terms</a></li>
             </ul>
           </div>
 
           {/* Contact & Newsletter */}
           <div className="lg:col-span-1">
-            <h4 className="text-white font-bold mb-6 text-sm tracking-wide">Stay Updated</h4>
+            <h4 className="text-white font-bold mb-6 text-sm tracking-wide">Campus Updates</h4>
             
             <form className="mb-6">
               <div className="relative group">
                 <input 
                   type="email" 
-                  placeholder="Enter your email" 
+                  placeholder="Enter university email" 
                   className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] focus:border-blue-500/30 rounded-xl py-2.5 pl-4 pr-10 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500/10 transition-all placeholder:text-slate-600"
                 />
                 <button type="button" aria-label="Subscribe" className="absolute right-2 top-2 p-1 text-slate-500 hover:text-blue-400 transition-colors">
@@ -105,9 +105,9 @@ const Footer = () => {
                   <Mail className="w-4 h-4 text-blue-400" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-slate-300 font-semibold mb-0.5">Contact Us</span>
-                  <a href="mailto:support@commplatform.net" className="text-slate-500 hover:text-blue-400 transition-colors text-xs">
-                    support@commplatform.net
+                  <span className="text-slate-300 font-semibold mb-0.5">Contact Support</span>
+                  <a href="mailto:support@arsiaseko.edu.et" className="text-slate-500 hover:text-blue-400 transition-colors text-xs">
+                    support@arsiaseko.edu.et
                   </a>
                 </div>
               </li>
@@ -118,7 +118,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/[0.04] flex flex-col md:flex-row items-center justify-between text-sm font-medium">
           <p className="text-slate-600 mb-4 md:mb-0 text-[13px]">
-            &copy; {new Date().getFullYear()} Communication Platform. All rights reserved.
+            &copy; {new Date().getFullYear()} Arsi Aseko University. All rights reserved.
           </p>
           <div className="flex items-center text-slate-600 text-[13px] bg-white/[0.02] px-3 py-1.5 rounded-full border border-white/[0.03]">
             Crafted with <Heart className="w-3.5 h-3.5 mx-1.5 text-rose-500 fill-rose-500" /> for the student community
