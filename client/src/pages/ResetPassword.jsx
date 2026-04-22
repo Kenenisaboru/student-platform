@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import API from '../api/axios';
-import { motion } from 'framer-motion';
-import { Lock, ArrowLeft, Check, Loader2, Eye, EyeOff } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Lock, ArrowLeft, Check, Loader2, Eye, EyeOff, ShieldAlert, Sparkles, KeySquare } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 
 const ResetPassword = () => {
@@ -18,11 +18,11 @@ const ResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError('Cryptographic mismatch. New passwords must be identical.');
       return;
     }
     if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError('Signal strength insufficient. Minimum 6 characters required.');
       return;
     }
     setLoading(true);
@@ -32,107 +32,143 @@ const ResetPassword = () => {
       setSuccess(true);
       setTimeout(() => navigate('/login'), 3000);
     } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong. The link may have expired.');
+      setError(err.response?.data?.message || 'Authentication link expired or invalid.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-[#060a14]">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-[#060a14] relative overflow-hidden">
       <Helmet>
-        <title>Reset Password | Student Communication Platform</title>
+        <title>Identity Re-authorization | Arsi Aseko University</title>
       </Helmet>
+
+      {/* Narrative Background Elements */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] -mr-40 -mt-40 pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[100px] -ml-20 -mb-20 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-grid-white/[0.02] [mask-image:radial-gradient(ellipse_at_center,white,transparent)] pointer-events-none"></div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
+        className="w-full max-w-lg z-10"
       >
-        <div className="rounded-2xl p-8 border border-white/[0.06] bg-white/[0.02] backdrop-blur-xl">
-          <Link to="/login" className="inline-flex items-center text-slate-500 hover:text-white text-sm mb-6 transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-1.5" /> Back to login
+        <div className="bg-[#0a0f1e]/80 backdrop-blur-3xl rounded-[3rem] p-10 sm:p-14 border border-white/[0.08] shadow-2xl relative overflow-hidden">
+          <Link to="/login" className="inline-flex items-center text-slate-500 hover:text-white font-black text-[10px] uppercase tracking-[0.3em] mb-12 transition-all group">
+            <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" /> Abort Re-authorization
           </Link>
 
-          {success ? (
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-8">
-              <div className="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Check className="w-8 h-8 text-emerald-400" />
-              </div>
-              <h2 className="text-xl font-bold text-white mb-2">Password reset!</h2>
-              <p className="text-slate-400 text-sm mb-4">
-                Your password has been reset successfully.
-              </p>
-              <p className="text-slate-500 text-xs">Redirecting to login...</p>
-            </motion.div>
-          ) : (
-            <>
-              <div className="mb-6">
-                <h1 className="text-2xl font-bold text-white mb-2">Set new password</h1>
-                <p className="text-slate-400 text-sm">
-                  Create a strong password with at least 6 characters and one number.
+          <AnimatePresence mode="wait">
+            {success ? (
+              <motion.div 
+                key="success"
+                initial={{ opacity: 0, scale: 0.95 }} 
+                animate={{ opacity: 1, scale: 1 }} 
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="text-center py-6"
+              >
+                <div className="w-20 h-20 bg-emerald-500/10 rounded-[2rem] flex items-center justify-center mx-auto mb-8 border border-emerald-500/20 shadow-xl">
+                  <Check className="w-10 h-10 text-emerald-400" />
+                </div>
+                <h2 className="text-3xl font-black text-white mb-4 tracking-tighter">Identity Authorized.</h2>
+                <p className="text-slate-400 text-sm mb-6 leading-relaxed font-medium">
+                  Your cryptographic access keys have been successfully updated.
                 </p>
-              </div>
-
-              {error && (
-                <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl text-sm mb-4">
-                  {error}
+                <div className="flex items-center justify-center gap-2 text-slate-600 text-[10px] font-black uppercase tracking-widest mt-10">
+                   <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-ping" />
+                   Redirecting to Secure Terminal...
                 </div>
-              )}
+              </motion.div>
+            ) : (
+              <motion.div
+                key="form"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <div className="mb-12">
+                  <div className="flex items-center gap-3 mb-4">
+                     <div className="px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-[9px] font-black text-indigo-400 uppercase tracking-[0.2em]">
+                       Auth Re-sync
+                     </div>
+                     <KeySquare className="w-3.5 h-3.5 text-indigo-500/50" />
+                  </div>
+                  <h1 className="text-4xl font-black text-white mb-4 tracking-tighter leading-none">New Signal Key.</h1>
+                  <p className="text-slate-500 font-bold text-xs uppercase tracking-widest leading-relaxed">
+                    Configure a high-strength password node to re-establish community uplink.
+                  </p>
+                </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1.5">New password</label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      minLength={6}
-                      placeholder="••••••••"
-                      className="w-full pl-10 pr-10 py-3 bg-white/[0.04] border border-white/[0.08] rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/40 transition-all text-sm"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                {error && (
+                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="bg-rose-500/10 border border-rose-500/20 text-rose-400 px-6 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest mb-8 flex items-center gap-3">
+                    <ShieldAlert className="w-4 h-4" />
+                    {error}
+                  </motion.div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="space-y-3">
+                    <label className="text-[11px] font-black text-slate-600 uppercase tracking-[0.3em] ml-1">New Access Signal</label>
+                    <div className="relative group">
+                      <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-700 group-focus-within:text-blue-500 transition-colors" />
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        placeholder="••••••••"
+                        className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.08] focus:border-blue-500/40 rounded-2xl py-4.5 pl-14 pr-12 text-sm font-black text-white placeholder:text-slate-800 outline-none transition-all shadow-inner"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-700 hover:text-blue-400 transition-colors"
+                      >
+                        {showPassword ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="text-[11px] font-black text-slate-600 uppercase tracking-[0.3em] ml-1">Confirm Identity Key</label>
+                    <div className="relative group">
+                      <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-700 group-focus-within:text-blue-500 transition-colors" />
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                        placeholder="••••••••"
+                        className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.08] focus:border-blue-500/40 rounded-2xl py-4.5 pl-14 pr-6 text-sm font-black text-white placeholder:text-slate-800 outline-none transition-all shadow-inner"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="pt-4">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      type="submit"
+                      disabled={loading}
+                      className="w-full bg-white text-[#060a14] py-5 rounded-[1.8rem] font-black shadow-2xl shadow-white/5 disabled:opacity-30 transition-all text-xs uppercase tracking-[0.2em] border border-white/20 flex items-center justify-center gap-3"
                     >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
+                      {loading ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <><Check className="w-4 h-4" /> Finalize Authorization</>
+                      )}
+                    </motion.button>
                   </div>
-                </div>
+                </form>
 
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Confirm password</label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      required
-                      minLength={6}
-                      placeholder="••••••••"
-                      className="w-full pl-10 pr-4 py-3 bg-white/[0.04] border border-white/[0.08] rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/40 transition-all text-sm"
-                    />
-                  </div>
+                <div className="mt-12 pt-8 border-t border-white/[0.05] flex items-center justify-center gap-3">
+                   <Sparkles className="w-4 h-4 text-indigo-500/30" />
+                   <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest">AAU Secure Authentication Node</p>
                 </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white py-3 rounded-xl font-bold transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50 flex items-center justify-center text-sm"
-                >
-                  {loading ? (
-                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                  ) : null}
-                  {loading ? 'Resetting...' : 'Reset password'}
-                </button>
-              </form>
-            </>
-          )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
     </div>
@@ -140,3 +176,4 @@ const ResetPassword = () => {
 };
 
 export default ResetPassword;
+
