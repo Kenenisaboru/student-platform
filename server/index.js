@@ -1,4 +1,4 @@
-// Rebranding to Communication Platform - Triggering Restart
+// Arsi Aseko University Student Platform API
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -107,6 +107,7 @@ const userRoutes = require('./routes/userRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const reportRoutes = require('./routes/reportRoutes');
+const resourceRoutes = require('./routes/resourceRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
@@ -115,9 +116,10 @@ app.use('/api/users', userRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/resources', resourceRoutes);
 
 app.get('/', (req, res) => {
-  res.send('Communication Platform API is running...');
+  res.send('AAU Student Platform API is running...');
 });
 
 // Connect to MongoDB
