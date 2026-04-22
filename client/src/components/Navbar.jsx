@@ -42,8 +42,8 @@ const Navbar = ({ onMenuToggle }) => {
       setUnreadMessages(res.data.unreadCount);
     }).catch(console.error);
 
-    const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-    const serverRoot = apiBase.split('/api')[0] || 'http://localhost:5000';
+    const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+    const serverRoot = apiBase.split('/api')[0] || 'http://localhost:5001';
     
     axios.get(serverRoot).then(() => setServerStatus('online')).catch(() => setServerStatus('offline'));
 
