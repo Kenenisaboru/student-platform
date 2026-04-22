@@ -3,7 +3,16 @@ const Notification = require('../models/Notification');
 
 exports.createPost = async (req, res) => {
   try {
-    const { title, content, tags, poll } = req.body;
+    let { title, content, tags, poll } = req.body;
+    
+    // Parse poll if it's a string (from FormData)
+    if (typeof poll === 'string') {
+      try {
+        poll = JSON.parse(poll);
+      } catch (err) {
+        console.error('Error parsing poll data:', err);
+      }
+    }
     // Handle image URL from Cloudinary upload or direct URL
     const images = [];
     if (req.file) {
