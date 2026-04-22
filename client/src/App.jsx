@@ -22,6 +22,8 @@ const Messages = lazy(() => import('./pages/Messages'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const SearchResults = lazy(() => import('./pages/SearchResults'));
 const PostDetail = lazy(() => import('./pages/PostDetail'));
+const ResourceLibrary = lazy(() => import('./pages/ResourceLibrary'));
+const VirtualID = lazy(() => import('./pages/VirtualID'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const Settings = lazy(() => import('./pages/Settings'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
@@ -102,6 +104,8 @@ function AppContent() {
                     <Route path="/messages/:id" element={<ProtectedRoute><PageTransition><Messages /></PageTransition></ProtectedRoute>} />
                     <Route path="/search" element={<ProtectedRoute><PageTransition><SearchResults /></PageTransition></ProtectedRoute>} />
                     <Route path="/settings" element={<ProtectedRoute><PageTransition><Settings /></PageTransition></ProtectedRoute>} />
+                    <Route path="/virtual-id" element={<ProtectedRoute><PageTransition><VirtualID /></PageTransition></ProtectedRoute>} />
+                    <Route path="/library" element={<ProtectedRoute><PageTransition><ResourceLibrary /></PageTransition></ProtectedRoute>} />
                     <Route path="/admin" element={<AdminRoute><PageTransition><AdminDashboard /></PageTransition></AdminRoute>} />
                     <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
                   </Routes>
@@ -127,7 +131,6 @@ function AppContent() {
 
       {showLayout && <MobileBottomNav />}
       <FloatingFocusHub />
-      {showLayout && <Footer />}
     </div>
   );
 }
