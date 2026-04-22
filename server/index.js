@@ -1,4 +1,4 @@
-// Arsi Aseko University Student Platform API
+// Arsi Aseko University Student Platform API - Updated Port to 5001
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -123,7 +123,7 @@ app.get('/', (req, res) => {
 });
 
 // Connect to MongoDB
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 const MONGODB_URI = process.env.MONGODB_URI;
 
 server.listen(PORT, () => {
