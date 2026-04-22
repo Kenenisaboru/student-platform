@@ -38,7 +38,19 @@ const createPostRules = [
     .isLength({ min: 3, max: 200 }).withMessage('Title must be 3-200 characters'),
   body('content').trim().notEmpty().withMessage('Content is required')
     .isLength({ min: 10, max: 10000 }).withMessage('Content must be 10-10,000 characters'),
-  body('tags').optional().isArray({ max: 10 }).withMessage('Maximum 10 tags allowed'),
+  body('tags').optional().customSanitizer(value => {
+    if (typeof value === 'string') return [value];
+    return value;
+  }).isArray({ max: 10 }).withMessage('Maximum 10 tags allowed'),
+  // Add poll validation directly here
+  body('poll.question').optional().trim()
+    .isLength({ min: 5, max: 200 }).withMessage('Poll question must be 5-200 characters'),
+  body('poll.options').optional().customSanitizer(value => {
+    if (typeof value === 'string') {
+      try { return JSON.parse(value); } catch (e) { return value; }
+    }
+    return value;
+  }).isArray({ min: 2, max: 6 }).withMessage('Poll must have 2-6 options'),
 ];
 
 const updatePostRules = [
@@ -46,7 +58,10 @@ const updatePostRules = [
     .isLength({ min: 3, max: 200 }).withMessage('Title must be 3-200 characters'),
   body('content').optional().trim()
     .isLength({ min: 10, max: 10000 }).withMessage('Content must be 10-10,000 characters'),
-  body('tags').optional().isArray({ max: 10 }).withMessage('Maximum 10 tags allowed'),
+  body('tags').optional().customSanitizer(value => {
+    if (typeof value === 'string') return [value];
+    return value;
+  }).isArray({ max: 10 }).withMessage('Maximum 10 tags allowed'),
 ];
 
 // Comment validations
