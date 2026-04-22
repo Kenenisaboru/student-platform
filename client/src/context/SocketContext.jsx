@@ -19,7 +19,7 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (user) {
-      const socketUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace('/api', '');
+      const socketUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5001').replace('/api', '');
       const socketInstance = io(socketUrl, {
         transports: ['websocket'],
       });
