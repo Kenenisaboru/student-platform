@@ -1,5 +1,5 @@
-# Communication Platform
-A full-stack community platform designed for users to connect, share ideas, and collaborate.
+# Arsi Aseko University Student Communication Platform
+The official full-stack community portal designed for Arsi Aseko University students to connect, share ideas, and collaborate.
 
 ## Tech Stack
 - **Frontend**: React.js, Tailwind CSS, Vite, Lucide Icons, Framer Motion
