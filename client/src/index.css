@@ -13,20 +13,28 @@
   --color-primary-800: #1e40af;
   --color-primary-900: #1e3a8a;
 
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 :root {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  /* Theme Colors Variables */
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  /* Core Pro Palette (HSL for dynamic control) */
+  --p-h: 221;
+  --p-s: 83%;
+  --p-l: 53%;
+  
+  --primary: hsl(var(--p-h), var(--p-s), var(--p-l));
+  --primary-glow: hsla(var(--p-h), var(--p-s), var(--p-l), 0.15);
+  
+  --background: #fdfdfe;
+  --foreground: #020617;
+  
   --card-bg: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(0, 0, 0, 0.08);
-
+  --border-color: rgba(0, 0, 0, 0.05);
+  
+  /* Glass Tokens */
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  
   color-scheme: light dark;
   color: var(--foreground);
   background-color: var(--background);
@@ -38,10 +46,13 @@
 }
 
 .dark {
-  --background: #060a14;
-  --foreground: #e2e8f0;
-  --card-bg: rgba(255, 255, 255, 0.03);
-  --border-color: rgba(255, 255, 255, 0.05);
+  --background: #02040a;
+  --foreground: #f8fafc;
+  --card-bg: rgba(15, 23, 42, 0.3);
+  --border-color: rgba(255, 255, 255, 0.04);
+  
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 body {
@@ -80,67 +91,46 @@ body {
    =========================== */
 @layer components {
   .glass {
-    @apply bg-white/[0.04] backdrop-blur-xl border border-white/[0.06] shadow-xl shadow-black/20;
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
   }
 
   .glass-card {
     background: var(--card-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border-color);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  }
-
-  .glass-card-hover {
-    background: var(--card-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border-color);
-    transition: all 0.3s ease;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                box-shadow 0.4s ease;
   }
 
   .glass-card-hover:hover {
-    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15),
-                inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    transform: translateY(-1px);
   }
 
-  .btn {
-    padding: 0.5rem 1rem;
-    border-radius: 0.75rem;
-    font-weight: 600;
-    transition: all 0.15s ease;
-    cursor: pointer;
+  .btn-pro {
+    @apply relative px-6 py-3 rounded-2xl font-bold transition-all duration-300
+           bg-gradient-to-br from-blue-600 to-indigo-600 text-white
+           shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40
+           active:scale-95 hover:-translate-y-0.5 overflow-hidden;
   }
-  .btn:active {
-    transform: scale(0.95);
+
+  .btn-pro::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent
+           -translate-x-full hover:animate-[shimmer_1.5s_infinite];
   }
-  .btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  .btn-primary {
-    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
-    color: white;
-    border: none;
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-  }
-  .btn-primary:hover:not(:disabled) {
-    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-    transform: translateY(-1px);
-  }
-  .btn-outline {
-    background-color: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #94a3b8;
-  }
-  .btn-outline:hover:not(:disabled) {
-    background-color: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.15);
-    color: white;
+
+  .pro-badge {
+    @apply px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest
+           bg-gradient-to-r from-amber-400 to-orange-500 text-white
+           shadow-[0_0_15px_rgba(251,191,36,0.3)] animate-pulse;
   }
 }
 
