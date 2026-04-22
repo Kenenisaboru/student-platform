@@ -16,6 +16,8 @@ import {
   MessageSquare
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ProBadge from './ProBadge';
+
 
 const MobileDrawer = ({ isOpen, onClose }) => {
   const { user, logout } = useAuth();
@@ -57,20 +59,20 @@ const MobileDrawer = ({ isOpen, onClose }) => {
             initial={{ x: '-100%' }}
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="fixed left-0 top-0 bottom-0 w-[300px] bg-[#0a0f1e]/95 backdrop-blur-2xl border-r border-white/[0.06] z-[61] flex flex-col overflow-y-auto"
+            transition={{ type: 'spring', stiffness: 300, damping: 32 }}
+            className="fixed left-0 top-0 bottom-0 w-[300px] glass z-[61] flex flex-col overflow-y-auto"
             id="mobile-drawer"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-5 border-b border-white/[0.05]">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                  <span className="font-extrabold text-white text-sm">CP</span>
+                  <span className="font-extrabold text-white text-sm">AAU</span>
                 </div>
                 <div>
-                  <p className="font-extrabold text-white text-sm leading-none">Communication</p>
+                  <p className="font-extrabold text-white text-sm leading-none">Arsi Aseko</p>
                   <p className="text-[10px] font-bold text-blue-400 uppercase tracking-widest mt-0.5">
-                    Platform Pro
+                    University Portal
                   </p>
                 </div>
               </div>
@@ -86,16 +88,20 @@ const MobileDrawer = ({ isOpen, onClose }) => {
             <Link
               to={`/profile/${user?._id}`}
               onClick={handleNavClick}
-              className="m-4 p-4 rounded-2xl bg-white/[0.03] border border-white/[0.05] flex items-center gap-3.5 group hover:bg-white/[0.06] transition-all"
+              className="m-4 p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04] flex items-center gap-3.5 group hover:bg-white/[0.05] hover:border-white/[0.08] transition-all relative overflow-hidden"
             >
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <img
                 src={user?.profilePicture}
                 alt={user?.name}
-                className="w-12 h-12 rounded-xl object-cover ring-2 ring-white/10"
+                className="w-12 h-12 rounded-xl object-cover ring-2 ring-white/10 group-hover:ring-blue-500/30 transition-all"
               />
-              <div className="flex-1 min-w-0">
-                <p className="font-bold text-white text-sm truncate">{user?.name}</p>
-                <p className="text-[11px] text-slate-500 truncate">
+              <div className="flex-1 min-w-0 relative z-10">
+                <div className="flex items-center gap-2">
+                  <p className="font-bold text-white text-sm truncate">{user?.name}</p>
+                  <ProBadge />
+                </div>
+                <p className="text-[11px] text-slate-500 truncate font-medium">
                   {user?.university} · {user?.department}
                 </p>
               </div>
