@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion';
+
 const Skeleton = ({ className }) => {
   return (
     <div className={`relative overflow-hidden bg-white/[0.03] rounded-lg ${className}`}>
