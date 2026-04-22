@@ -78,11 +78,11 @@ const Register = () => {
               transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
               className="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mb-8 flex items-center justify-center -rotate-3 shadow-xl shadow-blue-500/20"
             >
-              <h1 className="text-2xl font-extrabold text-white rotate-3">CP</h1>
+              <h1 className="text-2xl font-extrabold text-white rotate-3">AAU</h1>
             </motion.div>
 
             <h2 className="text-3xl lg:text-4xl font-extrabold text-white mb-5 leading-tight tracking-tight">
-              Shape Your Future, <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Together.</span>
+              Shape Your Future, <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Together at AAU.</span>
             </h2>
             
             <p className="text-base text-blue-200/60 mb-8 leading-relaxed font-medium">
@@ -95,8 +95,8 @@ const Register = () => {
                   <School className="w-5 h-5 text-blue-400" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-white font-bold text-base">Unite Academic Minds</h3>
-                  <p className="text-slate-500 text-sm">Connect with peers across our network.</p>
+                  <h3 className="text-white font-bold text-base">Unite Arsi Aseko Minds</h3>
+                  <p className="text-slate-500 text-sm">Connect with peers across our university portal.</p>
                 </div>
               </div>
               <div className="flex items-center space-x-4">
@@ -104,8 +104,8 @@ const Register = () => {
                   <Briefcase className="w-5 h-5 text-indigo-400" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-white font-bold text-base">Launch Your Career</h3>
-                  <p className="text-slate-500 text-sm">Build a network that accelerates your growth.</p>
+                  <h3 className="text-white font-bold text-base">Empower Your Career</h3>
+                  <p className="text-slate-500 text-sm">Build a network that accelerates your growth at Arsi Aseko.</p>
                 </div>
               </div>
             </div>
@@ -115,7 +115,7 @@ const Register = () => {
         {/* Right Side: Registration Form */}
         <div className="lg:w-1/2 bg-[#0a0f1e] p-8 sm:p-10 lg:p-14 flex flex-col justify-center">
           <div className="mb-7 hidden lg:block">
-            <h3 className="text-2xl font-bold text-white mb-2">Join the Network</h3>
+            <h3 className="text-2xl font-bold text-white mb-2">Join the Portal</h3>
             <p className="text-slate-500 font-medium text-sm">Create your account to get started</p>
           </div>
 
@@ -141,7 +141,7 @@ const Register = () => {
             <div>
               <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 ml-1">Email Address</label>
               <div className="relative group">
-                <input name="email" type="email" required className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] focus:border-blue-500/30 focus:bg-white/[0.06] rounded-xl py-3 pl-11 pr-4 text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 placeholder:text-slate-600 text-sm" placeholder="student@uni.edu" value={formData.email} onChange={handleChange} />
+                <input name="email" type="email" required className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] focus:border-blue-500/30 focus:bg-white/[0.06] rounded-xl py-3 pl-11 pr-4 text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 placeholder:text-slate-600 text-sm" placeholder="student@arsiaseko.edu.et" value={formData.email} onChange={handleChange} />
                 <Mail className="absolute left-3.5 top-3 text-slate-600 group-focus-within:text-blue-400 w-4.5 h-4.5 transition-colors" />
               </div>
             </div>
@@ -150,7 +150,7 @@ const Register = () => {
               <div>
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 ml-1">University</label>
                 <div className="relative group">
-                  <input name="university" type="text" required className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] focus:border-blue-500/30 focus:bg-white/[0.06] rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 placeholder:text-slate-600" placeholder="AAU, etc." value={formData.university} onChange={handleChange} />
+                  <input name="university" type="text" required className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] focus:border-blue-500/30 focus:bg-white/[0.06] rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 placeholder:text-slate-600" placeholder="Arsi Aseko University" value={formData.university} onChange={handleChange} />
                   <School className="absolute left-3.5 top-3 text-slate-600 group-focus-within:text-blue-400 w-4 h-4 transition-colors" />
                 </div>
               </div>
