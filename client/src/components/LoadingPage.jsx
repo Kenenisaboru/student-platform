@@ -11,7 +11,7 @@ const LoadingPage = () => {
         />
         <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-8 h-8 bg-blue-500/10 rounded-lg backdrop-blur-xl border border-white/[0.05] flex items-center justify-center text-[10px] font-black text-white">
-                CP
+                AAU
             </div>
         </div>
       </div>
