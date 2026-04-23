@@ -15,24 +15,25 @@ const SearchResults = () => {
 
   useEffect(() => {
     const fetchResults = async () => {
-      if (!query) return;
       setLoading(true);
       try {
         const [usersRes, postsRes] = await Promise.all([
-          API.get(`/users/search?search=${query}`),
+          API.get(query ? `/users/search?search=${query}` : '/users/active'),
           API.get('/posts')
         ]);
         
         // Both endpoints return { users/posts: [], ... } objects
-        const users = usersRes.data.users || [];
+        const users = usersRes.data.users || usersRes.data || [];
         const posts = postsRes.data.posts || [];
 
         setResults({
           users,
-          posts: posts.filter(p =>
-            p.title.toLowerCase().includes(query.toLowerCase()) ||
-            p.content.toLowerCase().includes(query.toLowerCase())
-          )
+          posts: query 
+            ? posts.filter(p =>
+                p.title.toLowerCase().includes(query.toLowerCase()) ||
+                p.content.toLowerCase().includes(query.toLowerCase())
+              )
+            : posts
         });
       } catch (err) { console.error(err); }
       finally { setLoading(false); }
