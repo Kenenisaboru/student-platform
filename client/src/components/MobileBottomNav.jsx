@@ -39,6 +39,8 @@ const MobileBottomNav = () => {
               <Link
                 key={item.path}
                 to={item.path}
+                aria-label="Create Post"
+                aria-current={active ? 'page' : undefined}
                 className="relative -mt-5"
                 id={`mobile-nav-${item.label.toLowerCase()}`}
               >
@@ -46,7 +48,7 @@ const MobileBottomNav = () => {
                   whileTap={{ scale: 0.9 }}
                   className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30 ring-4 ring-[#0a0f1e]/80"
                 >
-                  <PlusSquare className="w-5 h-5 text-white" />
+                  <PlusSquare className="w-5 h-5 text-white" aria-hidden="true" />
                 </motion.div>
               </Link>
             );
@@ -56,11 +58,14 @@ const MobileBottomNav = () => {
             <Link
               key={item.path}
               to={item.path}
+              aria-label={item.label}
+              aria-current={active ? 'page' : undefined}
               className="flex flex-col items-center justify-center py-2 px-3 relative group"
               id={`mobile-nav-${item.label.toLowerCase()}`}
             >
               <motion.div whileTap={{ scale: 0.85 }} className="relative">
                 <Icon
+                  aria-hidden="true"
                   className={`w-5 h-5 transition-colors duration-200 ${
                     active ? 'text-blue-400' : 'text-slate-500'
                   }`}
