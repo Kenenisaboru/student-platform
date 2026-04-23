@@ -33,7 +33,7 @@ const VirtualID = () => {
 
   if (!user) return null;
 
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=AAU-SECURE-${user._id}`;
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${window.location.origin}/profile/${user._id}`;
 
   const downloadID = () => {
     toast.success('Generating secure high-resolution digital credential...');
