@@ -10,6 +10,7 @@ import MobileBottomNav from './components/MobileBottomNav';
 import MobileDrawer from './components/MobileDrawer';
 import FloatingFocusHub from './components/FloatingFocusHub';
 import LoadingPage from './components/LoadingPage';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Lazy load pages
 const Home = lazy(() => import('./pages/Home'));
@@ -29,6 +30,13 @@ const Settings = lazy(() => import('./pages/Settings'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
+// New Pages
+const Events = lazy(() => import('./pages/Events'));
+const CampusGallery = lazy(() => import('./pages/CampusGallery'));
+const About = lazy(() => import('./pages/About'));
+const AcademicCalendar = lazy(() => import('./pages/AcademicCalendar'));
+const Announcements = lazy(() => import('./pages/Announcements'));
+
 import { Toaster } from 'sonner';
 import { HelmetProvider } from 'react-helmet-async';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -107,6 +115,11 @@ function AppContent() {
                     <Route path="/virtual-id" element={<ProtectedRoute><PageTransition><VirtualID /></PageTransition></ProtectedRoute>} />
                     <Route path="/library" element={<ProtectedRoute><PageTransition><ResourceLibrary /></PageTransition></ProtectedRoute>} />
                     <Route path="/admin" element={<AdminRoute><PageTransition><AdminDashboard /></PageTransition></AdminRoute>} />
+                    <Route path="/events" element={<ProtectedRoute><PageTransition><Events /></PageTransition></ProtectedRoute>} />
+                    <Route path="/gallery" element={<ProtectedRoute><PageTransition><CampusGallery /></PageTransition></ProtectedRoute>} />
+                    <Route path="/about" element={<PageTransition><About /></PageTransition>} />
+                    <Route path="/academic-calendar" element={<ProtectedRoute><PageTransition><AcademicCalendar /></PageTransition></ProtectedRoute>} />
+                    <Route path="/announcements" element={<ProtectedRoute><PageTransition><Announcements /></PageTransition></ProtectedRoute>} />
                     <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
                   </Routes>
                 </AnimatePresence>
@@ -137,27 +150,29 @@ function AppContent() {
 
 function App() {
   return (
-    <HelmetProvider>
-      <AuthProvider>
-        <Router>
-          <Toaster 
-            position="top-center" 
-            richColors 
-            toastOptions={{
-              style: {
-                background: '#0a0f1e',
-                border: '1px solid rgba(255,255,255,0.06)',
-                color: '#e2e8f0',
-                borderRadius: '16px',
-              }
-            }}
-          />
-          <SocketProvider>
-            <AppContent />
-          </SocketProvider>
-        </Router>
-      </AuthProvider>
-    </HelmetProvider>
+    <ErrorBoundary>
+      <HelmetProvider>
+        <AuthProvider>
+          <Router>
+            <Toaster 
+              position="top-center" 
+              richColors 
+              toastOptions={{
+                style: {
+                  background: '#0a0f1e',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  color: '#e2e8f0',
+                  borderRadius: '16px',
+                }
+              }}
+            />
+            <SocketProvider>
+              <AppContent />
+            </SocketProvider>
+          </Router>
+        </AuthProvider>
+      </HelmetProvider>
+    </ErrorBoundary>
   );
 }
 
