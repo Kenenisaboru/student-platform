@@ -125,15 +125,18 @@ const Home = () => {
             Greetings, <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">{user?.name?.split(' ')[0] || 'Scholar'}</span>.
           </h1>
           <p className="text-slate-400 text-sm font-medium leading-relaxed max-w-md opacity-80 mb-8">
-            Your centralized hub for academic excellence. {posts.length > 0 ? "You have new discussions waiting." : "Start your daily engagement now."}
+            Welcome to the Arsi Aseko University official portal. Your centralized hub for academic excellence.
           </p>
 
           <div className="flex flex-wrap gap-3">
              <Link to="/create-post" className="flex items-center gap-2 px-5 py-2.5 bg-white text-[#060a14] rounded-xl font-bold text-xs hover:bg-blue-50 transition-all shadow-lg active:scale-95">
                 <Plus className="w-4 h-4" /> Start Discussion
              </Link>
-             <Link to="/library" className="flex items-center gap-2 px-5 py-2.5 bg-white/[0.05] border border-white/10 text-white rounded-xl font-bold text-xs hover:bg-white/[0.1] transition-all active:scale-95">
-                <BookOpen className="w-4 h-4" /> Resource Vault
+             <Link to="/events" className="flex items-center gap-2 px-5 py-2.5 bg-white/[0.05] border border-white/10 text-white rounded-xl font-bold text-xs hover:bg-white/[0.1] transition-all active:scale-95">
+                <Calendar className="w-4 h-4 text-blue-400" /> Campus Events
+             </Link>
+             <Link to="/announcements" className="flex items-center gap-2 px-5 py-2.5 bg-white/[0.05] border border-white/10 text-white rounded-xl font-bold text-xs hover:bg-white/[0.1] transition-all active:scale-95">
+                <Zap className="w-4 h-4 text-amber-400" /> Announcements
              </Link>
           </div>
         </div>
