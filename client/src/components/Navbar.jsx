@@ -130,7 +130,7 @@ const Navbar = ({ onMenuToggle }) => {
               </button>
             )}
 
-            <Link to="/" className="flex items-center gap-4 group">
+            <Link to="/" aria-label="Arsi Aseko University Home" className="flex items-center gap-4 group">
               <div className="relative">
                  <div className="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-700 rounded-[1.2rem] flex items-center justify-center text-white shadow-xl shadow-blue-500/10 group-hover:shadow-blue-500/30 group-hover:scale-105 transition-all duration-500 border border-white/10">
                     <span className="font-black text-xs">AAU</span>
@@ -146,16 +146,17 @@ const Navbar = ({ onMenuToggle }) => {
 
           {/* Command Search */}
           {user && (
-            <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-lg mx-12 relative group">
+            <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-lg mx-12 relative group" role="search">
               <input
                 type="text"
                 placeholder="Query database for students, archives, or tags..."
+                aria-label="Search students, archives, or tags"
                 className="w-full bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.06] hover:border-white/[0.12] rounded-2xl py-3 pl-12 pr-6 text-sm focus:bg-white/[0.05] focus:border-blue-500/40 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all duration-500 font-bold text-white placeholder:text-slate-700 shadow-inner"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 id="search-input"
               />
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-blue-500 w-4.5 h-4.5 transition-colors" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-blue-500 w-4.5 h-4.5 transition-colors" aria-hidden="true" />
               <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
                 <ProBadge className="scale-90" />
               </div>
@@ -166,23 +167,42 @@ const Navbar = ({ onMenuToggle }) => {
           <div className="flex items-center gap-1 sm:gap-2">
             {user ? (
               <>
-                <div className="flex items-center px-2 py-1 bg-[#0d1428] rounded-[1.5rem] border border-white/[0.06] shadow-inner">
-                  <Link to="/" title="Home Feed" className={`p-2.5 rounded-xl transition-all relative ${isActive('/') ? 'text-white' : 'text-slate-600 hover:text-white'}`}>
-                    <Home className="w-5 h-5" />
+                <div className="flex items-center px-2 py-1 bg-[#0d1428] rounded-[1.5rem] border border-white/[0.06] shadow-inner" role="navigation" aria-label="Main Navigation">
+                  <Link 
+                    to="/" 
+                    aria-label="Home Feed"
+                    aria-current={isActive('/') ? 'page' : undefined}
+                    className={`p-2.5 rounded-xl transition-all relative ${isActive('/') ? 'text-white' : 'text-slate-600 hover:text-white'}`}
+                  >
+                    <Home className="w-5 h-5" aria-hidden="true" />
                     {isActive('/') && <motion.div layoutId="navDot" className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.8)]" />}
                   </Link>
-                  <Link to="/messages" title="Secure Messages" className={`p-2.5 rounded-xl transition-all relative group ${isActive('/messages') ? 'text-white' : 'text-slate-600 hover:text-white'}`}>
-                    <MessageSquare className="w-5 h-5" />
+                  <Link 
+                    to="/messages" 
+                    aria-label={`Secure Messages ${unreadMessages > 0 ? `(${unreadMessages} unread)` : ''}`}
+                    aria-current={isActive('/messages') ? 'page' : undefined}
+                    className={`p-2.5 rounded-xl transition-all relative group ${isActive('/messages') ? 'text-white' : 'text-slate-600 hover:text-white'}`}
+                  >
+                    <MessageSquare className="w-5 h-5" aria-hidden="true" />
                     {unreadMessages > 0 && <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-blue-500 border-2 border-[#0a0f1e] rounded-full shadow-[0_0_8px_rgba(59,130,246,0.5)]"></span>}
                     {isActive('/messages') && <motion.div layoutId="navDot" className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full" />}
                   </Link>
-                  <Link to="/notifications" title="System Alerts" className={`p-2.5 rounded-xl transition-all relative group ${isActive('/notifications') ? 'text-white' : 'text-slate-600 hover:text-white'}`}>
-                    <Bell className={`w-5 h-5 ${(unreadCount > 0 && !isActive('/notifications')) && 'group-hover:animate-pulse'}`} />
+                  <Link 
+                    to="/notifications" 
+                    aria-label={`System Alerts ${unreadCount > 0 ? `(${unreadCount} new)` : ''}`}
+                    aria-current={isActive('/notifications') ? 'page' : undefined}
+                    className={`p-2.5 rounded-xl transition-all relative group ${isActive('/notifications') ? 'text-white' : 'text-slate-600 hover:text-white'}`}>
+                    <Bell className={`w-5 h-5 ${(unreadCount > 0 && !isActive('/notifications')) && 'group-hover:animate-pulse'}`} aria-hidden="true" />
                     {unreadCount > 0 && <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-rose-500 border-2 border-[#0a0f1e] rounded-full"></span>}
                     {isActive('/notifications') && <motion.div layoutId="navDot" className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full" />}
                   </Link>
-                  <Link to="/create-post" title="Initialize Transmission" className={`p-2.5 rounded-xl transition-all relative ${isActive('/create-post') ? 'text-white' : 'text-slate-600 hover:text-white'}`}>
-                    <PlusSquare className="w-5 h-5" />
+                  <Link 
+                    to="/create-post" 
+                    aria-label="Initialize Transmission (Create Post)"
+                    aria-current={isActive('/create-post') ? 'page' : undefined}
+                    className={`p-2.5 rounded-xl transition-all relative ${isActive('/create-post') ? 'text-white' : 'text-slate-600 hover:text-white'}`}
+                  >
+                    <PlusSquare className="w-5 h-5" aria-hidden="true" />
                     {isActive('/create-post') && <motion.div layoutId="navDot" className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full" />}
                   </Link>
                 </div>
@@ -190,6 +210,8 @@ const Navbar = ({ onMenuToggle }) => {
                 {/* Profile Identity */}
                 <Link 
                   to={`/profile/${user?._id}`} 
+                  aria-label={`View your profile, ${user?.name}`}
+                  aria-current={isActive(`/profile/${user?._id}`) ? 'page' : undefined}
                   className={`ml-4 pl-4 border-l border-white/[0.08] hidden sm:flex items-center gap-3 group transition-all`}
                 >
                   <div className="relative">
