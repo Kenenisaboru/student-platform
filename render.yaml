@@ -10,17 +10,17 @@ services:
       - key: NODE_ENV
         value: production
       - key: MONGODB_URI
-        fromConfig: true
+        sync: false
       - key: JWT_SECRET
-        fromConfig: true
+        sync: false
       - key: CLIENT_URL
-        fromConfig: true
+        sync: false
       - key: CLOUDINARY_CLOUD_NAME
-        fromConfig: true
+        sync: false
       - key: CLOUDINARY_API_KEY
-        fromConfig: true
+        sync: false
       - key: CLOUDINARY_API_SECRET
-        fromConfig: true
+        sync: false
 
   # Frontend Service
   - type: static
@@ -35,4 +35,4 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        fromConfig: true
+        sync: false
