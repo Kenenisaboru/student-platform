@@ -15,7 +15,9 @@ import {
   MessageSquare,
   Settings,
   CreditCard,
-  ChevronRight
+  ChevronRight,
+  Calendar,
+  Image as ImageIcon
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -30,6 +32,8 @@ const LeftSidebar = () => {
   const mainNav = [
     { path: '/', icon: Home, label: 'Home Feed' },
     { path: '/search?q=', icon: Search, label: 'Explore Ecosystem', matchPath: '/search' },
+    { path: '/events', icon: Calendar, label: 'Events & Calendar' },
+    { path: '/gallery', icon: ImageIcon, label: 'Campus Gallery' },
     { path: '/notifications', icon: Bell, label: 'Notifications', badge: true },
     { path: '/messages', icon: MessageSquare, label: 'Portal Chat' },
     { path: '/library', icon: BookOpen, label: 'Resource Vault' },
