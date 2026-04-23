@@ -66,7 +66,7 @@ const updatePostRules = [
 const createCommentRules = [
   body('content').trim().notEmpty().withMessage('Comment content is required')
     .isLength({ min: 1, max: 2000 }).withMessage('Comment must be 1-2,000 characters'),
-  body('parentComment').optional().isMongoId().withMessage('Invalid parent comment ID'),
+  body('parentComment').optional({ nullable: true, checkFalsy: true }).isMongoId().withMessage('Invalid parent comment ID'),
 ];
 
 // Message validations
