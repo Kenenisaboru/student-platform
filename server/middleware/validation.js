@@ -36,8 +36,7 @@ const loginRules = [
 const createPostRules = [
   body('title').trim().notEmpty().withMessage('Title is required')
     .isLength({ min: 3, max: 200 }).withMessage('Title must be 3-200 characters'),
-  body('content').trim().notEmpty().withMessage('Content is required')
-    .isLength({ min: 10, max: 10000 }).withMessage('Content must be 10-10,000 characters'),
+  body('content').trim().notEmpty().withMessage('Content is required'),
   body('tags').optional().customSanitizer(value => {
     if (typeof value === 'string') return [value];
     return value;
@@ -56,8 +55,7 @@ const createPostRules = [
 const updatePostRules = [
   body('title').optional().trim()
     .isLength({ min: 3, max: 200 }).withMessage('Title must be 3-200 characters'),
-  body('content').optional().trim()
-    .isLength({ min: 10, max: 10000 }).withMessage('Content must be 10-10,000 characters'),
+  body('content').optional().trim(),
   body('tags').optional().customSanitizer(value => {
     if (typeof value === 'string') return [value];
     return value;
