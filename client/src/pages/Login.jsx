@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Mail, Lock, Loader2, ArrowRight, MessageSquare, BookOpen, Bell, Users, Play, Sparkles, ShieldCheck, Zap } from 'lucide-react';
+import { Mail, Lock, Loader2, ArrowRight, MessageSquare, BookOpen, Bell, Users, Play, Sparkles, ShieldCheck, Zap, Quote } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '../components/Footer';
 
 const heroSlides = [
   {
-    image: "https://images.unsplash.com/photo-1541339907198-e08759dfc3ef?auto=format&fit=crop&w=1920&q=80", 
-    title: "Welcome to Arsi Aseko University",
+    image: "https://images.unsplash.com/photo-1541339907198-e08759dfc3ef?auto=format&fit=crop&w=1920&q=80",
+    title: "Welcome to Arsi Aseko University Students Platform",
     subtitle: "Join the digital hub connecting students across all departments and campuses."
   },
   {
@@ -24,23 +24,23 @@ const heroSlides = [
 ];
 
 const features = [
-  { 
-    icon: MessageSquare, 
-    title: "Smart Chat", 
+  {
+    icon: MessageSquare,
+    title: "Smart Chat",
     desc: "Real-time messaging with your peers and study groups.",
     color: "from-blue-500/20 to-indigo-500/10",
     borderColor: "group-hover:border-blue-500/50"
   },
-  { 
-    icon: BookOpen, 
-    title: "Share Resources", 
+  {
+    icon: BookOpen,
+    title: "Share Resources",
     desc: "Access and share course materials, notes, and research papers.",
     color: "from-purple-500/20 to-indigo-500/10",
     borderColor: "group-hover:border-purple-500/50"
   },
-  { 
-    icon: Bell, 
-    title: "Announcements", 
+  {
+    icon: Bell,
+    title: "Announcements",
     desc: "Stay updated with the latest university news and department notifications.",
     color: "from-indigo-500/20 to-blue-500/10",
     borderColor: "group-hover:border-indigo-500/50"
@@ -84,7 +84,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-[#060a14] selection:bg-blue-500/30 selection:text-blue-200 font-sans">
-      
+
       {/* Dynamic Background Glows */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[120px] animate-blob"></div>
@@ -94,7 +94,7 @@ const Login = () => {
 
       {/* Hero Section */}
       <section className="relative min-h-[100vh] lg:min-h-screen flex items-center overflow-hidden border-b border-white/[0.03]">
-        
+
         {/* Background Images Carousel */}
         <AnimatePresence mode="wait">
           <motion.div
@@ -105,7 +105,7 @@ const Login = () => {
             transition={{ duration: 2 }}
             className="absolute inset-0 z-0"
           >
-            <img 
+            <img
               src={heroSlides[currentSlide].image}
               className="w-full h-full object-cover scale-105"
               alt="Background"
@@ -119,15 +119,15 @@ const Login = () => {
         <div className="absolute inset-0 z-0 bg-gradient-to-t from-[#060a14] via-transparent to-transparent" />
 
         <div className="container mx-auto px-4 lg:px-8 z-10 grid lg:grid-cols-2 gap-16 items-center py-20 lg:py-0">
-          
+
           {/* Left Content */}
           <div className="relative">
             <motion.div
-               initial={{ opacity: 0, scale: 0.9 }}
-               animate={{ opacity: 1, scale: 1 }}
-               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-8 backdrop-blur-md"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-8 backdrop-blur-md"
             >
-               <Sparkles className="w-3.5 h-3.5" /> Premium University Network
+              <Sparkles className="w-3.5 h-3.5" /> Premium University Network
             </motion.div>
 
             <AnimatePresence mode="wait">
@@ -163,7 +163,7 @@ const Login = () => {
                 </span>
                 <div className="absolute inset-0 bg-white/20 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300"></div>
               </Link>
-              <button 
+              <button
                 onClick={scrollToFeatures}
                 className="px-8 py-4 bg-white/[0.03] backdrop-blur-xl border border-white/10 text-white rounded-2xl font-bold text-lg hover:bg-white/[0.08] transition-all hover:border-white/20 active:scale-95 flex items-center gap-3"
               >
@@ -181,10 +181,10 @@ const Login = () => {
                 { label: 'Resources', val: '12k+' },
                 { label: 'Mentors', val: '150+' },
               ].map((s, i) => (
-                <motion.div 
-                  initial={{ opacity: 0 }} 
-                  animate={{ opacity: 1 }} 
-                  transition={{ delay: 0.8 + (i * 0.1) }} 
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8 + (i * 0.1) }}
                   key={s.label}
                 >
                   <div className="text-2xl font-black text-white">{s.val}</div>
@@ -204,11 +204,11 @@ const Login = () => {
             <div className="group relative">
               {/* Outer Glow Effect */}
               <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/20 via-indigo-500/20 to-purple-500/20 rounded-[2.5rem] blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-              
+
               <div className="relative bg-[#0a0f1e]/80 backdrop-blur-3xl p-10 lg:p-12 rounded-[2.5rem] border border-white/[0.08] shadow-2xl">
                 <div className="mb-10 text-center">
                   <h3 className="text-3xl font-black text-white mb-3 tracking-tight">Student Login</h3>
-                  <p className="text-slate-400 font-medium text-sm">Welcome back to the AAU Portal</p>
+                  <p className="text-slate-400 font-medium text-sm">Welcome back to the AAUSP Portal</p>
                 </div>
 
                 {error && (
@@ -273,29 +273,30 @@ const Login = () => {
 
                 <div className="mt-10 pt-8 border-t border-white/[0.04]">
                   <div className="flex items-center justify-between mb-4">
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Testing Access</p>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Daily Inspiration</p>
                     <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-500/5 border border-blue-500/10">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                      <span className="text-[9px] font-bold text-emerald-500 uppercase">Live Connection</span>
+                      <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></div>
+                      <span className="text-[9px] font-bold text-blue-400 uppercase">Academic Wisdom</span>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => { setEmail('student@example.com'); setPassword('Password123!'); }}
-                      className="flex items-center justify-center gap-2 py-3 px-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] text-white text-[11px] font-bold transition-all active:scale-95 group"
-                    >
-                      <Users className="w-3.5 h-3.5 text-blue-400 group-hover:scale-110 transition-transform" />
-                      Student Demo
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => { setEmail('kenenisaboru998@gmail.com'); setPassword('AdminPassword123!'); }}
-                      className="flex items-center justify-center gap-2 py-3 px-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] text-white text-[11px] font-bold transition-all active:scale-95 group"
-                    >
-                      <ShieldCheck className="w-3.5 h-3.5 text-indigo-400 group-hover:scale-110 transition-transform" />
-                      Admin Demo
-                    </button>
+                  <div className="relative p-6 rounded-2xl bg-gradient-to-br from-blue-600/5 to-indigo-600/5 border border-white/5 overflow-hidden group">
+                    <Quote className="absolute -top-2 -right-2 w-16 h-16 text-blue-500/5 rotate-12 group-hover:scale-110 transition-transform duration-700" />
+                    <div className="relative z-10">
+                      <p className="text-white/90 text-sm font-medium italic leading-relaxed mb-4">
+                        "Education is the most powerful weapon which you can use to change the world. Your journey at Arsi Aseko starts with a single step towards excellence."
+                      </p>
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 p-[1px]">
+                          <div className="w-full h-full rounded-full bg-[#0a0f1e] flex items-center justify-center">
+                            <Users className="w-3.5 h-3.5 text-blue-400" />
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-white text-[10px] font-black uppercase tracking-widest">AAU Student Moto</p>
+                          <p className="text-slate-500 text-[9px] font-bold">Official Motivation Node</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -323,7 +324,7 @@ const Login = () => {
       <section id="features-section" className="py-32 px-4 relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-24">
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               className="text-4xl sm:text-6xl font-black text-white mb-6 tracking-tighter"
@@ -348,7 +349,7 @@ const Login = () => {
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">{feature.title}</h3>
                 <p className="text-slate-400 text-base leading-relaxed font-medium group-hover:text-slate-300 transition-colors">{feature.desc}</p>
-                
+
                 {/* Subtle corner glow */}
                 <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl group-hover:bg-blue-500/10 transition-colors"></div>
               </motion.div>
@@ -367,13 +368,13 @@ const Login = () => {
               </div>
               <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter">Vibrant Student <span className="text-blue-500">Core.</span></h2>
             </div>
-            <p className="text-slate-500 font-medium max-w-sm lg:text-right italic">"Arsi Aseko is where visionaries meet."</p>
+            <p className="text-slate-500 font-medium max-w-sm lg:text-right italic">"Arsi Aseko UNIversity students is where visionaries meets."</p>
           </div>
 
           {/* Bento Grid Redesign */}
           <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-3 gap-5 h-auto lg:h-[700px]">
             {/* Main Feature - Large Tall */}
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 0.99 }}
               className="md:col-span-2 md:row-span-3 relative rounded-[2.5rem] overflow-hidden group border border-white/[0.08]"
             >
@@ -386,7 +387,7 @@ const Login = () => {
             </motion.div>
 
             {/* Top Right High */}
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 0.99 }}
               className="md:col-span-2 md:row-span-1 relative rounded-[2rem] overflow-hidden group border border-white/[0.08]"
             >
@@ -398,30 +399,30 @@ const Login = () => {
             </motion.div>
 
             {/* Bottom Left Square */}
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 0.99 }}
               className="md:col-span-1 md:row-span-2 relative rounded-[2.5rem] overflow-hidden group border border-white/[0.08]"
             >
               <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" alt="Event" />
               <div className="absolute inset-0 bg-purple-600/10 mix-blend-overlay" />
               <div className="absolute inset-0 flex flex-col justify-end p-8">
-                 <ShieldCheck className="text-white/40 mb-3 w-6 h-6" />
-                 <p className="text-white font-bold text-sm">Official Campus Gatherings</p>
+                <ShieldCheck className="text-white/40 mb-3 w-6 h-6" />
+                <p className="text-white font-bold text-sm">Official Campus Gatherings</p>
               </div>
             </motion.div>
 
             {/* Bottom Right - Dynamic Content */}
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 0.99 }}
               className="md:col-span-1 md:row-span-2 bg-[#0d1428] p-8 rounded-[2.5rem] border border-white/[0.08] flex flex-col justify-center relative overflow-hidden group"
             >
-                <div className="relative z-10">
-                  <div className="text-4xl font-black text-white mb-2">15+</div>
-                  <div className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-6">Departments Integrated</div>
-                  <p className="text-slate-400 text-sm leading-relaxed font-medium">From Bio-Tech to Digital Arts, experience a seamless academic flow.</p>
-                </div>
-                {/* Decorative background circle */}
-                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+              <div className="relative z-10">
+                <div className="text-4xl font-black text-white mb-2">15+</div>
+                <div className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-6">Departments Integrated</div>
+                <p className="text-slate-400 text-sm leading-relaxed font-medium">From Engenering  to BUsness, experience a seamless academic flow.</p>
+              </div>
+              {/* Decorative background circle */}
+              <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
             </motion.div>
           </div>
         </div>
@@ -430,11 +431,11 @@ const Login = () => {
       {/* Integration Banner */}
       <section className="py-24 px-4 bg-gradient-to-r from-blue-600 to-indigo-700">
         <div className="max-w-5xl mx-auto text-center">
-            <h2 className="text-3xl md:text-5xl font-black text-white mb-6">Secure Your Digital ID</h2>
-            <p className="text-blue-100 text-lg mb-10 opacity-90 max-w-2xl mx-auto font-medium">Join Arsi Aseko's secure network today and access global opportunities with your verified student profile.</p>
-            <Link to="/register" className="inline-flex items-center gap-3 px-10 py-5 bg-white text-blue-600 rounded-[2rem] font-black text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all">
-              Complete Registration <Sparkles className="w-6 h-6 text-blue-500" />
-            </Link>
+          <h2 className="text-3xl md:text-5xl font-black text-white mb-6">Secure Your Digital ID</h2>
+          <p className="text-blue-100 text-lg mb-10 opacity-90 max-w-2xl mx-auto font-medium">Join Arsi Aseko's secure network today and access global opportunities with your verified student profile.</p>
+          <Link to="/register" className="inline-flex items-center gap-3 px-10 py-5 bg-white text-blue-600 rounded-[2rem] font-black text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all">
+            Complete Registration <Sparkles className="w-6 h-6 text-blue-500" />
+          </Link>
         </div>
       </section>
 
