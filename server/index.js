@@ -40,9 +40,11 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
-// CORS restricted to production URL if set
+// CORS configuration to allow any origin dynamically
 app.use(cors({
-  origin: process.env.CLIENT_URL || '*',
+  origin: function (origin, callback) {
+    callback(null, true);
+  },
   credentials: true
 }));
 app.use(express.json());
@@ -135,8 +137,8 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 5001;
 const MONGODB_URI = process.env.MONGODB_URI;
 
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port ${PORT} (Network Accessible)`);
 });
 
 mongoose.connect(MONGODB_URI)
