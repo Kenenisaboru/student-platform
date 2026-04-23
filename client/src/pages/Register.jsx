@@ -157,7 +157,23 @@ const Register = () => {
               <div>
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 ml-1">Department</label>
                 <div className="relative group">
-                  <input name="department" type="text" required className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] focus:border-blue-500/30 focus:bg-white/[0.06] rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 placeholder:text-slate-600" placeholder="CS, Medicine..." value={formData.department} onChange={handleChange} />
+                  <select 
+                    name="department" 
+                    required 
+                    className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] focus:border-blue-500/30 focus:bg-white/[0.06] rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 appearance-none"
+                    value={formData.department} 
+                    onChange={handleChange}
+                  >
+                    <option value="" disabled className="bg-[#0a0f1e] text-slate-500">Select Department</option>
+                    <option value="Computer Science" className="bg-[#0a0f1e]">Computer Science</option>
+                    <option value="Software Engineering" className="bg-[#0a0f1e]">Software Engineering</option>
+                    <option value="Information Technology" className="bg-[#0a0f1e]">Information Technology</option>
+                    <option value="Electrical Engineering" className="bg-[#0a0f1e]">Electrical Engineering</option>
+                    <option value="Mechanical Engineering" className="bg-[#0a0f1e]">Mechanical Engineering</option>
+                    <option value="Civil Engineering" className="bg-[#0a0f1e]">Civil Engineering</option>
+                    <option value="Medicine" className="bg-[#0a0f1e]">Medicine</option>
+                    <option value="Business Administration" className="bg-[#0a0f1e]">Business Administration</option>
+                  </select>
                   <Briefcase className="absolute left-3.5 top-3 text-slate-600 group-focus-within:text-blue-400 w-4 h-4 transition-colors" />
                 </div>
               </div>
