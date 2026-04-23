@@ -175,16 +175,20 @@ const PostCard = ({ post: initialPost, onDelete }) => {
             <button 
               onClick={handleTranslate}
               title="AI Translate"
+              aria-label={translation ? "Show original content" : "Translate post using AI"}
               className={`p-2 rounded-xl transition-all ${translation ? 'text-blue-400 bg-blue-500/10' : 'text-slate-600 hover:bg-white/[0.04] hover:text-blue-400'}`}
             >
-              <Languages className={`w-4 h-4 ${isTranslating ? 'animate-pulse' : ''}`} />
+              <Languages className={`w-4 h-4 ${isTranslating ? 'animate-pulse' : ''}`} aria-hidden="true" />
             </button>
             <div className="relative">
               <button 
                 onClick={() => setMenuOpen(!menuOpen)}
+                aria-label="Post options"
+                aria-haspopup="true"
+                aria-expanded={menuOpen}
                 className="p-2 hover:bg-white/[0.04] rounded-xl text-slate-600 transition-colors"
               >
-                <MoreHorizontal className="w-5 h-5" />
+                <MoreHorizontal className="w-5 h-5" aria-hidden="true" />
               </button>
               
               <AnimatePresence>
@@ -269,6 +273,7 @@ const PostCard = ({ post: initialPost, onDelete }) => {
                       key={option._id}
                       onClick={() => handleVote(option._id)}
                       disabled={voting}
+                      aria-label={`Vote for ${option.text}. Current percentage: ${percentage}%`}
                       className={`relative w-full text-left p-3.5 rounded-xl border transition-all overflow-hidden group/poll ${votedThis ? 'border-blue-500/30 bg-blue-500/5' : 'border-white/[0.04] hover:border-white/[0.1] hover:bg-white/[0.02]'}`}
                     >
                       {/* Progress Bar */}
@@ -319,31 +324,38 @@ const PostCard = ({ post: initialPost, onDelete }) => {
           <div className="flex items-center space-x-1">
             <motion.button 
               whileTap={{ scale: 0.85 }} onClick={handleLike}
+              aria-label={liked ? "Unlike post" : "Like post"}
               className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-all ${liked ? 'text-pink-400 bg-pink-500/10' : 'text-slate-500 hover:bg-white/[0.04] hover:text-pink-400'}`}
             >
-              <Heart className={`w-[18px] h-[18px] ${liked ? 'fill-current' : ''}`} />
+              <Heart className={`w-[18px] h-[18px] ${liked ? 'fill-current' : ''}`} aria-hidden="true" />
               <span>{likesCount}</span>
             </motion.button>
-
+ 
             <Link 
               to={`/post/${post._id}`}
+              aria-label={`View ${post.commentsCount || 0} comments`}
               className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-slate-500 hover:bg-white/[0.04] hover:text-blue-400 text-sm font-semibold"
             >
-              <MessageCircle className="w-[18px] h-[18px]" />
+              <MessageCircle className={`w-[18px] h-[18px]`} aria-hidden="true" />
               <span>{post.commentsCount || 0}</span>
             </Link>
-
-            <button onClick={handleShare} className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-slate-500 hover:bg-white/[0.04] hover:text-emerald-400 text-sm font-semibold">
-              <Share2 className="w-[18px] h-[18px]" />
+ 
+            <button 
+              onClick={handleShare} 
+              aria-label="Share post link"
+              className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-slate-500 hover:bg-white/[0.04] hover:text-emerald-400 text-sm font-semibold"
+            >
+              <Share2 className={`w-[18px] h-[18px]`} aria-hidden="true" />
               <span className="hidden sm:inline">Share</span>
             </button>
           </div>
-
+ 
           <motion.button
             whileTap={{ scale: 0.85 }} onClick={handleBookmark}
+            aria-label={bookmarked ? "Remove from bookmarks" : "Save to bookmarks"}
             className={`p-2 rounded-xl transition-all ${bookmarked ? 'text-blue-400 bg-blue-500/10' : 'text-slate-600 hover:bg-white/[0.04]'}`}
           >
-            <Bookmark className={`w-[18px] h-[18px] ${bookmarked ? 'fill-current' : ''}`} />
+            <Bookmark className={`w-[18px] h-[18px] ${bookmarked ? 'fill-current' : ''}`} aria-hidden="true" />
           </motion.button>
         </div>
       </div>
