@@ -9,6 +9,7 @@ import RightSidebar from './components/RightSidebar';
 import MobileBottomNav from './components/MobileBottomNav';
 import MobileDrawer from './components/MobileDrawer';
 import FloatingFocusHub from './components/FloatingFocusHub';
+import InstallPWA from './components/InstallPWA';
 import LoadingPage from './components/LoadingPage';
 import ErrorBoundary from './components/ErrorBoundary';
 
@@ -144,6 +145,7 @@ function AppContent() {
 
       {showLayout && <MobileBottomNav />}
       <FloatingFocusHub />
+      <InstallPWA />
     </div>
   );
 }
