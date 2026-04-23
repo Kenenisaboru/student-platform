@@ -31,7 +31,7 @@ const Register = () => {
       special: /[!@#$%^&*]/.test(pass)
     });
   };
-  
+
   const { register } = useAuth();
   const navigate = useNavigate();
 
@@ -62,7 +62,7 @@ const Register = () => {
       <div className="absolute top-0 left-10 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-10 animate-blob animation-delay-2000"></div>
       <div className="absolute -bottom-10 right-32 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-10 animate-blob animation-delay-4000"></div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
@@ -72,9 +72,9 @@ const Register = () => {
         <div className="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center relative bg-gradient-to-br from-blue-900/20 to-indigo-900/20 z-20 overflow-hidden border-r border-white/[0.04]">
           <div className="absolute -top-24 -left-24 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
           <div className="relative z-10">
-            <motion.div 
-              initial={{ scale: 0 }} 
-              animate={{ scale: 1 }} 
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
               transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
               className="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mb-8 flex items-center justify-center -rotate-3 shadow-xl shadow-blue-500/20"
             >
@@ -82,9 +82,9 @@ const Register = () => {
             </motion.div>
 
             <h2 className="text-3xl lg:text-4xl font-extrabold text-white mb-5 leading-tight tracking-tight">
-              Shape Your Future, <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Together at AAU.</span>
+              Shape Your Future, <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Together at AAUS.</span>
             </h2>
-            
+
             <p className="text-base text-blue-200/60 mb-8 leading-relaxed font-medium">
               "Education is the passport to the future, for tomorrow belongs to those who prepare for it today."
             </p>
@@ -95,8 +95,8 @@ const Register = () => {
                   <School className="w-5 h-5 text-blue-400" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-white font-bold text-base">Unite Arsi Aseko Minds</h3>
-                  <p className="text-slate-500 text-sm">Connect with peers across our university portal.</p>
+                  <h3 className="text-white font-bold text-base">Unite Arsi Aseko student  Minds</h3>
+                  <p className="text-slate-500 text-sm">Connect with peers across our university Experiences.</p>
                 </div>
               </div>
               <div className="flex items-center space-x-4">
@@ -120,8 +120,8 @@ const Register = () => {
           </div>
 
           {error && (
-            <motion.div 
-              initial={{ opacity: 0, x: -10 }} 
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               className="mb-5 p-4 bg-red-500/10 text-red-400 rounded-xl text-sm border border-red-500/10 flex items-center"
             >
@@ -157,22 +157,66 @@ const Register = () => {
               <div>
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 ml-1">Department</label>
                 <div className="relative group">
-                  <select 
-                    name="department" 
-                    required 
+                  <select
+                    name="department"
+                    required
                     className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] focus:border-blue-500/30 focus:bg-white/[0.06] rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 appearance-none"
-                    value={formData.department} 
+                    value={formData.department}
                     onChange={handleChange}
                   >
-                    <option value="" disabled className="bg-[#0a0f1e] text-slate-500">Select Department</option>
+                    <option value="" disabled className="bg-[#0a0f1e] text-slate-500">
+                      Select Department
+                    </option>
+
+                    {/* Computing */}
                     <option value="Computer Science" className="bg-[#0a0f1e]">Computer Science</option>
                     <option value="Software Engineering" className="bg-[#0a0f1e]">Software Engineering</option>
                     <option value="Information Technology" className="bg-[#0a0f1e]">Information Technology</option>
+                    <option value="Information Systems" className="bg-[#0a0f1e]">Information Systems</option>
+                    <option value="Cyber Security" className="bg-[#0a0f1e]">Cyber Security</option>
+                    <option value="Data Science" className="bg-[#0a0f1e]">Data Science</option>
+
+                    {/* Engineering */}
                     <option value="Electrical Engineering" className="bg-[#0a0f1e]">Electrical Engineering</option>
                     <option value="Mechanical Engineering" className="bg-[#0a0f1e]">Mechanical Engineering</option>
                     <option value="Civil Engineering" className="bg-[#0a0f1e]">Civil Engineering</option>
+                    <option value="Chemical Engineering" className="bg-[#0a0f1e]">Chemical Engineering</option>
+                    <option value="Industrial Engineering" className="bg-[#0a0f1e]">Industrial Engineering</option>
+
+                    {/* Health */}
                     <option value="Medicine" className="bg-[#0a0f1e]">Medicine</option>
+                    <option value="Nursing" className="bg-[#0a0f1e]">Nursing</option>
+                    <option value="Pharmacy" className="bg-[#0a0f1e]">Pharmacy</option>
+                    <option value="Public Health" className="bg-[#0a0f1e]">Public Health</option>
+
+                    {/* Business */}
                     <option value="Business Administration" className="bg-[#0a0f1e]">Business Administration</option>
+                    <option value="Accounting and Finance" className="bg-[#0a0f1e]">Accounting and Finance</option>
+                    <option value="Marketing Management" className="bg-[#0a0f1e]">Marketing Management</option>
+                    <option value="Economics" className="bg-[#0a0f1e]">Economics</option>
+
+                    {/* Social Sciences */}
+                    <option value="Political Science" className="bg-[#0a0f1e]">Political Science</option>
+                    <option value="Sociology" className="bg-[#0a0f1e]">Sociology</option>
+                    <option value="Psychology" className="bg-[#0a0f1e]">Psychology</option>
+                    <option value="Law" className="bg-[#0a0f1e]">Law</option>
+
+                    {/* Natural Sciences */}
+                    <option value="Mathematics" className="bg-[#0a0f1e]">Mathematics</option>
+                    <option value="Physics" className="bg-[#0a0f1e]">Physics</option>
+                    <option value="Chemistry" className="bg-[#0a0f1e]">Chemistry</option>
+                    <option value="Biology" className="bg-[#0a0f1e]">Biology</option>
+
+                    {/* Agriculture */}
+                    <option value="Agronomy" className="bg-[#0a0f1e]">Agronomy</option>
+                    <option value="Animal Science" className="bg-[#0a0f1e]">Animal Science</option>
+                    <option value="Plant Science" className="bg-[#0a0f1e]">Plant Science</option>
+                    <option value="Agricultural Economics" className="bg-[#0a0f1e]">Agricultural Economics</option>
+
+                    {/* Education */}
+                    <option value="Education" className="bg-[#0a0f1e]">Education</option>
+                    <option value="Curriculum and Instruction" className="bg-[#0a0f1e]">Curriculum and Instruction</option>
+
                   </select>
                   <Briefcase className="absolute left-3.5 top-3 text-slate-600 group-focus-within:text-blue-400 w-4 h-4 transition-colors" />
                 </div>
@@ -185,7 +229,7 @@ const Register = () => {
                 <input name="password" type="password" required className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] focus:border-blue-500/30 focus:bg-white/[0.06] rounded-xl py-3 pl-11 pr-4 text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 placeholder:text-slate-600 text-sm" placeholder="••••••••" value={formData.password} onChange={handleChange} />
                 <Lock className="absolute left-3.5 top-3 text-slate-600 group-focus-within:text-blue-400 w-4.5 h-4.5 transition-colors" />
               </div>
-              
+
               {/* Password Strength Checklist */}
               {formData.password && (
                 <div className="mt-3 grid grid-cols-2 gap-2 p-3 bg-white/[0.02] border border-white/[0.04] rounded-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300">
