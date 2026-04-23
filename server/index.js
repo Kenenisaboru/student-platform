@@ -28,6 +28,9 @@ app.set('socketio', io);
 app.use(helmet());
 // Logging
 app.use(morgan('dev'));
+// Compression
+const compression = require('compression');
+app.use(compression());
 
 // Rate limiting
 const limiter = rateLimit({
@@ -37,12 +40,18 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
+// CORS restricted to production URL if set
 app.use(cors({
   origin: process.env.CLIENT_URL || '*',
   credentials: true
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Health Check Endpoint
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date() });
+});
 
 // Track online users
 const onlineUsers = new Map(); // socketId -> userId
