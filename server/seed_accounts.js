@@ -12,9 +12,9 @@ const seedCredentials = async () => {
         // Regular Student
         const studentEmail = 'student@example.com';
         const studentPassword = 'Password123!';
-        
+
         // Admin (Using one from .env list)
-        const adminEmail = 'kananiman710@gmail.com'; 
+        const adminEmail = 'kananiman710@gmail.com';
         const adminPassword = 'AdminPassword123!';
 
         // Delete existing if any to ensure clean credentials
@@ -51,7 +51,7 @@ const seedCredentials = async () => {
         console.log('Email: ' + adminEmail);
         console.log('Pass:  ' + adminPassword);
         console.log('-------------------------------');
-        
+
         process.exit();
     } catch (err) {
         console.error('❌ Error seeding credentials:', err);
