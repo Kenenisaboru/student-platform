@@ -8,18 +8,18 @@ import Footer from '../components/Footer';
 const heroSlides = [
   {
     image: "https://images.unsplash.com/photo-1541339907198-e08759dfc3ef?auto=format&fit=crop&w=1920&q=80", 
-    title: "Connect with Arsi Aseko Students",
-    subtitle: "Join the largest university community platform designed specifically for you."
-  },
-  {
-    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1920&q=80",
-    title: "Share Knowledge, Build Your Future",
-    subtitle: "Collaborate on projects, share resources, and grow together."
+    title: "Welcome to Arsi Aseko University",
+    subtitle: "Join the digital hub connecting students across all departments and campuses."
   },
   {
     image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1920&q=80",
-    title: "Your Campus, Your Community",
-    subtitle: "Stay updated with announcements and university events."
+    title: "Innovate and Collaborate",
+    subtitle: "Build your future with state-of-the-art resources and community support."
+  },
+  {
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1920&q=80",
+    title: "Your Campus, Your Voice",
+    subtitle: "Stay updated with official announcements and university events."
   }
 ];
 
