@@ -4,6 +4,7 @@ import PostCard from '../components/PostCard';
 import { Loader2, Plus, Sparkles, MessageCircle, TrendingUp, Zap, BookOpen, GraduationCap, Calendar, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@/components/ui/button';
 import { PostSkeleton } from '../components/Skeleton';
 import { toast } from 'sonner';
 import { Helmet } from 'react-helmet-async';
@@ -129,15 +130,21 @@ const Home = () => {
           </p>
 
           <div className="flex flex-wrap gap-3">
-             <Link to="/create-post" className="flex items-center gap-2 px-5 py-2.5 bg-white text-[#060a14] rounded-xl font-bold text-xs hover:bg-blue-50 transition-all shadow-lg active:scale-95">
-                <Plus className="w-4 h-4" /> Start Discussion
-             </Link>
-             <Link to="/events" className="flex items-center gap-2 px-5 py-2.5 bg-white/[0.05] border border-white/10 text-white rounded-xl font-bold text-xs hover:bg-white/[0.1] transition-all active:scale-95">
-                <Calendar className="w-4 h-4 text-blue-400" /> Campus Events
-             </Link>
-             <Link to="/announcements" className="flex items-center gap-2 px-5 py-2.5 bg-white/[0.05] border border-white/10 text-white rounded-xl font-bold text-xs hover:bg-white/[0.1] transition-all active:scale-95">
-                <Zap className="w-4 h-4 text-amber-400" /> Announcements
-             </Link>
+             <Button asChild variant="pro-white" className="rounded-xl font-bold text-xs px-5 py-2.5 h-auto">
+               <Link to="/create-post">
+                  <Plus className="w-4 h-4" /> Start Discussion
+               </Link>
+             </Button>
+             <Button asChild variant="outline" className="bg-white/[0.05] border-white/10 text-white rounded-xl font-bold text-xs hover:bg-white/[0.1] px-5 py-2.5 h-auto">
+               <Link to="/events">
+                  <Calendar className="w-4 h-4 text-blue-400" /> Campus Events
+               </Link>
+             </Button>
+             <Button asChild variant="outline" className="bg-white/[0.05] border-white/10 text-white rounded-xl font-bold text-xs hover:bg-white/[0.1] px-5 py-2.5 h-auto">
+               <Link to="/announcements">
+                  <Zap className="w-4 h-4 text-amber-400" /> Announcements
+               </Link>
+             </Button>
           </div>
         </div>
       </motion.div>
