@@ -69,7 +69,7 @@ const Login = () => {
     setError('');
     setLoading(true);
     try {
-      await login(email, password);
+      await login(email.trim(), password.trim());
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to login');
