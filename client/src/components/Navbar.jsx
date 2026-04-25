@@ -167,7 +167,7 @@ const Navbar = ({ onMenuToggle }) => {
           <div className="flex items-center gap-1 sm:gap-2">
             {user ? (
               <>
-                <div className="flex items-center px-2 py-1 bg-[#0d1428] rounded-[1.5rem] border border-white/[0.06] shadow-inner" role="navigation" aria-label="Main Navigation">
+                <div className="hidden md:flex items-center px-2 py-1 bg-[#0d1428] rounded-[1.5rem] border border-white/[0.06] shadow-inner" role="navigation" aria-label="Main Navigation">
                   <Link 
                     to="/" 
                     aria-label="Home Feed"
