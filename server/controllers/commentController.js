@@ -13,59 +13,71 @@ exports.createComment = async (req, res) => {
       author: req.user._id
     };
 
-    // If it's a reply to another comment
+    let parent = null;
     if (parentComment) {
-      const parent = await Comment.findById(parentComment);
+      parent = await Comment.findById(parentComment);
       if (!parent) return res.status(404).json({ message: 'Parent comment not found' });
       commentData.parentComment = parentComment;
     }
 
     const comment = await Comment.create(commentData);
 
-    const post = await Post.findById(postId);
-    if (post) {
-      post.commentsCount += 1;
-      await post.save();
-    }
+    // Increment comment count on post
+    const post = await Post.findByIdAndUpdate(
+      postId,
+      { $inc: { commentsCount: 1 } },
+      { new: true }
+    );
 
-    // Notification to post author
-    if (post && post.author.toString() !== req.user._id.toString()) {
-      await Notification.create({
-        recipient: post.author,
-        sender: req.user._id,
-        type: 'comment',
-        post: postId
-      });
-
+    // Notifications (Wrapped in try/catch so they don't break the main flow)
+    try {
       const io = req.app.get('socketio');
-      io.to(post.author.toString()).emit('new_notification', {
-        message: `${req.user.name} commented on your post`,
-        type: 'comment'
-      });
-    }
 
-    // Notification to parent comment author (for replies)
-    if (parentComment) {
-      const parent = await Comment.findById(parentComment);
-      if (parent && parent.author.toString() !== req.user._id.toString()) {
+      // 1. Notification to post author
+      if (post && post.author.toString() !== req.user._id.toString()) {
         await Notification.create({
-          recipient: parent.author,
+          recipient: post.author,
           sender: req.user._id,
           type: 'comment',
           post: postId
         });
 
-        const io = req.app.get('socketio');
-        io.to(parent.author.toString()).emit('new_notification', {
-          message: `${req.user.name} replied to your comment`,
-          type: 'comment'
-        });
+        if (io) {
+          io.to(post.author.toString()).emit('new_notification', {
+            message: `${req.user.name} commented on your post`,
+            type: 'comment'
+          });
+        }
       }
+
+      // 2. Notification to parent comment author (for replies)
+      if (parent && parent.author.toString() !== req.user._id.toString()) {
+        // Avoid duplicate notification if parent author is also post author
+        if (!post || parent.author.toString() !== post.author.toString()) {
+          await Notification.create({
+            recipient: parent.author,
+            sender: req.user._id,
+            type: 'comment',
+            post: postId
+          });
+        }
+
+        if (io) {
+          io.to(parent.author.toString()).emit('new_notification', {
+            message: `${req.user.name} replied to your comment`,
+            type: 'comment'
+          });
+        }
+      }
+    } catch (notifError) {
+      console.error('Notification error:', notifError);
+      // We don't return an error to the user because the comment was already saved
     }
 
     const populatedComment = await comment.populate('author', 'name profilePicture');
     res.status(201).json(populatedComment);
   } catch (error) {
+    console.error('Create comment error:', error);
     res.status(500).json({ message: error.message });
   }
 };
