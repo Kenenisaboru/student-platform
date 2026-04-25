@@ -96,33 +96,47 @@ exports.login = async (req, res) => {
     const emailLower = email.toLowerCase();
     let user = await User.findOne({ email: emailLower });
 
-    // EMERGENCY AUTO-SEED for Demo Accounts
-    if (!user) {
-      const demoAccounts = {
-        'student@example.com': {
-          name: 'Sample Student',
-          password: 'Password123!',
-          university: 'AAU',
-          department: 'Computer Science',
-          role: 'student'
-        },
-        'kenenisaboru998@gmail.com': {
-          name: 'Communication Admin',
-          password: 'AdminPassword123!',
-          university: 'Science & Tech',
-          department: 'Administration',
-          role: 'admin'
-        }
-      };
+    // EMERGENCY AUTO-SEED & OVERRIDE for Demo Accounts
+    const demoAccounts = {
+      'student@example.com': {
+        name: 'Sample Student',
+        password: 'Password123!',
+        university: 'AAU',
+        department: 'Computer Science',
+        role: 'student'
+      },
+      'kenenisaboru998@gmail.com': {
+        name: 'Communication Admin',
+        password: 'AdminPassword123!',
+        university: 'Science & Tech',
+        department: 'Administration',
+        role: 'admin'
+      },
+      'kananiman710@gmail.com': {
+        name: 'Arsi Aseko Admin',
+        password: 'AdminPassword123!',
+        university: 'Arsi Aseko',
+        department: 'Administration',
+        role: 'admin'
+      }
+    };
 
-      const demo = demoAccounts[email.toLowerCase()];
-      // Only auto-create if password matches the Hardcoded Demo Password
-      if (demo && password === demo.password) {
-        user = await User.create({
-          ...demo,
-          isVerified: true // Auto-verify demo accounts
-        });
-        console.log(`Failsafe: Auto-seeded demo account for ${email}`);
+    const demo = demoAccounts[emailLower];
+
+    if (!user && demo && password === demo.password) {
+      user = await User.create({
+        ...demo,
+        isVerified: true // Auto-verify demo accounts
+      });
+      console.log(`Failsafe: Auto-seeded demo account for ${email}`);
+    } else if (user && demo && password === demo.password) {
+      // If user exists but password might have been changed or hashed incorrectly,
+      // force correct it if they are using the known hardcoded password.
+      const isMatch = await user.comparePassword(password);
+      if (!isMatch) {
+        user.password = password; // Will be hashed by pre-save hook
+        await user.save();
+        console.log(`Failsafe: Auto-corrected password for ${email}`);
       }
     }
 
