@@ -86,20 +86,27 @@ exports.followUser = async (req, res) => {
       currentUser.following.push(req.params.id);
       userToFollow.followers.push(req.user._id);
 
-      // Create notification
-      const Notification = require('../models/Notification');
-      await Notification.create({
-        recipient: userToFollow._id,
-        sender: req.user._id,
-        type: 'follow'
-      });
+      // Notifications (Wrapped in try/catch so they don't break the main flow)
+      try {
+        // Create notification
+        const Notification = require('../models/Notification');
+        await Notification.create({
+          recipient: userToFollow._id,
+          sender: req.user._id,
+          type: 'follow'
+        });
 
-      // Real-time notification
-      const io = req.app.get('socketio');
-      io.to(userToFollow._id.toString()).emit('new_notification', {
-        message: `${currentUser.name} started following you`,
-        type: 'follow'
-      });
+        // Real-time notification
+        const io = req.app.get('socketio');
+        if (io) {
+          io.to(userToFollow._id.toString()).emit('new_notification', {
+            message: `${currentUser.name} started following you`,
+            type: 'follow'
+          });
+        }
+      } catch (notifError) {
+        console.error('Follow notification error:', notifError);
+      }
     }
 
     await currentUser.save();
