@@ -129,20 +129,20 @@ const Home = () => {
             Welcome to the Arsi Aseko University official portal. Your centralized hub for academic excellence.
           </p>
 
-          <div className="flex flex-wrap gap-3">
-             <Button asChild variant="pro-white" className="rounded-xl font-bold text-xs px-5 py-2.5 h-auto">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+             <Button asChild variant="pro-white" className="w-full sm:w-auto rounded-xl font-bold text-xs px-5 py-2.5 h-auto justify-start sm:justify-center">
                <Link to="/create-post">
-                  <Plus className="w-4 h-4" /> Start Discussion
+                  <Plus className="w-4 h-4 mr-2" /> Start Discussion
                </Link>
              </Button>
-             <Button asChild variant="outline" className="bg-white/[0.05] border-white/10 text-white rounded-xl font-bold text-xs hover:bg-white/[0.1] px-5 py-2.5 h-auto">
+             <Button asChild variant="outline" className="w-full sm:w-auto bg-white/[0.05] border-white/10 text-white rounded-xl font-bold text-xs hover:bg-white/[0.1] px-5 py-2.5 h-auto justify-start sm:justify-center">
                <Link to="/events">
-                  <Calendar className="w-4 h-4 text-blue-400" /> Campus Events
+                  <Calendar className="w-4 h-4 text-blue-400 mr-2" /> Campus Events
                </Link>
              </Button>
-             <Button asChild variant="outline" className="bg-white/[0.05] border-white/10 text-white rounded-xl font-bold text-xs hover:bg-white/[0.1] px-5 py-2.5 h-auto">
+             <Button asChild variant="outline" className="w-full sm:w-auto bg-white/[0.05] border-white/10 text-white rounded-xl font-bold text-xs hover:bg-white/[0.1] px-5 py-2.5 h-auto justify-start sm:justify-center">
                <Link to="/announcements">
-                  <Zap className="w-4 h-4 text-amber-400" /> Announcements
+                  <Zap className="w-4 h-4 text-amber-400 mr-2" /> Announcements
                </Link>
              </Button>
           </div>
