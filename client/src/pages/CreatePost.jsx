@@ -171,9 +171,9 @@ const CreatePost = () => {
             <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/[0.05] relative overflow-hidden group">
                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full blur-3xl pointer-events-none"></div>
                
-               <div className="flex flex-col sm:flex-row items-center gap-4 mb-6">
-                 <h4 className="text-white font-black text-sm uppercase tracking-widest mr-auto">Asset Integration</h4>
-                 <div className="flex gap-2">
+               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6">
+                 <h4 className="text-white font-black text-sm uppercase tracking-widest mr-auto w-full sm:w-auto border-b border-white/5 sm:border-0 pb-3 sm:pb-0 mb-2 sm:mb-0">Asset Integration</h4>
+                 <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                     <button 
                         type="button" 
                         onClick={() => document.getElementById('image-upload').click()}
