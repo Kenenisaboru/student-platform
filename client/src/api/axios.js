@@ -1,7 +1,21 @@
 import axios from 'axios';
 
+const getBaseURL = () => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  const hostname = window.location.hostname;
+
+  // If we are accessing the site via an IP address (like on a phone)
+  // and the envUrl is also an IP, it's better to use the current hostname
+  // to ensure we're hitting the server on the same machine.
+  if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
+    return `http://${hostname}:5001/api`;
+  }
+
+  return envUrl || 'http://localhost:5001/api';
+};
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5001/api',
+  baseURL: getBaseURL(),
 });
 
 API.interceptors.request.use((req) => {
