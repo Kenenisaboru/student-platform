@@ -144,19 +144,26 @@ exports.likePost = async (req, res) => {
     } else {
       post.likes.push(req.user._id);
       
-      if (post.author.toString() !== req.user._id.toString()) {
-        await Notification.create({
-          recipient: post.author,
-          sender: req.user._id,
-          type: 'like',
-          post: post._id
-        });
-        
-        const io = req.app.get('socketio');
-        io.to(post.author.toString()).emit('new_notification', {
-          message: `${req.user.name} liked your post`,
-          type: 'like'
-        });
+      // Notifications (Wrapped in try/catch so they don't break the main flow)
+      try {
+        if (post.author.toString() !== req.user._id.toString()) {
+          await Notification.create({
+            recipient: post.author,
+            sender: req.user._id,
+            type: 'like',
+            post: post._id
+          });
+          
+          const io = req.app.get('socketio');
+          if (io) {
+            io.to(post.author.toString()).emit('new_notification', {
+              message: `${req.user.name} liked your post`,
+              type: 'like'
+            });
+          }
+        }
+      } catch (notifError) {
+        console.error('Like notification error:', notifError);
       }
     }
 
