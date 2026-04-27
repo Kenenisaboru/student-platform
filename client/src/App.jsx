@@ -39,6 +39,10 @@ const AcademicCalendar = lazy(() => import('./pages/AcademicCalendar'));
 const Announcements = lazy(() => import('./pages/Announcements'));
 const CommunityDirectory = lazy(() => import('./pages/CommunityDirectory'));
 const CommunityInitiatives = lazy(() => import('./pages/CommunityInitiatives'));
+const CommunityGoalsDashboard = lazy(() => import('./pages/CommunityGoalsDashboard'));
+const JobOpportunityBoard = lazy(() => import('./pages/JobOpportunityBoard'));
+const DiscussionForum = lazy(() => import('./pages/DiscussionForum'));
+const MentorshipProgram = lazy(() => import('./pages/MentorshipProgram'));
 
 import { Toaster } from 'sonner';
 import { HelmetProvider } from 'react-helmet-async';
@@ -125,6 +129,10 @@ function AppContent() {
                     <Route path="/announcements" element={<ProtectedRoute><PageTransition><Announcements /></PageTransition></ProtectedRoute>} />
                     <Route path="/community-directory" element={<ProtectedRoute><PageTransition><CommunityDirectory /></PageTransition></ProtectedRoute>} />
                     <Route path="/community-initiatives" element={<ProtectedRoute><PageTransition><CommunityInitiatives /></PageTransition></ProtectedRoute>} />
+                    <Route path="/community-goals" element={<ProtectedRoute><PageTransition><CommunityGoalsDashboard /></PageTransition></ProtectedRoute>} />
+                    <Route path="/jobs" element={<ProtectedRoute><PageTransition><JobOpportunityBoard /></PageTransition></ProtectedRoute>} />
+                    <Route path="/forum" element={<ProtectedRoute><PageTransition><DiscussionForum /></PageTransition></ProtectedRoute>} />
+                    <Route path="/mentorship" element={<ProtectedRoute><PageTransition><MentorshipProgram /></PageTransition></ProtectedRoute>} />
                     <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
                   </Routes>
                 </AnimatePresence>

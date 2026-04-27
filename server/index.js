@@ -119,6 +119,10 @@ const notificationRoutes = require('./routes/notificationRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const reportRoutes = require('./routes/reportRoutes');
 const resourceRoutes = require('./routes/resourceRoutes');
+const communityGoalsRoutes = require('./routes/communityGoals');
+const jobsRoutes = require('./routes/jobs');
+const forumRoutes = require('./routes/forum');
+const mentorshipRoutes = require('./routes/mentorship');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
@@ -128,6 +132,10 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/resources', resourceRoutes);
+app.use('/api/community-goals', communityGoalsRoutes);
+app.use('/api/jobs', jobsRoutes);
+app.use('/api/forum', forumRoutes);
+app.use('/api/mentorship', mentorshipRoutes);
 
 app.get('/', (req, res) => {
   res.send('AAU Student Platform API is running...');

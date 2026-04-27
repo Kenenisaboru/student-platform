@@ -19,7 +19,11 @@ import {
   Calendar,
   Image as ImageIcon,
   Users,
-  Zap
+  Zap,
+  Target,
+  Briefcase,
+  MessageCircle,
+  Heart
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -46,6 +50,13 @@ const LeftSidebar = () => {
   const communityNav = [
     { path: '/community-directory', icon: Users, label: 'Community Directory' },
     { path: '/community-initiatives', icon: Zap, label: 'Initiatives & Programs' },
+  ];
+
+  const featureNav = [
+    { path: '/community-goals', icon: Target, label: 'Community Goals' },
+    { path: '/jobs', icon: Briefcase, label: 'Job Opportunities' },
+    { path: '/forum', icon: MessageCircle, label: 'Discussion Forum' },
+    { path: '/mentorship', icon: Heart, label: 'Mentorship Program' },
   ];
 
   return (
@@ -175,6 +186,46 @@ const LeftSidebar = () => {
               )}
               
               <Icon className={`w-5 h-5 transition-all duration-300 ${active ? 'text-emerald-400 scale-110' : 'group-hover:scale-110 group-hover:text-emerald-400'}`} />
+              <span className="relative z-10">{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Features Section Header */}
+      <div className="px-5 mb-4">
+        <h4 className="text-[10px] font-black text-slate-600 uppercase tracking-[0.3em]">Community Features</h4>
+      </div>
+
+      {/* Features Navigation */}
+      <nav className="space-y-1.5 mb-10 px-1">
+        {featureNav.map((item) => {
+          const active = isActive(item.path);
+          const Icon = item.icon;
+
+          return (
+            <Link
+              key={item.label}
+              to={item.path}
+              className={`group flex items-center gap-4 px-4 py-3.5 rounded-2xl font-bold text-[13px] tracking-tight transition-all relative overflow-hidden ${
+                active
+                  ? 'bg-blue-600/10 text-white'
+                  : 'text-slate-400 hover:text-white hover:bg-white/[0.03]'
+              }`}
+            >
+              {active && (
+                <motion.div
+                  layoutId="featuresNavGlow"
+                  className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent"
+                  initial={false}
+                  transition={{ type: 'spring', stiffness: 200, damping: 25 }}
+                />
+              )}
+              {active && (
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-blue-500 rounded-r-full shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
+              )}
+              
+              <Icon className={`w-5 h-5 transition-all duration-300 ${active ? 'text-blue-400 scale-110' : 'group-hover:scale-110 group-hover:text-blue-400'}`} />
               <span className="relative z-10">{item.label}</span>
             </Link>
           );
