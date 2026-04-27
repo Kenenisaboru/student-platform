@@ -10,6 +10,9 @@ import { toast } from 'sonner';
 import { Helmet } from 'react-helmet-async';
 import EmptyState from '../components/EmptyState';
 import { useAuth } from '../context/AuthContext';
+import ArsiTestimonials from '../components/ArsiTestimonials';
+import CommunityHighlights from '../components/CommunityHighlights';
+import ArsiMotivationCard from '../components/ArsiMotivationCard';
 
 const Home = () => {
   const { user } = useAuth();
@@ -103,90 +106,103 @@ const Home = () => {
         <meta name="description" content="Connect, share, and collaborate with the Arsi Aseko University academic community." />
       </Helmet>
 
-      {/* Pro Welcome Header */}
+      {/* Arsi Aseko Community Hero Section */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative rounded-[2rem] p-8 mb-8 overflow-hidden bg-[#0d1428] border border-white/[0.05] shadow-2xl group"
+        className="relative rounded-[2rem] p-8 mb-8 overflow-hidden bg-gradient-to-br from-[#0d1428] via-[#1a1f3a] to-[#0d1428] border border-white/[0.05] shadow-2xl group"
       >
-        {/* Animated background patterns */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] group-hover:bg-blue-500/20 transition-all duration-700"></div>
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-500/10 rounded-full blur-[60px] group-hover:bg-purple-500/20 transition-all duration-700"></div>
+        {/* Animated background patterns with Arsi theme */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] group-hover:bg-emerald-500/20 transition-all duration-700"></div>
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-500/10 rounded-full blur-[60px] group-hover:bg-blue-500/20 transition-all duration-700"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-purple-500/5 rounded-full blur-[100px]"></div>
         
         <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-4">
-             <div className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-[10px] font-black text-blue-400 uppercase tracking-[0.2em]">
-               Daily Directive
+          <div className="flex items-center gap-2 mb-4 flex-wrap">
+             <div className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em]">
+               Arsi Aseko Community
              </div>
              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
-             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Portal Online</span>
+             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Active & Growing</span>
           </div>
 
           <h1 className="text-3xl md:text-4xl font-black text-white mb-3 tracking-tighter leading-tight">
-            Greetings, <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">{user?.name?.split(' ')[0] || 'Scholar'}</span>.
+            Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-400">{user?.name?.split(' ')[0] || 'Scholar'}</span>.
           </h1>
-          <p className="text-slate-400 text-sm font-medium leading-relaxed max-w-md opacity-80 mb-8">
-            Welcome to the Arsi Aseko University official portal. Your centralized hub for academic excellence.
+          <p className="text-slate-300 text-sm font-medium leading-relaxed max-w-2xl opacity-90 mb-2">
+            You are part of the <span className="font-bold text-emerald-400">Arsi Aseko student community</span> — a united force of scholars from across Ethiopian universities, sharing knowledge, dreams, and achievements.
+          </p>
+          <p className="text-slate-400 text-xs font-medium leading-relaxed max-w-md opacity-75 mb-8">
+            Whether you were born in the beautiful Aseko region or studying anywhere in Ethiopia, this is your space to connect, inspire, and grow together.
           </p>
 
           <div className="flex flex-col sm:flex-row flex-wrap gap-3">
-             <Button asChild variant="pro-white" className="w-full sm:w-auto rounded-xl font-bold text-xs px-5 py-2.5 h-auto justify-start sm:justify-center">
+             <Button asChild variant="pro-white" className="w-full sm:w-auto rounded-xl font-bold text-xs px-5 py-2.5 h-auto justify-start sm:justify-center bg-emerald-600 hover:bg-emerald-700">
                <Link to="/create-post">
-                  <Plus className="w-4 h-4 mr-2" /> Start Discussion
+                  <Plus className="w-4 h-4 mr-2" /> Share Your Story
                </Link>
              </Button>
              <Button asChild variant="outline" className="w-full sm:w-auto bg-white/[0.05] border-white/10 text-white rounded-xl font-bold text-xs hover:bg-white/[0.1] px-5 py-2.5 h-auto justify-start sm:justify-center">
                <Link to="/events">
-                  <Calendar className="w-4 h-4 text-blue-400 mr-2" /> Campus Events
+                  <Calendar className="w-4 h-4 text-emerald-400 mr-2" /> Community Events
                </Link>
              </Button>
              <Button asChild variant="outline" className="w-full sm:w-auto bg-white/[0.05] border-white/10 text-white rounded-xl font-bold text-xs hover:bg-white/[0.1] px-5 py-2.5 h-auto justify-start sm:justify-center">
                <Link to="/announcements">
-                  <Zap className="w-4 h-4 text-amber-400 mr-2" /> Announcements
+                  <Zap className="w-4 h-4 text-amber-400 mr-2" /> Updates
                </Link>
              </Button>
           </div>
         </div>
       </motion.div>
 
-      {/* Bento-style Status Grid */}
+      {/* Arsi Aseko Community Highlights Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
-          className="md:col-span-2 glass-card-hover p-6 rounded-[2rem] relative overflow-hidden group border border-white/[0.04]"
+          className="md:col-span-2 glass-card-hover p-6 rounded-[2rem] relative overflow-hidden group border border-white/[0.04] bg-emerald-600/5 hover:bg-emerald-600/10"
         >
           <div className="flex items-start justify-between mb-4">
-             <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 border border-amber-500/20">
-                <Zap className="w-5 h-5" />
+             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 border border-emerald-500/20">
+                <Sparkles className="w-5 h-5" />
              </div>
-             <Sparkles className="w-4 h-4 text-slate-700" />
+             <BookOpen className="w-4 h-4 text-slate-700" />
           </div>
-          <h4 className="font-black text-white text-sm mb-2 tracking-tight uppercase tracking-[0.05em]">Perspective</h4>
-          <p className="text-slate-400 text-xs italic leading-relaxed font-medium">"{randomQuote}"</p>
-          <div className="absolute -bottom-6 -right-6 w-20 h-20 bg-amber-500/5 rounded-full blur-2xl group-hover:bg-amber-500/10 transition-all"></div>
+          <h4 className="font-black text-white text-sm mb-2 tracking-tight uppercase tracking-[0.05em]">Arsi Aseko Unity</h4>
+          <p className="text-slate-300 text-xs italic leading-relaxed font-medium">"We come from Aseko, we study across Ethiopia, and together we rise. Your success is our collective victory. Share your journey, celebrate your victories, and lift others as you climb."</p>
+          <div className="absolute -bottom-6 -right-6 w-20 h-20 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-all"></div>
         </motion.div>
 
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2 }}
-          className="glass-card-hover p-6 rounded-[2rem] border border-white/[0.04] bg-blue-600/5 flex flex-col justify-between"
+          className="glass-card-hover p-6 rounded-[2rem] border border-white/[0.04] bg-purple-600/5 flex flex-col justify-between hover:bg-purple-600/10"
         >
-          <TrendingUp className="w-5 h-5 text-blue-400 mb-4" />
+          <GraduationCap className="w-5 h-5 text-purple-400 mb-4" />
           <div>
-             <h4 className="font-black text-white text-xs mb-1 tracking-widest uppercase">Academics</h4>
-             <p className="text-[10px] text-slate-500 font-bold">Exam season approaching. Check guidelines.</p>
+             <h4 className="font-black text-white text-xs mb-1 tracking-widest uppercase">Community Strength</h4>
+             <p className="text-[10px] text-slate-400 font-bold">Hundreds of Arsi students united across Ethiopian universities, building networks for life.</p>
           </div>
         </motion.div>
       </div>
+
+      {/* Motivation Card */}
+      <ArsiMotivationCard />
+
+      {/* Community Highlights Section */}
+      <CommunityHighlights />
+
+      {/* Success Stories Section */}
+      <ArsiTestimonials />
 
       {/* Active Discussions Tab Header */}
       <div className="flex items-center justify-between mb-6 px-2">
         <div className="flex items-center gap-3">
            <div className="w-1 h-6 bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
-           <h2 className="text-xl font-black text-white tracking-tighter">Unified Feed</h2>
+           <h2 className="text-xl font-black text-white tracking-tighter">Community Discussions</h2>
         </div>
         <div className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] bg-white/[0.03] px-3 py-1.5 rounded-lg border border-white/[0.05]">
            Latest Updates

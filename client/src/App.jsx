@@ -37,6 +37,8 @@ const CampusGallery = lazy(() => import('./pages/CampusGallery'));
 const About = lazy(() => import('./pages/About'));
 const AcademicCalendar = lazy(() => import('./pages/AcademicCalendar'));
 const Announcements = lazy(() => import('./pages/Announcements'));
+const CommunityDirectory = lazy(() => import('./pages/CommunityDirectory'));
+const CommunityInitiatives = lazy(() => import('./pages/CommunityInitiatives'));
 
 import { Toaster } from 'sonner';
 import { HelmetProvider } from 'react-helmet-async';
@@ -121,6 +123,8 @@ function AppContent() {
                     <Route path="/about" element={<PageTransition><About /></PageTransition>} />
                     <Route path="/academic-calendar" element={<ProtectedRoute><PageTransition><AcademicCalendar /></PageTransition></ProtectedRoute>} />
                     <Route path="/announcements" element={<ProtectedRoute><PageTransition><Announcements /></PageTransition></ProtectedRoute>} />
+                    <Route path="/community-directory" element={<ProtectedRoute><PageTransition><CommunityDirectory /></PageTransition></ProtectedRoute>} />
+                    <Route path="/community-initiatives" element={<ProtectedRoute><PageTransition><CommunityInitiatives /></PageTransition></ProtectedRoute>} />
                     <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
                   </Routes>
                 </AnimatePresence>
