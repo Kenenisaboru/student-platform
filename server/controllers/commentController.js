@@ -144,8 +144,8 @@ exports.deleteComment = async (req, res) => {
     }
 
     // Delete all replies to this comment
-    await Comment.deleteMany({ parentComment: comment._id });
     const repliesCount = await Comment.countDocuments({ parentComment: comment._id });
+    await Comment.deleteMany({ parentComment: comment._id });
 
     const post = await Post.findById(comment.post);
     if (post) {
