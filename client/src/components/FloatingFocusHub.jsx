@@ -43,7 +43,7 @@ const FloatingFocusHub = () => {
       <AnimatePresence>
         {!isOpen && (
           <motion.button initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setIsOpen(true)}
-            className="fixed bottom-20 lg:bottom-6 right-6 z-40 w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-2xl shadow-indigo-500/20 flex items-center justify-center text-white focus:outline-none overflow-hidden group">
+            className="fixed bottom-20 lg:bottom-6 right-6 z-40 w-12 h-12 bg-linear-to-br from-indigo-500 to-purple-600 rounded-xl shadow-2xl shadow-indigo-500/20 flex items-center justify-center text-white focus:outline-none overflow-hidden group">
             <Target className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
             {isActive && <span className="absolute top-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-[#060a14] rounded-full animate-pulse" />}
           </motion.button>
@@ -53,9 +53,9 @@ const FloatingFocusHub = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div initial={{ opacity: 0, y: 20, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: 0.95 }} transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed bottom-20 lg:bottom-6 right-6 z-40 w-[320px] bg-[#0a0f1e]/95 backdrop-blur-2xl border border-white/[0.06] shadow-2xl rounded-2xl overflow-hidden flex flex-col text-slate-200">
+            className="fixed bottom-20 lg:bottom-6 right-6 z-40 w-[320px] bg-[#0a0f1e]/95 backdrop-blur-2xl border border-white/6 shadow-2xl rounded-2xl overflow-hidden flex flex-col text-slate-200">
             
-            <div className="flex items-center justify-between p-3.5 border-b border-white/[0.04] bg-white/[0.02]">
+            <div className="flex items-center justify-between p-3.5 border-b border-white/4 bg-white/2">
               <div className="flex items-center gap-2">
                 <Target className="w-4 h-4 text-indigo-400" />
                 <span className="font-bold text-sm text-white">Focus Hub <span className="text-[9px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.5 rounded ml-1">BETA</span></span>
@@ -63,17 +63,17 @@ const FloatingFocusHub = () => {
               <button onClick={() => setIsOpen(false)} className="p-1 hover:bg-white/5 rounded-lg transition-colors text-slate-500 hover:text-white"><X className="w-4 h-4" /></button>
             </div>
 
-            <div className="flex p-1.5 gap-1 bg-white/[0.01]">
-              <button onClick={() => setActiveTab('timer')} className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-[11px] font-semibold rounded-lg transition-all ${activeTab === 'timer' ? 'bg-indigo-500/15 text-indigo-300' : 'text-slate-500 hover:bg-white/[0.03]'}`}>
+            <div className="flex p-1.5 gap-1 bg-white/1">
+              <button onClick={() => setActiveTab('timer')} className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-[11px] font-semibold rounded-lg transition-all ${activeTab === 'timer' ? 'bg-indigo-500/15 text-indigo-300' : 'text-slate-500 hover:bg-white/3'}`}>
                 <Clock className="w-3 h-3" /> Timer
               </button>
-              <button onClick={() => setActiveTab('notes')} className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-[11px] font-semibold rounded-lg transition-all ${activeTab === 'notes' ? 'bg-purple-500/15 text-purple-300' : 'text-slate-500 hover:bg-white/[0.03]'}`}>
+              <button onClick={() => setActiveTab('notes')} className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-[11px] font-semibold rounded-lg transition-all ${activeTab === 'notes' ? 'bg-purple-500/15 text-purple-300' : 'text-slate-500 hover:bg-white/3'}`}>
                 <Edit3 className="w-3 h-3" /> Notes
               </button>
-              <button onClick={() => setActiveTab('sounds')} className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-[11px] font-semibold rounded-lg transition-all ${activeTab === 'sounds' ? 'bg-emerald-500/15 text-emerald-300' : 'text-slate-500 hover:bg-white/[0.03]'}`}>
+              <button onClick={() => setActiveTab('sounds')} className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-[11px] font-semibold rounded-lg transition-all ${activeTab === 'sounds' ? 'bg-emerald-500/15 text-emerald-300' : 'text-slate-500 hover:bg-white/3'}`}>
                 <Headphones className="w-3 h-3" /> Focus
               </button>
-              <button onClick={() => setActiveTab('ai')} className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-[11px] font-semibold rounded-lg transition-all ${activeTab === 'ai' ? 'bg-blue-500/15 text-blue-300' : 'text-slate-500 hover:bg-white/[0.03]'}`}>
+              <button onClick={() => setActiveTab('ai')} className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-[11px] font-semibold rounded-lg transition-all ${activeTab === 'ai' ? 'bg-blue-500/15 text-blue-300' : 'text-slate-500 hover:bg-white/3'}`}>
                 <Sparkles className="w-3 h-3" /> AI
               </button>
             </div>
@@ -82,13 +82,13 @@ const FloatingFocusHub = () => {
               <AnimatePresence mode="wait">
                 {activeTab === 'timer' && (
                   <motion.div key="timer" initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 15 }} className="flex flex-col items-center justify-center h-full">
-                    <div className="flex gap-1.5 mb-5 bg-white/[0.03] p-1 rounded-lg border border-white/[0.04]">
+                    <div className="flex gap-1.5 mb-5 bg-white/3 p-1 rounded-lg border border-white/4">
                       <button onClick={() => switchMode('focus')} className={`px-4 py-1.5 text-[11px] font-bold rounded-md transition-all ${mode === 'focus' ? 'bg-indigo-500 text-white shadow-md' : 'text-slate-500 hover:text-slate-300'}`}>Focus</button>
                       <button onClick={() => switchMode('break')} className={`px-4 py-1.5 text-[11px] font-bold rounded-md transition-all ${mode === 'break' ? 'bg-purple-500 text-white shadow-md' : 'text-slate-500 hover:text-slate-300'}`}>Break</button>
                     </div>
                     <div className="relative mb-6 flex items-center justify-center">
                       <svg width="130" height="130" className="transform -rotate-90">
-                        <circle cx="65" cy="65" r="60" stroke="currentColor" strokeWidth="3" fill="transparent" className="text-white/[0.04]" />
+                        <circle cx="65" cy="65" r="60" stroke="currentColor" strokeWidth="3" fill="transparent" className="text-white/4" />
                         <circle cx="65" cy="65" r="60" stroke="currentColor" strokeWidth="3" fill="transparent" strokeDasharray={377} strokeDashoffset={377 - (377 * timeLeft) / (mode === 'focus' ? 25 * 60 : 5 * 60)} strokeLinecap="round" className={`${mode === 'focus' ? 'text-indigo-400' : 'text-purple-400'} transition-all duration-1000 ease-linear`} />
                       </svg>
                       <span className="absolute text-3xl font-extrabold tracking-tighter text-white font-mono">{formatTime(timeLeft)}</span>
@@ -97,7 +97,7 @@ const FloatingFocusHub = () => {
                       <button onClick={toggleTimer} className={`w-11 h-11 flex items-center justify-center rounded-xl text-white shadow-lg transition-all ${isActive ? 'bg-red-500/80 hover:bg-red-500' : 'bg-indigo-500 hover:bg-indigo-400'}`}>
                         {isActive ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
                       </button>
-                      <button onClick={resetTimer} className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/[0.08] transition-colors text-slate-400"><RotateCcw className="w-3.5 h-3.5" /></button>
+                      <button onClick={resetTimer} className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/4 hover:bg-white/8 transition-colors text-slate-400"><RotateCcw className="w-3.5 h-3.5" /></button>
                     </div>
                   </motion.div>
                 )}
@@ -105,11 +105,11 @@ const FloatingFocusHub = () => {
                   <motion.div key="notes" initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 15 }} className="flex flex-col h-full">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Scratchpad</span>
-                      <button onClick={saveNotes} className={`flex items-center gap-1 px-2 py-1 text-[10px] font-bold uppercase rounded transition-all ${saved ? 'bg-emerald-500/15 text-emerald-400' : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.06]'}`}>
+                      <button onClick={saveNotes} className={`flex items-center gap-1 px-2 py-1 text-[10px] font-bold uppercase rounded transition-all ${saved ? 'bg-emerald-500/15 text-emerald-400' : 'bg-white/4 text-slate-400 hover:bg-white/6'}`}>
                         {saved ? <CheckCircle className="w-3 h-3" /> : <Save className="w-3 h-3" />} {saved ? 'Saved' : 'Save'}
                       </button>
                     </div>
-                    <textarea value={noteContent} onChange={(e) => setNoteContent(e.target.value)} placeholder="Jot down thoughts..." className="flex-1 w-full bg-white/[0.03] border border-white/[0.06] p-3 text-sm text-slate-300 rounded-xl resize-none outline-none focus:border-purple-500/20 transition-all font-mono leading-relaxed" />
+                    <textarea value={noteContent} onChange={(e) => setNoteContent(e.target.value)} placeholder="Jot down thoughts..." className="flex-1 w-full bg-white/3 border border-white/6 p-3 text-sm text-slate-300 rounded-xl resize-none outline-none focus:border-purple-500/20 transition-all font-mono leading-relaxed" />
                   </motion.div>
                 )}
                 {activeTab === 'sounds' && (
@@ -119,7 +119,7 @@ const FloatingFocusHub = () => {
                       <h3 className="text-sm font-bold text-white">Deep Focus Audio</h3>
                       <p className="text-[11px] text-slate-500 px-4">Block distractions with ambient rain.</p>
                     </div>
-                    <button onClick={toggleSound} className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-bold transition-all text-sm ${isPlaying ? 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/20' : 'bg-white/[0.04] text-white hover:bg-white/[0.06]'}`}>
+                    <button onClick={toggleSound} className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-bold transition-all text-sm ${isPlaying ? 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/20' : 'bg-white/4 text-white hover:bg-white/6'}`}>
                       {isPlaying ? 'Playing Rain' : <><Play className="w-4 h-4 fill-current" /> Play Rain</>}
                     </button>
                   </motion.div>
@@ -130,10 +130,10 @@ const FloatingFocusHub = () => {
                       <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Research Hub</span>
                       <Sparkles className="w-3 h-3 text-blue-400" />
                     </div>
-                    <div className="flex-1 bg-white/[0.02] border border-white/[0.06] rounded-xl p-3 flex flex-col gap-3 overflow-y-auto no-scrollbar">
+                    <div className="flex-1 bg-white/2 border border-white/6 rounded-xl p-3 flex flex-col gap-3 overflow-y-auto no-scrollbar">
                       <div className="space-y-1.5">
                         <label className="text-[9px] font-bold text-slate-500 uppercase">Input Paper Segment</label>
-                        <textarea placeholder="Paste complex text here..." className="w-full h-20 bg-white/[0.03] border border-white/[0.04] p-2 text-xs text-slate-300 rounded-lg resize-none outline-none focus:border-blue-500/20" />
+                        <textarea placeholder="Paste complex text here..." className="w-full h-20 bg-white/3 border border-white/4 p-2 text-xs text-slate-300 rounded-lg resize-none outline-none focus:border-blue-500/20" />
                       </div>
                       <button className="w-full py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 text-[10px] font-bold rounded-lg border border-blue-500/20 transition-all flex items-center justify-center gap-2">
                         <Target className="w-3 h-3" /> Generate Summary
