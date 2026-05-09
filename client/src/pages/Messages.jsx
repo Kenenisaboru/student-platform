@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import API from '../api/axios';
 import { useAuth } from '../context/AuthContext';
-import { Loader2, Send, ArrowLeft, MessageSquare, Search, Sparkles, User, Info, MoreVertical } from 'lucide-react';
+import { Loader2, Send, ArrowLeft, MessageSquare, Search, Sparkles, User, Info, MoreVertical, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { MessageSkeleton } from '../components/Skeleton';
@@ -177,14 +177,14 @@ const Messages = () => {
 
   return (
     <div className="max-w-6xl mx-auto py-6 px-2 lg:px-4 h-[calc(100vh-6.5rem)]">
-      <div className="bg-[#0a0f1e]/80 backdrop-blur-3xl rounded-[2.5rem] h-full flex overflow-hidden border border-white/[0.08] shadow-2xl relative">
+      <div className="bg-[#0a0f1e]/80 backdrop-blur-3xl rounded-[2.5rem] h-full flex overflow-hidden border border-white/8 shadow-2xl relative">
         
         {/* Background Accent Gradients */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none"></div>
 
         {/* Sidebar: Conversations List */}
-        <div className={`w-full sm:w-[350px] border-r border-white/[0.08] flex flex-col z-10 ${id && 'hidden sm:flex'}`}>
+        <div className={`w-full sm:w-[350px] border-r border-white/8 flex flex-col z-10 ${id && 'hidden sm:flex'}`}>
           <div className="p-6">
             <div className="flex items-center justify-between mb-6">
                <h2 className="text-2xl font-black text-white tracking-tighter">Portal Chat</h2>
@@ -196,7 +196,7 @@ const Messages = () => {
               <input 
                 type="text" 
                 placeholder="Find a scholar..." 
-                className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.08] focus:border-blue-500/40 rounded-2xl py-3.5 pl-12 pr-4 text-sm font-bold text-white placeholder:text-slate-600 outline-none transition-all"
+                className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-blue-500/40 rounded-2xl py-3.5 pl-12 pr-4 text-sm font-bold text-white placeholder:text-slate-600 outline-none transition-all"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -219,7 +219,7 @@ const Messages = () => {
                     animate={{ opacity: 1, x: 0 }}
                     key={conv._id}
                     onClick={() => navigate(`/messages/${otherUser._id}`)}
-                    className={`group flex items-center gap-4 p-4 rounded-[1.8rem] cursor-pointer transition-all border ${isActive ? 'bg-blue-600/10 border-blue-500/30 shadow-[0_0_20px_rgba(59,130,246,0.1)]' : 'hover:bg-white/[0.03] border-transparent'}`}
+                    className={`group flex items-center gap-4 p-4 rounded-[1.8rem] cursor-pointer transition-all border ${isActive ? 'bg-blue-600/10 border-blue-500/30 shadow-[0_0_20px_rgba(59,130,246,0.1)]' : 'hover:bg-white/3 border-transparent'}`}
                   >
                     <div className="relative shrink-0">
                       <img src={otherUser?.profilePicture} alt="Profile" className="w-12 h-12 rounded-2xl object-cover ring-2 ring-white/10 group-hover:ring-blue-500/40 transition-all duration-300" />
@@ -247,7 +247,7 @@ const Messages = () => {
               })
             ) : (
               <div className="px-6 py-12 text-center">
-                 <div className="w-12 h-12 rounded-2xl bg-white/[0.03] flex items-center justify-center mx-auto mb-4 border border-white/[0.05]">
+                 <div className="w-12 h-12 rounded-2xl bg-white/3 flex items-center justify-center mx-auto mb-4 border border-white/5">
                     <MessageSquare className="w-6 h-6 text-slate-700" />
                  </div>
                  <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] mb-2">No Frequency</p>
@@ -262,9 +262,9 @@ const Messages = () => {
           {activeConversation ? (
             <>
               {/* Pro Chat Header */}
-              <div className="p-6 border-b border-white/[0.08] flex items-center justify-between bg-white/[0.01] backdrop-blur-md">
+              <div className="p-6 border-b border-white/8 flex items-center justify-between bg-white/1 backdrop-blur-md">
                 <div className="flex items-center gap-4">
-                  <button onClick={() => navigate('/messages')} className="sm:hidden p-2 -ml-2 hover:bg-white/[0.08] rounded-xl text-slate-400">
+                  <button onClick={() => navigate('/messages')} className="sm:hidden p-2 -ml-2 hover:bg-white/8 rounded-xl text-slate-400">
                     <ArrowLeft className="w-5 h-5" />
                   </button>
                   {(() => {
@@ -284,23 +284,23 @@ const Messages = () => {
                   })()}
                 </div>
                 <div className="flex gap-2">
-                   <button className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] text-slate-500 transition-all">
+                   <button className="p-2.5 rounded-xl bg-white/3 hover:bg-white/6 border border-white/6 text-slate-500 transition-all">
                       <Info className="w-4 h-4" />
                    </button>
-                   <button className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] text-slate-500 transition-all">
+                   <button className="p-2.5 rounded-xl bg-white/3 hover:bg-white/6 border border-white/6 text-slate-500 transition-all">
                       <MoreVertical className="w-4 h-4" />
                    </button>
                 </div>
               </div>
 
               {/* Message Feed */}
-              <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6 bg-gradient-to-b from-transparent to-[#0d1428]/20">
+              <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6 bg-linear-to-b from-transparent to-[#0d1428]/20">
                 <AnimatePresence initial={false}>
                   {loadingMessages ? (
                     <div className="space-y-6">
                       {[...Array(3)].map((_, i) => (
                          <div key={i} className={`flex ${i%2===0 ? 'justify-end' : 'justify-start'}`}>
-                           <Skeleton className={`w-2/3 h-14 rounded-[1.5rem] ${i%2===0 ? 'rounded-tr-sm' : 'rounded-tl-sm'}`} />
+                           <Skeleton className={`w-2/3 h-14 rounded-3xl ${i%2===0 ? 'rounded-tr-sm' : 'rounded-tl-sm'}`} />
                          </div>
                       ))}
                     </div>
@@ -316,9 +316,9 @@ const Messages = () => {
                         >
                           <div className="relative group/msg max-w-[80%]">
                             <div className={`px-5 py-3.5 rounded-[1.8rem] shadow-xl ${isOwn 
-                              ? 'bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-tr-sm shadow-blue-500/10' 
-                              : 'bg-white/[0.04] backdrop-blur-md text-slate-200 border border-white/[0.05] rounded-tl-sm shadow-black/20'}`}>
-                              <p className="text-[14px] font-medium leading-relaxed break-words">{msg.content}</p>
+                              ? 'bg-linear-to-tr from-blue-600 to-indigo-600 text-white rounded-tr-sm shadow-blue-500/10' 
+                              : 'bg-white/4 backdrop-blur-md text-slate-200 border border-white/5 rounded-tl-sm shadow-black/20'}`}>
+                              <p className="text-[14px] font-medium leading-relaxed wrap-break-word">{msg.content}</p>
                               <div className={`flex items-center gap-2 justify-end mt-1.5 opacity-40 group-hover/msg:opacity-70 transition-opacity`}>
                                 <Clock className="w-2.5 h-2.5" />
                                 <p className={`text-[9px] font-black uppercase tracking-tighter`}>
@@ -332,7 +332,7 @@ const Messages = () => {
                     })
                   ) : (
                     <div className="h-full flex flex-col items-center justify-center opacity-30">
-                      <div className="w-20 h-20 rounded-[2rem] bg-white/[0.04] border border-white/[0.05] flex items-center justify-center mb-6">
+                      <div className="w-20 h-20 rounded-4xl bg-white/4 border border-white/5 flex items-center justify-center mb-6">
                         <MessageSquare className="w-8 h-8 text-slate-300" />
                       </div>
                       <p className="font-black text-xs uppercase tracking-[0.3em] text-white">Initialize Signal</p>
@@ -344,7 +344,7 @@ const Messages = () => {
                 <AnimatePresence>
                   {isTyping && (
                     <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} className="flex justify-start">
-                      <div className="bg-blue-600/10 px-5 py-3 rounded-[1.5rem] rounded-tl-sm border border-blue-500/20 flex items-center gap-3">
+                      <div className="bg-blue-600/10 px-5 py-3 rounded-3xl rounded-tl-sm border border-blue-500/20 flex items-center gap-3">
                         <div className="flex gap-1.5">
                           <motion.div animate={{ y: [0, -3, 0] }} transition={{ repeat: Infinity, duration: 0.8 }} className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
                           <motion.div animate={{ y: [0, -3, 0] }} transition={{ repeat: Infinity, duration: 0.8, delay: 0.15 }} className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
@@ -360,7 +360,7 @@ const Messages = () => {
               </div>
 
               {/* Pro Input Area */}
-              <div className="p-6 border-t border-white/[0.08] bg-white/[0.01] backdrop-blur-md">
+              <div className="p-6 border-t border-white/8 bg-white/1 backdrop-blur-md">
                 <form onSubmit={handleSendMessage} className="flex gap-4 relative">
                   <div className="relative flex-1 group">
                     <input 
@@ -368,7 +368,7 @@ const Messages = () => {
                       value={newMessage}
                       onChange={handleInputChange}
                       placeholder="Enter coordinate signal..."
-                      className="w-full bg-white/[0.04] hover:bg-white/[0.06] border border-white/[0.08] focus:border-blue-500/40 rounded-[1.5rem] py-4 pl-6 pr-14 text-[14px] text-white font-bold placeholder:text-slate-600 outline-none transition-all shadow-inner"
+                      className="w-full bg-white/4 hover:bg-white/6 border border-white/8 focus:border-blue-500/40 rounded-3xl py-4 pl-6 pr-14 text-[14px] text-white font-bold placeholder:text-slate-600 outline-none transition-all shadow-inner"
                     />
                     <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
                        <motion.button 
@@ -389,7 +389,7 @@ const Messages = () => {
             <div className="h-full flex items-center justify-center p-12 relative overflow-hidden">
                {/* Aesthetic placeholder */}
                <div className="text-center relative z-10">
-                 <div className="w-24 h-24 rounded-[2.5rem] bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center mx-auto mb-8 shadow-2xl relative">
+                 <div className="w-24 h-24 rounded-[2.5rem] bg-linear-to-br from-blue-600 to-indigo-600 flex items-center justify-center mx-auto mb-8 shadow-2xl relative">
                     <MessageSquare className="w-10 h-10 text-white" />
                     <div className="absolute -inset-4 bg-blue-500/10 rounded-[3rem] blur-xl -z-10 animate-pulse"></div>
                  </div>
