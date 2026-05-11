@@ -88,7 +88,8 @@ function AppContent() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const location = useLocation();
 
-  const showLayout = user && !isFullWidthPath(location.pathname);
+  const isAuthPath = isFullWidthPath(location.pathname);
+  const showLayout = user && !isAuthPath;
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300">
@@ -96,7 +97,7 @@ function AppContent() {
       <MobileDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
 
       <Suspense fallback={<LoadingPage />}>
-        {showLayout ? (
+        {!isAuthPath && showLayout ? (
           /* ===== 3-Column Layout ===== */
           <div className="flex-grow pt-[6.5rem] sm:pt-[7.5rem]">
             <div className="mx-auto max-w-7xl px-4 flex gap-6">
