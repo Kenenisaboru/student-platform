@@ -5,8 +5,17 @@ const AuthContext = createContext();
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
+  // Return a safe default instead of throwing — prevents crash on auth pages (Login/Register)
+  // when context isn't available due to HMR or initialization race conditions
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    return {
+      user: null,
+      loading: false,
+      login: async () => { throw new Error('AuthProvider not ready'); },
+      register: async () => { throw new Error('AuthProvider not ready'); },
+      logout: () => {},
+      updateProfile: () => {},
+    };
   }
   return context;
 };
