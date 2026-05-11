@@ -2,16 +2,20 @@ import axios from 'axios';
 
 const getBaseURL = () => {
   const envUrl = import.meta.env.VITE_API_URL;
-  const hostname = window.location.hostname;
 
-  // If we are accessing the site via an IP address (like on a phone)
-  // and the envUrl is also an IP, it's better to use the current hostname
-  // to ensure we're hitting the server on the same machine.
+  // In production, VITE_API_URL must be set to the deployed backend URL.
+  // Locally, fall back to localhost or the LAN IP for device testing.
+  if (envUrl) {
+    return envUrl;
+  }
+
+  // Local dev fallback: allow same-machine access from LAN devices
+  const hostname = window.location.hostname;
   if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
     return `http://${hostname}:5001/api`;
   }
 
-  return envUrl || 'http://localhost:5001/api';
+  return 'http://localhost:5001/api';
 };
 
 const API = axios.create({
