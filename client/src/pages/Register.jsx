@@ -66,23 +66,23 @@ const Register = () => {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="max-w-5xl w-full relative z-10 flex flex-col lg:flex-row rounded-[2rem] shadow-2xl overflow-hidden glass-card"
+        className="max-w-5xl w-full relative z-10 flex flex-col lg:flex-row rounded-4xl shadow-2xl overflow-hidden glass-card"
       >
         {/* Left Side */}
-        <div className="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center relative bg-gradient-to-br from-blue-900/20 to-indigo-900/20 z-20 overflow-hidden border-r border-white/[0.04]">
+        <div className="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center relative bg-linear-to-br from-blue-900/20 to-indigo-900/20 z-20 overflow-hidden border-r border-white/4">
           <div className="absolute -top-24 -left-24 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
           <div className="relative z-10">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
-              className="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mb-8 flex items-center justify-center -rotate-3 shadow-xl shadow-blue-500/20"
+              className="w-14 h-14 bg-linear-to-br from-blue-500 to-indigo-600 rounded-2xl mb-8 flex items-center justify-center -rotate-3 shadow-xl shadow-blue-500/20"
             >
               <h1 className="text-2xl font-extrabold text-white rotate-3">AAU</h1>
             </motion.div>
 
             <h2 className="text-3xl lg:text-4xl font-extrabold text-white mb-5 leading-tight tracking-tight">
-              Shape Your Future, <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Together at AAUS.</span>
+              Shape Your Future, <br /><span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-indigo-400">Together at AAUS.</span>
             </h2>
 
             <p className="text-base text-blue-200/60 mb-8 leading-relaxed font-medium">
@@ -91,7 +91,7 @@ const Register = () => {
 
             <div className="space-y-5">
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-white/[0.04] rounded-xl flex items-center justify-center backdrop-blur-md border border-white/[0.06]">
+                <div className="w-12 h-12 bg-white/4 rounded-xl flex items-center justify-center backdrop-blur-md border border-white/6">
                   <School className="w-5 h-5 text-blue-400" />
                 </div>
                 <div className="flex-1">
@@ -100,7 +100,7 @@ const Register = () => {
                 </div>
               </div>
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-white/[0.04] rounded-xl flex items-center justify-center backdrop-blur-md border border-white/[0.06]">
+                <div className="w-12 h-12 bg-white/4 rounded-xl flex items-center justify-center backdrop-blur-md border border-white/6">
                   <Briefcase className="w-5 h-5 text-indigo-400" />
                 </div>
                 <div className="flex-1">
@@ -133,7 +133,7 @@ const Register = () => {
             <div>
               <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 ml-1">Full Name</label>
               <div className="relative group">
-                <input name="name" type="text" required className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] focus:border-blue-500/30 focus:bg-white/[0.06] rounded-xl py-3 pl-11 pr-4 text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 placeholder:text-slate-600 text-sm" placeholder="John Doe" value={formData.name} onChange={handleChange} />
+                <input name="name" type="text" required className="w-full bg-white/3 hover:bg-white/5 border border-white/6 focus:border-blue-500/30 focus:bg-white/6 rounded-xl py-3 pl-11 pr-4 text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 placeholder:text-slate-600 text-sm" placeholder="John Doe" value={formData.name} onChange={handleChange} />
                 <User className="absolute left-3.5 top-3 text-slate-600 group-focus-within:text-blue-400 w-4.5 h-4.5 transition-colors" />
               </div>
             </div>
@@ -141,7 +141,7 @@ const Register = () => {
             <div>
               <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 ml-1">Email Address</label>
               <div className="relative group">
-                <input name="email" type="email" required className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] focus:border-blue-500/30 focus:bg-white/[0.06] rounded-xl py-3 pl-11 pr-4 text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 placeholder:text-slate-600 text-sm" placeholder="student@arsiaseko.edu.et" value={formData.email} onChange={handleChange} />
+                <input name="email" type="email" required className="w-full bg-white/3 hover:bg-white/5 border border-white/6 focus:border-blue-500/30 focus:bg-white/6 rounded-xl py-3 pl-11 pr-4 text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 placeholder:text-slate-600 text-sm" placeholder="student@arsiaseko.edu.et" value={formData.email} onChange={handleChange} />
                 <Mail className="absolute left-3.5 top-3 text-slate-600 group-focus-within:text-blue-400 w-4.5 h-4.5 transition-colors" />
               </div>
             </div>
@@ -150,7 +150,7 @@ const Register = () => {
               <div>
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 ml-1">University</label>
                 <div className="relative group">
-                  <input name="university" type="text" required className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] focus:border-blue-500/30 focus:bg-white/[0.06] rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 placeholder:text-slate-600" placeholder="Arsi Aseko University" value={formData.university} onChange={handleChange} />
+                  <input name="university" type="text" required className="w-full bg-white/3 hover:bg-white/5 border border-white/6 focus:border-blue-500/30 focus:bg-white/6 rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 placeholder:text-slate-600" placeholder="Arsi Aseko University" value={formData.university} onChange={handleChange} />
                   <School className="absolute left-3.5 top-3 text-slate-600 group-focus-within:text-blue-400 w-4 h-4 transition-colors" />
                 </div>
               </div>
@@ -160,7 +160,7 @@ const Register = () => {
                   <select
                     name="department"
                     required
-                    className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] focus:border-blue-500/30 focus:bg-white/[0.06] rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 appearance-none"
+                    className="w-full bg-white/3 hover:bg-white/5 border border-white/6 focus:border-blue-500/30 focus:bg-white/6 rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 appearance-none"
                     value={formData.department}
                     onChange={handleChange}
                   >
@@ -226,13 +226,13 @@ const Register = () => {
             <div>
               <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 ml-1">Password</label>
               <div className="relative group">
-                <input name="password" type="password" required className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] focus:border-blue-500/30 focus:bg-white/[0.06] rounded-xl py-3 pl-11 pr-4 text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 placeholder:text-slate-600 text-sm" placeholder="••••••••" value={formData.password} onChange={handleChange} />
+                <input name="password" type="password" required className="w-full bg-white/3 hover:bg-white/5 border border-white/6 focus:border-blue-500/30 focus:bg-white/6 rounded-xl py-3 pl-11 pr-4 text-white focus:ring-2 focus:ring-blue-500/10 outline-none transition-all duration-300 placeholder:text-slate-600 text-sm" placeholder="••••••••" value={formData.password} onChange={handleChange} />
                 <Lock className="absolute left-3.5 top-3 text-slate-600 group-focus-within:text-blue-400 w-4.5 h-4.5 transition-colors" />
               </div>
 
               {/* Password Strength Checklist */}
               {formData.password && (
-                <div className="mt-3 grid grid-cols-2 gap-2 p-3 bg-white/[0.02] border border-white/[0.04] rounded-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300">
+                <div className="mt-3 grid grid-cols-2 gap-2 p-3 bg-white/2 border border-white/4 rounded-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300">
                   {[
                     { key: 'length', label: '8+ Characters' },
                     { key: 'uppercase', label: 'Uppercase' },
@@ -256,7 +256,7 @@ const Register = () => {
               whileTap={{ scale: 0.99 }}
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white py-3.5 rounded-xl flex items-center justify-center font-bold text-base shadow-xl shadow-blue-600/20 disabled:opacity-70 disabled:cursor-not-allowed transition-all mt-2"
+              className="w-full bg-linear-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white py-3.5 rounded-xl flex items-center justify-center font-bold text-base shadow-xl shadow-blue-600/20 disabled:opacity-70 disabled:cursor-not-allowed transition-all mt-2"
             >
               {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
                 <>Create Account <ArrowRight className="w-5 h-5 ml-2" /></>
