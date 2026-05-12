@@ -93,7 +93,7 @@ const Login = () => {
       </div>
 
       {/* Hero Section */}
-      <section className="relative min-h-[100vh] lg:min-h-screen flex items-center overflow-hidden border-b border-white/[0.03]">
+      <section className="relative min-h-screen lg:min-h-screen flex items-center overflow-hidden border-b border-white/3">
 
         {/* Background Images Carousel */}
         <AnimatePresence mode="wait">
@@ -115,8 +115,8 @@ const Login = () => {
         </AnimatePresence>
 
         {/* Overlays */}
-        <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#060a14] via-[#060a14]/90 to-transparent" />
-        <div className="absolute inset-0 z-0 bg-gradient-to-t from-[#060a14] via-transparent to-transparent" />
+        <div className="absolute inset-0 z-0 bg-linear-to-r from-[#060a14] via-[#060a14]/90 to-transparent" />
+        <div className="absolute inset-0 z-0 bg-linear-to-t from-[#060a14] via-transparent to-transparent" />
 
         <div className="container mx-auto px-4 lg:px-8 z-10 grid lg:grid-cols-2 gap-16 items-center py-20 lg:py-0">
 
@@ -140,7 +140,7 @@ const Login = () => {
               >
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-[1.1] tracking-tighter">
                   {heroSlides[currentSlide].title.split(' ').map((word, i) => (
-                    <span key={i} className={i >= 3 ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400" : ""}>
+                    <span key={i} className={i >= 3 ? "text-transparent bg-clip-text bg-linear-to-r from-blue-400 via-indigo-400 to-purple-400" : ""}>
                       {word}{' '}
                     </span>
                   ))}
@@ -157,15 +157,15 @@ const Login = () => {
               transition={{ delay: 0.6 }}
               className="flex flex-wrap gap-5"
             >
-              <Link to="/register" className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl font-bold text-lg transition-all hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] active:scale-95 overflow-hidden">
+              <Link to="/register" className="group relative px-8 py-4 bg-linear-to-r from-blue-600 to-indigo-600 text-white rounded-2xl font-bold text-lg transition-all hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] active:scale-95 overflow-hidden">
                 <span className="relative z-10 flex items-center">
                   Start Your Journey <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </span>
-                <div className="absolute inset-0 bg-white/20 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300"></div>
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
               </Link>
               <button
                 onClick={scrollToFeatures}
-                className="px-8 py-4 bg-white/[0.03] backdrop-blur-xl border border-white/10 text-white rounded-2xl font-bold text-lg hover:bg-white/[0.08] transition-all hover:border-white/20 active:scale-95 flex items-center gap-3"
+                className="px-8 py-4 bg-white/3 backdrop-blur-xl border border-white/10 text-white rounded-2xl font-bold text-lg hover:bg-white/8 transition-all hover:border-white/20 active:scale-95 flex items-center gap-3"
               >
                 <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
                   <Play className="w-3 h-3 fill-white ml-0.5" />
@@ -203,9 +203,9 @@ const Login = () => {
           >
             <div className="group relative">
               {/* Outer Glow Effect */}
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/20 via-indigo-500/20 to-purple-500/20 rounded-[2.5rem] blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+              <div className="absolute -inset-0.5 bg-linear-to-r from-blue-500/20 via-indigo-500/20 to-purple-500/20 rounded-[2.5rem] blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
 
-              <div className="relative bg-[#0a0f1e]/80 backdrop-blur-3xl p-10 lg:p-12 rounded-[2.5rem] border border-white/[0.08] shadow-2xl">
+              <div className="relative bg-[#0a0f1e]/80 backdrop-blur-3xl p-10 lg:p-12 rounded-[2.5rem] border border-white/8 shadow-2xl">
                 <div className="mb-10 text-center">
                   <h3 className="text-3xl font-black text-white mb-3 tracking-tight">Student Login</h3>
                   <p className="text-slate-400 font-medium text-sm">Welcome back to the AAUSP Portal</p>
@@ -231,7 +231,7 @@ const Login = () => {
                       <input
                         type="email"
                         required
-                        className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.08] focus:border-blue-500/50 focus:bg-white/[0.06] rounded-2xl py-4 pl-12 pr-4 text-white outline-none transition-all duration-300 placeholder:text-slate-600 focus:shadow-[0_0_20px_rgba(59,130,246,0.1)]"
+                        className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-blue-500/50 focus:bg-white/6 rounded-2xl py-4 pl-12 pr-4 text-white outline-none transition-all duration-300 placeholder:text-slate-600 focus:shadow-[0_0_20px_rgba(59,130,246,0.1)]"
                         placeholder="yourname@arsiaseko.edu.et"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -249,7 +249,7 @@ const Login = () => {
                       <input
                         type="password"
                         required
-                        className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.08] focus:border-blue-500/50 focus:bg-white/[0.06] rounded-2xl py-4 pl-12 pr-4 text-white outline-none transition-all duration-300 placeholder:text-slate-600 focus:shadow-[0_0_20px_rgba(59,130,246,0.1)]"
+                        className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-blue-500/50 focus:bg-white/6 rounded-2xl py-4 pl-12 pr-4 text-white outline-none transition-all duration-300 placeholder:text-slate-600 focus:shadow-[0_0_20px_rgba(59,130,246,0.1)]"
                         placeholder="••••••••"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -271,7 +271,7 @@ const Login = () => {
                   </motion.button>
                 </form>
 
-                <div className="mt-10 pt-8 border-t border-white/[0.04]">
+                <div className="mt-10 pt-8 border-t border-white/4">
                   <div className="flex items-center justify-between mb-4">
                     <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Daily Inspiration</p>
                     <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-500/5 border border-blue-500/10">
@@ -279,14 +279,14 @@ const Login = () => {
                       <span className="text-[9px] font-bold text-blue-400 uppercase">Academic Wisdom</span>
                     </div>
                   </div>
-                  <div className="relative p-6 rounded-2xl bg-gradient-to-br from-blue-600/5 to-indigo-600/5 border border-white/5 overflow-hidden group">
+                  <div className="relative p-6 rounded-2xl bg-linear-to-br from-blue-600/5 to-indigo-600/5 border border-white/5 overflow-hidden group">
                     <Quote className="absolute -top-2 -right-2 w-16 h-16 text-blue-500/5 rotate-12 group-hover:scale-110 transition-transform duration-700" />
                     <div className="relative z-10">
                       <p className="text-white/90 text-sm font-medium italic leading-relaxed mb-4">
                         "Education is the most powerful weapon which you can use to change the world. Your journey at Arsi Aseko starts with a single step towards excellence."
                       </p>
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 p-[1px]">
+                        <div className="w-8 h-8 rounded-full bg-linear-to-tr from-blue-500 to-indigo-500 p-px">
                           <div className="w-full h-full rounded-full bg-[#0a0f1e] flex items-center justify-center">
                             <Users className="w-3.5 h-3.5 text-blue-400" />
                           </div>
@@ -316,7 +316,7 @@ const Login = () => {
         {/* Scroll Indicator */}
         <div className="absolute bottom-10 left-12 hidden lg:flex flex-col items-center gap-4">
           <div className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em] [writing-mode:vertical-lr] rotate-180">Discovery</div>
-          <div className="w-[1px] h-20 bg-gradient-to-b from-blue-500/50 to-transparent"></div>
+          <div className="w-px h-20 bg-linear-to-b from-blue-500/50 to-transparent"></div>
         </div>
       </section>
 
@@ -329,7 +329,7 @@ const Login = () => {
               whileInView={{ opacity: 1, y: 0 }}
               className="text-4xl sm:text-6xl font-black text-white mb-6 tracking-tighter"
             >
-              The Pro Student <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Toolkit</span>
+              The Pro Student <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-indigo-400">Toolkit</span>
             </motion.h2>
             <p className="text-slate-400 text-lg max-w-2xl mx-auto font-medium">A unified workspace for the modern academic experience.</p>
           </div>
@@ -342,9 +342,9 @@ const Login = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className={`group relative bg-gradient-to-br ${feature.color} backdrop-blur-2xl p-10 rounded-[2.5rem] border border-white/[0.04] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)] ${feature.borderColor}`}
+                className={`group relative bg-linear-to-br ${feature.color} backdrop-blur-2xl p-10 rounded-[2.5rem] border border-white/4 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)] ${feature.borderColor}`}
               >
-                <div className="w-16 h-16 rounded-[1.5rem] bg-white/[0.03] border border-white/[0.06] flex items-center justify-center text-blue-400 mb-8 group-hover:scale-110 group-hover:bg-blue-500/10 transition-all duration-500">
+                <div className="w-16 h-16 rounded-3xl bg-white/3 border border-white/6 flex items-center justify-center text-blue-400 mb-8 group-hover:scale-110 group-hover:bg-blue-500/10 transition-all duration-500">
                   <feature.icon className="w-7 h-7" />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">{feature.title}</h3>
@@ -359,7 +359,7 @@ const Login = () => {
       </section>
 
       {/* Community - Professional Bento Grid Layout */}
-      <section className="py-32 px-4 relative bg-[#0a0f1e]/50 border-y border-white/[0.03]">
+      <section className="py-32 px-4 relative bg-[#0a0f1e]/50 border-y border-white/3">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col lg:flex-row items-end justify-between gap-8 mb-16 px-4">
             <div className="max-w-2xl">
@@ -376,10 +376,10 @@ const Login = () => {
             {/* Main Feature - Large Tall */}
             <motion.div
               whileHover={{ scale: 0.99 }}
-              className="md:col-span-2 md:row-span-3 relative rounded-[2.5rem] overflow-hidden group border border-white/[0.08]"
+              className="md:col-span-2 md:row-span-3 relative rounded-[2.5rem] overflow-hidden group border border-white/8"
             >
               <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110" alt="Collaboration" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#060a14] via-transparent to-transparent opacity-80" />
+              <div className="absolute inset-0 bg-linear-to-t from-[#060a14] via-transparent to-transparent opacity-80" />
               <div className="absolute bottom-10 left-10 right-10">
                 <div className="text-3xl font-black text-white mb-2">United Innovation</div>
                 <p className="text-slate-300 text-sm font-medium">Cross-departmental collaboration at its finest.</p>
@@ -389,11 +389,11 @@ const Login = () => {
             {/* Top Right High */}
             <motion.div
               whileHover={{ scale: 0.99 }}
-              className="md:col-span-2 md:row-span-1 relative rounded-[2rem] overflow-hidden group border border-white/[0.08]"
+              className="md:col-span-2 md:row-span-1 relative rounded-4xl overflow-hidden group border border-white/8"
             >
               <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" alt="Library" />
               <div className="absolute inset-0 bg-blue-600/10 mix-blend-overlay group-hover:opacity-0 transition-opacity" />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent p-8 flex items-center">
+              <div className="absolute inset-0 bg-linear-to-r from-black/50 to-transparent p-8 flex items-center">
                 <h4 className="text-xl font-bold text-white tracking-tight">The Neural Library</h4>
               </div>
             </motion.div>
@@ -401,7 +401,7 @@ const Login = () => {
             {/* Bottom Left Square */}
             <motion.div
               whileHover={{ scale: 0.99 }}
-              className="md:col-span-1 md:row-span-2 relative rounded-[2.5rem] overflow-hidden group border border-white/[0.08]"
+              className="md:col-span-1 md:row-span-2 relative rounded-[2.5rem] overflow-hidden group border border-white/8"
             >
               <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" alt="Event" />
               <div className="absolute inset-0 bg-purple-600/10 mix-blend-overlay" />
@@ -414,7 +414,7 @@ const Login = () => {
             {/* Bottom Right - Dynamic Content */}
             <motion.div
               whileHover={{ scale: 0.99 }}
-              className="md:col-span-1 md:row-span-2 bg-[#0d1428] p-8 rounded-[2.5rem] border border-white/[0.08] flex flex-col justify-center relative overflow-hidden group"
+              className="md:col-span-1 md:row-span-2 bg-[#0d1428] p-8 rounded-[2.5rem] border border-white/8 flex flex-col justify-center relative overflow-hidden group"
             >
               <div className="relative z-10">
                 <div className="text-4xl font-black text-white mb-2">15+</div>
@@ -429,11 +429,11 @@ const Login = () => {
       </section>
 
       {/* Integration Banner */}
-      <section className="py-24 px-4 bg-gradient-to-r from-blue-600 to-indigo-700">
+      <section className="py-24 px-4 bg-linear-to-r from-blue-600 to-indigo-700">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-3xl md:text-5xl font-black text-white mb-6">Secure Your Digital ID</h2>
           <p className="text-blue-100 text-lg mb-10 opacity-90 max-w-2xl mx-auto font-medium">Join Arsi Aseko's secure network today and access global opportunities with your verified student profile.</p>
-          <Link to="/register" className="inline-flex items-center gap-3 px-10 py-5 bg-white text-blue-600 rounded-[2rem] font-black text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all">
+          <Link to="/register" className="inline-flex items-center gap-3 px-10 py-5 bg-white text-blue-600 rounded-4xl font-black text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all">
             Complete Registration <Sparkles className="w-6 h-6 text-blue-500" />
           </Link>
         </div>
