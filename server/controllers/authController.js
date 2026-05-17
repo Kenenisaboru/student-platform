@@ -2,6 +2,7 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const sendEmail = require('../utils/sendEmail');
+const isEmailConfigured = sendEmail.isEmailConfigured;
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -30,11 +31,12 @@ exports.register = async (req, res) => {
       university,
       department,
       role,
-      isVerified: role === 'admin',
+      isVerified: role === 'admin' || !isEmailConfigured(),
     });
 
-    // Generate verification token (skipped for pre-verified admins)
-    const verificationToken = role === 'admin' ? null : user.createVerificationToken();
+    // Generate verification token (skipped for admins and when email is not configured)
+    const verificationToken =
+      role === 'admin' || !isEmailConfigured() ? null : user.createVerificationToken();
     await user.save();
 
     if (verificationToken) {
@@ -81,7 +83,7 @@ exports.register = async (req, res) => {
         university: user.university,
         department: user.department,
         role: user.role,
-        isVerified: user.isVerified,
+        isVerified: user.isVerified || !isEmailConfigured(),
         profilePicture: user.profilePicture,
         message,
       });
@@ -101,7 +103,7 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email: emailLower });
 
     if (user && (await user.comparePassword(password))) {
-      if (!user.isVerified && user.role !== 'admin') {
+      if (isEmailConfigured() && !user.isVerified && user.role !== 'admin') {
         return res.status(403).json({
           message: 'Please verify your email before logging in. Check your inbox or request a new link.',
           code: 'EMAIL_NOT_VERIFIED',
@@ -116,7 +118,7 @@ exports.login = async (req, res) => {
         university: user.university,
         department: user.department,
         role: user.role,
-        isVerified: user.isVerified,
+        isVerified: user.isVerified || !isEmailConfigured(),
         profilePicture: user.profilePicture,
         token: generateToken(user._id),
       });
@@ -132,7 +134,9 @@ exports.getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
     if (user) {
-      res.json(user);
+      const payload = user.toObject();
+      payload.isVerified = user.isVerified || !isEmailConfigured();
+      res.json(payload);
     } else {
       res.status(404).json({ message: 'User not found' });
     }
