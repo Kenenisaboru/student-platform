@@ -1,11 +1,13 @@
 const nodemailer = require('nodemailer');
 
-const isEmailConfigured = () =>
-  Boolean(
-    process.env.EMAIL_HOST &&
-      process.env.EMAIL_USER &&
-      process.env.EMAIL_PASS
-  );
+const isEmailConfigured = () => {
+  const host = process.env.EMAIL_HOST?.trim();
+  const user = process.env.EMAIL_USER?.trim();
+  const pass = process.env.EMAIL_PASS?.trim();
+  if (!host || !user || !pass) return false;
+  if (user.includes('your_email') || pass.includes('your_app_password')) return false;
+  return true;
+};
 
 const sendEmail = async ({ to, subject, html }) => {
   if (!isEmailConfigured()) {
