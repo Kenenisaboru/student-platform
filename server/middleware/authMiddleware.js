@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { isEmailConfigured } = require('../utils/sendEmail');
 
 exports.protect = async (req, res, next) => {
   let token;
@@ -24,7 +25,7 @@ exports.protect = async (req, res, next) => {
 };
 
 exports.requireVerified = (req, res, next) => {
-  if (req.user.role === 'admin' || req.user.isVerified) {
+  if (!isEmailConfigured() || req.user.role === 'admin' || req.user.isVerified) {
     return next();
   }
   return res.status(403).json({

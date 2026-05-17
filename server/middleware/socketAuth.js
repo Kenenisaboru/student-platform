@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { isEmailConfigured } = require('../utils/sendEmail');
 
 async function socketAuth(socket, next) {
   try {
@@ -15,7 +16,7 @@ async function socketAuth(socket, next) {
       return next(new Error('User not found'));
     }
 
-    if (user.role !== 'admin' && !user.isVerified) {
+    if (isEmailConfigured() && user.role !== 'admin' && !user.isVerified) {
       return next(new Error('Email not verified'));
     }
 
