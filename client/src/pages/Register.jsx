@@ -47,8 +47,12 @@ const Register = () => {
     setError('');
     setLoading(true);
     try {
-      await register(formData);
-      navigate('/verify-email-pending');
+      const data = await register(formData);
+      if (data?.isVerified) {
+        navigate('/login');
+      } else {
+        navigate('/verify-email-pending');
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to register');
     } finally {

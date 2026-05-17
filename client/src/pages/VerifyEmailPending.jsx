@@ -63,7 +63,7 @@ const VerifyEmailPending = () => {
           {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Resend verification email'}
         </button>
 
-        <div className="flex flex-col gap-2 text-sm">
+        <motion.div className="flex flex-col gap-2 text-sm">
           <Link to="/login" className="text-slate-500 hover:text-white flex items-center justify-center gap-1">
             <ArrowLeft className="w-4 h-4" /> Back to login
           </Link>
