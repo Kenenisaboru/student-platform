@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
 import { useAuth } from './AuthContext';
+import socket, { connectSocket, disconnectSocket } from '../utils/socket';
 
 const SocketContext = createContext();
 
@@ -13,45 +13,28 @@ export const useSocket = () => {
 };
 
 export const SocketProvider = ({ children }) => {
-  const [socket, setSocket] = useState(null);
-  const { user } = useAuth();
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const { user } = useAuth();
 
   useEffect(() => {
+    if (!user?.isVerified && user?.role !== 'admin') {
+      disconnectSocket();
+      return;
+    }
+
     if (user) {
-      const getSocketUrl = () => {
-        const envUrl = import.meta.env.VITE_API_URL;
-        const hostname = window.location.hostname;
-        
-        if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
-          return `http://${hostname}:5001`;
-        }
-        
-        return (envUrl || 'http://localhost:5001').replace('/api', '');
-      };
-      
-      const socketUrl = getSocketUrl();
-      const socketInstance = io(socketUrl, {
-        transports: ['websocket'],
-      });
+      connectSocket();
 
-      socketInstance.emit('join_room', user._id);
-
-      socketInstance.on('user_online_list', (users) => {
-        setOnlineUsers(users);
-      });
-
-      setSocket(socketInstance);
+      const onOnlineList = (users) => setOnlineUsers(users);
+      socket.on('user_online_list', onOnlineList);
 
       return () => {
-        socketInstance.disconnect();
+        socket.off('user_online_list', onOnlineList);
+        disconnectSocket();
       };
-    } else {
-      if (socket) {
-        socket.disconnect();
-        setSocket(null);
-      }
     }
+
+    disconnectSocket();
   }, [user]);
 
   return (

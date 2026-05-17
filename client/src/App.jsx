@@ -31,6 +31,7 @@ const Settings = lazy(() => import('./pages/Settings'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
+const VerifyEmailPending = lazy(() => import('./pages/VerifyEmailPending'));
 // New Pages
 const Events = lazy(() => import('./pages/Events'));
 const CampusGallery = lazy(() => import('./pages/CampusGallery'));
@@ -50,6 +51,9 @@ const ProtectedRoute = ({ children }) => {
     </div>
   );
   if (!user) return <Navigate to="/login" />;
+  if (!user.isVerified && user.role !== 'admin') {
+    return <Navigate to="/verify-email-pending" replace />;
+  }
   return children;
 };
 
@@ -66,7 +70,7 @@ const AdminRoute = ({ children }) => {
 
 // Pages that should NOT show the 3-column layout
 const isFullWidthPath = (path) => {
-  const prefixes = ['/login', '/register', '/forgot-password', '/reset-password', '/verify-email'];
+  const prefixes = ['/login', '/register', '/forgot-password', '/reset-password', '/verify-email', '/verify-email-pending'];
   return prefixes.some(prefix => path.startsWith(prefix));
 };
 
@@ -138,6 +142,7 @@ function AppContent() {
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password/:token" element={<ResetPassword />} />
               <Route path="/verify-email/:token" element={<VerifyEmail />} />
+              <Route path="/verify-email-pending" element={<VerifyEmailPending />} />
               <Route path="*" element={<Navigate to={user ? "/" : "/login"} />} />
             </Routes>
           </main>

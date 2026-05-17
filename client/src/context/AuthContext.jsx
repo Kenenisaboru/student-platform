@@ -69,26 +69,23 @@ export const AuthProvider = ({ children }) => {
     try {
       const { data } = await API.post('/auth/login', { email, password });
       const { token, ...userData } = data;
+      localStorage.removeItem('pendingEmail');
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
       return data;
     } catch (err) {
+      if (err.response?.data?.code === 'EMAIL_NOT_VERIFIED') {
+        localStorage.setItem('pendingEmail', err.response.data.email || email);
+      }
       throw err;
     }
   };
 
   const register = async (formData) => {
-    try {
-      const { data } = await API.post('/auth/register', formData);
-      const { token, ...userData } = data;
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(userData));
-      setUser(userData);
-      return data;
-    } catch (err) {
-      throw err;
-    }
+    const { data } = await API.post('/auth/register', formData);
+    localStorage.setItem('pendingEmail', formData.email);
+    return data;
   };
 
   const logout = () => {

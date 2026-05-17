@@ -48,7 +48,7 @@ const Register = () => {
     setLoading(true);
     try {
       await register(formData);
-      navigate('/');
+      navigate('/verify-email-pending');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to register');
     } finally {

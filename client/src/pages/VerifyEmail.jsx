@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import API from '../api/axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, X, Loader2, Sparkles, ShieldCheck } from 'lucide-react';
@@ -7,6 +7,7 @@ import { Helmet } from 'react-helmet-async';
 
 const VerifyEmail = () => {
   const { token } = useParams();
+  const navigate = useNavigate();
   const [status, setStatus] = useState('loading'); // loading, success, error
   const [message, setMessage] = useState('');
 
@@ -14,8 +15,17 @@ const VerifyEmail = () => {
     const verifyEmail = async () => {
       try {
         const { data } = await API.get(`/auth/verify-email/${token}`);
+        if (data.token) {
+          const { token: jwt, message: msg, ...userData } = data;
+          localStorage.setItem('token', jwt);
+          localStorage.setItem('user', JSON.stringify(userData));
+          localStorage.removeItem('pendingEmail');
+        }
         setStatus('success');
         setMessage(data.message);
+        if (data.token) {
+          setTimeout(() => navigate('/'), 2000);
+        }
       } catch (err) {
         setStatus('error');
         setMessage(err.response?.data?.message || 'Verification failed');
@@ -75,8 +85,8 @@ const VerifyEmail = () => {
                   {message || 'Your scholarly identity has been successfully authenticated.'}
                 </p>
                 
-                <Link to="/login" className="inline-flex items-center justify-center bg-white text-[#060a14] px-10 py-4 rounded-[1.5rem] font-black text-xs uppercase tracking-[0.2em] shadow-2xl hover:scale-105 transition-all border border-white/20">
-                  Access Portal
+                <Link to="/" className="inline-flex items-center justify-center bg-white text-[#060a14] px-10 py-4 rounded-[1.5rem] font-black text-xs uppercase tracking-[0.2em] shadow-2xl hover:scale-105 transition-all border border-white/20">
+                  Go to platform
                 </Link>
               </motion.div>
             )}

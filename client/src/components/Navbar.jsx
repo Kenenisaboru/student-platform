@@ -5,7 +5,8 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import API from '../api/axios';
-import sharedSocket from '../utils/socket';
+import sharedSocket, { connectSocket } from '../utils/socket';
+import { getSocketURL } from '../lib/apiUrl';
 import { toast } from 'sonner';
 import ThemeToggle from './ThemeToggle';
 import ProBadge from './ProBadge';
@@ -42,17 +43,10 @@ const Navbar = ({ onMenuToggle }) => {
       setUnreadMessages(res.data.unreadCount);
     }).catch(console.error);
 
-    const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
-    const serverRoot = apiBase.split('/api')[0] || 'http://localhost:5001';
-    
-    axios.get(serverRoot).then(() => setServerStatus('online')).catch(() => setServerStatus('offline'));
+    axios.get(getSocketURL()).then(() => setServerStatus('online')).catch(() => setServerStatus('offline'));
 
-    if (!sharedSocket.connected) {
-      sharedSocket.connect();
-    }
-    
-    if (user && user._id) {
-      sharedSocket.emit('join_room', user._id);
+    if (user?.isVerified || user?.role === 'admin') {
+      connectSocket();
     }
 
     const handleNewNotification = (notification) => {

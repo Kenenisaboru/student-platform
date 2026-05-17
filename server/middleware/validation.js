@@ -1,5 +1,13 @@
 const { body, param, query, validationResult } = require('express-validator');
 
+const passwordRules = (field = 'password') =>
+  body(field)
+    .isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
+    .matches(/[A-Z]/).withMessage('Password must contain at least one uppercase letter')
+    .matches(/[a-z]/).withMessage('Password must contain at least one lowercase letter')
+    .matches(/\d/).withMessage('Password must contain at least one number')
+    .matches(/[!@#$%^&*]/).withMessage('Password must contain at least one special character');
+
 // Middleware to check validation results
 const validate = (req, res, next) => {
   const errors = validationResult(req);
@@ -17,12 +25,7 @@ const registerRules = [
   body('name').trim().notEmpty().withMessage('Name is required')
     .isLength({ min: 2, max: 50 }).withMessage('Name must be 2-50 characters'),
   body('email').trim().isEmail().withMessage('Valid email is required').normalizeEmail(),
-  body('password')
-    .isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
-    .matches(/[A-Z]/).withMessage('Password must contain at least one uppercase letter')
-    .matches(/[a-z]/).withMessage('Password must contain at least one lowercase letter')
-    .matches(/\d/).withMessage('Password must contain at least one number')
-    .matches(/[!@#$%^&*]/).withMessage('Password must contain at least one special character'),
+  passwordRules('password'),
   body('university').trim().notEmpty().withMessage('University is required'),
   body('department').trim().notEmpty().withMessage('Department is required'),
 ];
@@ -85,8 +88,12 @@ const updateProfileRules = [
     .isLength({ max: 100 }).withMessage('University name too long'),
   body('department').optional().trim()
     .isLength({ max: 100 }).withMessage('Department name too long'),
-  body('password').optional()
-    .isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+  body('password').optional({ values: 'falsy' })
+    .isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
+    .matches(/[A-Z]/).withMessage('Password must contain at least one uppercase letter')
+    .matches(/[a-z]/).withMessage('Password must contain at least one lowercase letter')
+    .matches(/\d/).withMessage('Password must contain at least one number')
+    .matches(/[!@#$%^&*]/).withMessage('Password must contain at least one special character'),
 ];
 
 // Password reset validations
@@ -95,8 +102,7 @@ const forgotPasswordRules = [
 ];
 
 const resetPasswordRules = [
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
-    .matches(/\d/).withMessage('Password must contain at least one number'),
+  passwordRules('password'),
 ];
 
 // Report validations

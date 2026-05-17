@@ -125,12 +125,12 @@ const Messages = () => {
     const otherUser = activeConversation.participants.find(p => p._id !== user._id);
     if (!otherUser) return;
 
-    socket.emit('typing', { senderId: user._id, receiverId: otherUser._id });
+    socket.emit('typing', { receiverId: otherUser._id });
 
     if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
     
     typingTimeoutRef.current = setTimeout(() => {
-      socket.emit('stop_typing', { senderId: user._id, receiverId: otherUser._id });
+      socket.emit('stop_typing', { receiverId: otherUser._id });
     }, 2000);
   };
 
@@ -140,7 +140,7 @@ const Messages = () => {
 
     const otherUser = activeConversation.participants.find(p => p._id !== user._id);
     if (socket && otherUser) {
-        socket.emit('stop_typing', { senderId: user._id, receiverId: otherUser._id });
+        socket.emit('stop_typing', { receiverId: otherUser._id });
     }
 
     try {

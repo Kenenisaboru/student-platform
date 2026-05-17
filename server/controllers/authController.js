@@ -5,7 +5,7 @@ const sendEmail = require('../utils/sendEmail');
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
+    expiresIn: process.env.NODE_ENV === 'production' ? '7d' : '30d',
   });
 };
 
@@ -29,17 +29,18 @@ exports.register = async (req, res) => {
       password,
       university,
       department,
-      role
+      role,
+      isVerified: role === 'admin',
     });
 
-    // Generate verification token
-    const verificationToken = user.createVerificationToken();
+    // Generate verification token (skipped for pre-verified admins)
+    const verificationToken = role === 'admin' ? null : user.createVerificationToken();
     await user.save();
 
-    // Send verification email
-    const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
-    try {
-      await sendEmail({
+    if (verificationToken) {
+      const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
+      try {
+        await sendEmail({
         to: user.email,
         subject: 'Verify your email - Communication Platform',
         html: `
@@ -63,12 +64,16 @@ exports.register = async (req, res) => {
           </div>
         `
       });
-    } catch (emailErr) {
-      console.error('Email sending failed:', emailErr.message);
-      // Continue registration even if email fails
+      } catch (emailErr) {
+        console.error('Email sending failed:', emailErr.message);
+      }
     }
 
     if (user) {
+      const message = user.isVerified
+        ? 'Admin account created. You can log in now.'
+        : 'Registration successful! Please check your email to verify your account before logging in.';
+
       res.status(201).json({
         _id: user._id,
         name: user.name,
@@ -78,8 +83,7 @@ exports.register = async (req, res) => {
         role: user.role,
         isVerified: user.isVerified,
         profilePicture: user.profilePicture,
-        token: generateToken(user._id),
-        message: 'Registration successful! Please check your email to verify your account.'
+        message,
       });
     } else {
       res.status(400).json({ message: 'Invalid user data' });
@@ -94,53 +98,17 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     const emailLower = email.toLowerCase();
-    let user = await User.findOne({ email: emailLower });
-
-    // EMERGENCY AUTO-SEED & OVERRIDE for Demo Accounts
-    const demoAccounts = {
-      'student@example.com': {
-        name: 'Sample Student',
-        password: 'Password123!',
-        university: 'AAU',
-        department: 'Computer Science',
-        role: 'student'
-      },
-      'kenenisaboru998@gmail.com': {
-        name: 'Communication Admin',
-        password: 'AdminPassword123!',
-        university: 'Science & Tech',
-        department: 'Administration',
-        role: 'admin'
-      },
-      'kananiman710@gmail.com': {
-        name: 'Arsi Aseko Admin',
-        password: 'AdminPassword123!',
-        university: 'Arsi Aseko',
-        department: 'Administration',
-        role: 'admin'
-      }
-    };
-
-    const demo = demoAccounts[emailLower];
-
-    if (!user && demo && password === demo.password) {
-      user = await User.create({
-        ...demo,
-        isVerified: true // Auto-verify demo accounts
-      });
-      console.log(`Failsafe: Auto-seeded demo account for ${email}`);
-    } else if (user && demo && password === demo.password) {
-      // If user exists but password might have been changed or hashed incorrectly,
-      // force correct it if they are using the known hardcoded password.
-      const isMatch = await user.comparePassword(password);
-      if (!isMatch) {
-        user.password = password; // Will be hashed by pre-save hook
-        await user.save();
-        console.log(`Failsafe: Auto-corrected password for ${email}`);
-      }
-    }
+    const user = await User.findOne({ email: emailLower });
 
     if (user && (await user.comparePassword(password))) {
+      if (!user.isVerified && user.role !== 'admin') {
+        return res.status(403).json({
+          message: 'Please verify your email before logging in. Check your inbox or request a new link.',
+          code: 'EMAIL_NOT_VERIFIED',
+          email: user.email,
+        });
+      }
+
       res.json({
         _id: user._id,
         name: user.name,
@@ -192,7 +160,15 @@ exports.verifyEmail = async (req, res) => {
     user.verificationTokenExpires = undefined;
     await user.save({ validateBeforeSave: false });
 
-    res.json({ message: 'Email verified successfully! You can now fully use the platform.' });
+    res.json({
+      message: 'Email verified successfully! You can now fully use the platform.',
+      token: generateToken(user._id),
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isVerified: true,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

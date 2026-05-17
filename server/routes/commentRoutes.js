@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { 
-  createComment, 
-  getCommentsByPost, 
+const {
+  createComment,
+  getCommentsByPost,
   deleteComment,
   likeComment
 } = require('../controllers/commentController');
-const { protect } = require('../middleware/authMiddleware');
+const { secure } = require('../middleware/authMiddleware');
 const { validate, createCommentRules, paginationRules } = require('../middleware/validation');
 
-router.post('/:postId', protect, createCommentRules, validate, createComment);
+router.post('/:postId', secure, createCommentRules, validate, createComment);
 router.get('/:postId', paginationRules, validate, getCommentsByPost);
-router.delete('/:id', protect, deleteComment);
-router.post('/:id/like', protect, likeComment);
+router.delete('/:id', secure, deleteComment);
+router.post('/:id/like', secure, likeComment);
 
 module.exports = router;

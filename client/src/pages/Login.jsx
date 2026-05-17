@@ -72,6 +72,10 @@ const Login = () => {
       await login(email.trim(), password.trim());
       navigate('/');
     } catch (err) {
+      if (err.response?.data?.code === 'EMAIL_NOT_VERIFIED') {
+        navigate('/verify-email-pending');
+        return;
+      }
       setError(err.response?.data?.message || 'Failed to login');
     } finally {
       setLoading(false);

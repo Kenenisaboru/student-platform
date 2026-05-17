@@ -1,3 +1,8 @@
+if (process.env.NODE_ENV === 'production') {
+  console.error('create_test_user.js must not be run in production.');
+  process.exit(1);
+}
+
 const mongoose = require('mongoose');
 const User = require('./models/User');
 const dotenv = require('dotenv');
