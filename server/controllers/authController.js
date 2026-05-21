@@ -24,6 +24,10 @@ exports.register = async (req, res) => {
     const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase());
     const role = adminEmails.includes(email.toLowerCase()) ? 'admin' : 'student';
 
+    // If email is not configured, auto-verify all users
+    // If email is configured, only auto-verify admins
+    const shouldAutoVerify = !isEmailConfigured() || role === 'admin';
+    
     const user = new User({
       name,
       email: email.toLowerCase(),
@@ -31,12 +35,11 @@ exports.register = async (req, res) => {
       university,
       department,
       role,
-      isVerified: role === 'admin' || !isEmailConfigured(),
+      isVerified: shouldAutoVerify,
     });
 
-    // Generate verification token (skipped for admins and when email is not configured)
-    const verificationToken =
-      role === 'admin' || !isEmailConfigured() ? null : user.createVerificationToken();
+    // Generate verification token only if email is configured and user is not admin
+    const verificationToken = shouldAutoVerify ? null : user.createVerificationToken();
     await user.save();
 
     if (verificationToken) {
@@ -72,9 +75,16 @@ exports.register = async (req, res) => {
     }
 
     if (user) {
-      const message = user.isVerified
-        ? 'Admin account created. You can log in now.'
-        : 'Registration successful! Please check your email to verify your account before logging in.';
+      let message;
+      if (role === 'admin') {
+        message = 'Admin account created. You can log in now.';
+      } else if (!isEmailConfigured()) {
+        message = 'Registration successful! You can log in now.';
+      } else if (user.isVerified) {
+        message = 'Registration successful! You can log in now.';
+      } else {
+        message = 'Registration successful! Please check your email to verify your account before logging in.';
+      }
 
       res.status(201).json({
         _id: user._id,
@@ -83,7 +93,7 @@ exports.register = async (req, res) => {
         university: user.university,
         department: user.department,
         role: user.role,
-        isVerified: user.isVerified || !isEmailConfigured(),
+        isVerified: user.isVerified,
         profilePicture: user.profilePicture,
         message,
       });
@@ -118,7 +128,7 @@ exports.login = async (req, res) => {
         university: user.university,
         department: user.department,
         role: user.role,
-        isVerified: user.isVerified || !isEmailConfigured(),
+        isVerified: user.isVerified,
         profilePicture: user.profilePicture,
         token: generateToken(user._id),
       });
@@ -134,9 +144,7 @@ exports.getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
     if (user) {
-      const payload = user.toObject();
-      payload.isVerified = user.isVerified || !isEmailConfigured();
-      res.json(payload);
+      res.json(user);
     } else {
       res.status(404).json({ message: 'User not found' });
     }

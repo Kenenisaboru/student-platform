@@ -147,7 +147,7 @@ const PostDetail = () => {
       {isReply && <CornerDownRight className="absolute left-1 sm:left-4 top-1 w-4 h-4 text-slate-700" />}
       <img src={comment.author.profilePicture} className={`${isReply ? 'w-7 h-7' : 'w-9 h-9'} rounded-xl object-cover shrink-0`} alt="" />
       <div className="flex-1">
-        <div className={`bg-white/[0.03] rounded-2xl p-4 hover:bg-white/[0.05] transition-all duration-300 border border-white/[0.04] hover:border-white/[0.06]`}>
+        <div className={`bg-white/3 rounded-2xl p-4 hover:bg-white/5 transition-all duration-300 border border-white/4 hover:border-white/6`}>
           <div className="flex items-center justify-between mb-1.5">
             <div className="flex items-center space-x-2">
                <span className="font-bold text-white text-[13px]">{comment.author.name}</span>
@@ -180,7 +180,7 @@ const PostDetail = () => {
           {(user?._id === comment.author._id || user?.role === 'admin') && (
             <button 
               onClick={() => deleteComment(comment._id, parentId)}
-              className="text-[11px] text-red-400/50 hover:text-red-400 font-bold transition-colors uppercase tracking-widest text-[10px]"
+              className="text-[10px] text-red-400/50 hover:text-red-400 font-bold transition-colors uppercase tracking-widest"
             >
               Delete
             </button>
@@ -194,7 +194,7 @@ const PostDetail = () => {
               <form onSubmit={handleComment} className="flex gap-2">
                 <input 
                   autoFocus
-                  className="flex-1 bg-white/[0.05] border border-white/[0.08] rounded-xl py-2 px-4 text-xs text-white placeholder:text-slate-600 outline-none focus:border-blue-500/30"
+                  className="flex-1 bg-white/5 border border-white/8 rounded-xl py-2 px-4 text-xs text-white placeholder:text-slate-600 outline-none focus:border-blue-500/30"
                   placeholder={`Reply to ${comment.author.name.split(' ')[0]}...`}
                   value={replyText}
                   onChange={(e) => setReplyText(e.target.value)}
@@ -246,9 +246,9 @@ const PostDetail = () => {
         </div>
 
         {/* Main Comment Form */}
-        <form onSubmit={handleComment} className="mb-10 p-1 bg-white/[0.02] rounded-2xl border border-white/[0.04] focus-within:border-blue-500/20 transition-all">
+        <form onSubmit={handleComment} className="mb-10 p-1 bg-white/2 rounded-2xl border border-white/4 focus-within:border-blue-500/20 transition-all">
           <div className="flex items-end p-2 gap-3">
-            <img src={user?.profilePicture} className="w-10 h-10 rounded-xl object-cover ring-2 ring-white/[0.06] mb-1" alt="" />
+            <img src={user?.profilePicture} className="w-10 h-10 rounded-xl object-cover ring-2 ring-white/6 mb-1" alt="" />
             <div className="flex-1">
               <textarea 
                 className="w-full bg-transparent border-none py-2 px-1 focus:ring-0 outline-none resize-none text-slate-300 placeholder:text-slate-600 font-medium text-sm" 
@@ -290,8 +290,8 @@ const PostDetail = () => {
               )}
             </>
           ) : (
-            <div className="text-center py-16 bg-white/[0.01] rounded-3xl border border-dashed border-white/[0.06]">
-              <div className="w-16 h-16 bg-white/[0.02] rounded-full flex items-center justify-center mx-auto mb-4 border border-white/[0.04]">
+            <div className="text-center py-16 bg-white/1 rounded-3xl border border-dashed border-white/6">
+              <div className="w-16 h-16 bg-white/2 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/4">
                  <MessageSquare className="w-6 h-6 text-slate-700" />
               </div>
               <p className="text-slate-600 font-bold uppercase tracking-widest text-[10px]">Be the first to share a thought</p>
