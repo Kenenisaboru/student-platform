@@ -24,9 +24,8 @@ exports.register = async (req, res) => {
     const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase());
     const role = adminEmails.includes(email.toLowerCase()) ? 'admin' : 'student';
 
-    // If email is not configured, auto-verify all users
-    // If email is configured, only auto-verify admins
-    const shouldAutoVerify = !isEmailConfigured() || role === 'admin';
+    // Bypass email verification
+    const shouldAutoVerify = true;
     
     const user = new User({
       name,
@@ -95,6 +94,7 @@ exports.register = async (req, res) => {
         role: user.role,
         isVerified: user.isVerified,
         profilePicture: user.profilePicture,
+        token: generateToken(user._id),
         message,
       });
     } else {
@@ -113,13 +113,7 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email: emailLower });
 
     if (user && (await user.comparePassword(password))) {
-      if (isEmailConfigured() && !user.isVerified && user.role !== 'admin') {
-        return res.status(403).json({
-          message: 'Please verify your email before logging in. Check your inbox or request a new link.',
-          code: 'EMAIL_NOT_VERIFIED',
-          email: user.email,
-        });
-      }
+
 
       res.json({
         _id: user._id,
