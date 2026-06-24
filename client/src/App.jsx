@@ -51,9 +51,7 @@ const ProtectedRoute = ({ children }) => {
     </div>
   );
   if (!user) return <Navigate to="/login" />;
-  if (!user.isVerified && user.role !== 'admin') {
-    return <Navigate to="/verify-email-pending" replace />;
-  }
+
   return children;
 };
 
