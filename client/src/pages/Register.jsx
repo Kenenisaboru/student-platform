@@ -49,7 +49,7 @@ const Register = () => {
     try {
       const data = await register(formData);
       if (data?.isVerified) {
-        navigate('/login');
+        navigate(`/profile/${data._id}`);
       } else {
         navigate('/verify-email-pending');
       }
