@@ -28,12 +28,7 @@ API.interceptors.response.use(
       }
     }
 
-    if (status === 403 && code === 'EMAIL_NOT_VERIFIED') {
-      const path = window.location.pathname;
-      if (!path.startsWith('/verify-email')) {
-        window.location.href = '/verify-email-pending';
-      }
-    }
+
 
     return Promise.reject(error);
   }
