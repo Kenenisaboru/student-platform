@@ -25,13 +25,7 @@ exports.protect = async (req, res, next) => {
 };
 
 exports.requireVerified = (req, res, next) => {
-  if (!isEmailConfigured() || req.user.role === 'admin' || req.user.isVerified) {
-    return next();
-  }
-  return res.status(403).json({
-    message: 'Please verify your email before using the platform.',
-    code: 'EMAIL_NOT_VERIFIED',
-  });
+  return next(); // Bypassed email verification requirement
 };
 
 /** Authenticated routes that need a verified email (admins exempt). */
