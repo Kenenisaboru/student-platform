@@ -94,14 +94,14 @@ function AppContent() {
   const showLayout = user && !isAuthPath;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-(--background) text-(--foreground) transition-colors duration-300">
       <Navbar onMenuToggle={() => setDrawerOpen(true)} />
       <MobileDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
 
       <Suspense fallback={<LoadingPage />}>
         {!isAuthPath && showLayout ? (
           /* ===== 3-Column Layout ===== */
-          <div className="flex-grow pt-[6.5rem] sm:pt-[7.5rem]">
+            <div className="grow pt-26 sm:pt-30">
             <div className="mx-auto max-w-7xl px-4 flex gap-6">
               <LeftSidebar />
               <main className="flex-1 min-w-0 pb-24 lg:pb-10">
@@ -133,7 +133,7 @@ function AppContent() {
           </div>
         ) : (
           /* ===== Full Width (Auth Pages) ===== */
-          <main className="flex-grow">
+            <main className="grow">
             <Routes location={location} key={location.pathname}>
               <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
               <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
