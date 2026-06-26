@@ -77,7 +77,7 @@ const PostDetail = () => {
         setReplyText('');
         setReplyTo(null);
       } else {
-        setComments([data, ...comments]);
+        setComments(prev => [data, ...prev]);
         setCommentText('');
       }
 
