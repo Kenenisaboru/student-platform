@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { Target, Eye, Users, BookOpen, Globe, GraduationCap, Building2, Award, FlaskConical } from 'lucide-react';
+import { Target, Eye, Users, BookOpen, Globe, GraduationCap, Building2, Award } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 const campusImages = [
