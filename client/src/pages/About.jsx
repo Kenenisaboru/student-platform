@@ -164,7 +164,7 @@ const About = () => {
             className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tighter leading-[1.05]"
           >
             About{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 via-indigo-400 to-purple-400">
               Arsi Aseko
             </span>
           </motion.h1>
