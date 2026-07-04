@@ -48,7 +48,7 @@ const AcademicCalendar = () => {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative rounded-[2rem] p-8 mb-10 overflow-hidden bg-gradient-to-br from-slate-900 to-[#0a0f1e] border border-white/[0.05] shadow-2xl"
+        className="relative rounded-4xl p-8 mb-10 overflow-hidden bg-linear-to-br from-slate-900 to-[#0a0f1e] border border-white/5 shadow-2xl"
       >
         <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-[80px] mix-blend-screen"></div>
         <div className="relative z-10">
@@ -56,7 +56,7 @@ const AcademicCalendar = () => {
             <CalendarIcon className="w-3.5 h-3.5" /> Official Schedule
           </div>
           <h1 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tighter leading-tight">
-            Academic <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Calendar</span>
+           Academic <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-purple-400">Calendar</span>
           </h1>
           <p className="text-slate-400 text-base font-medium leading-relaxed max-w-xl">
             Plan your academic year. Stay informed about crucial dates for registration, examinations, and university holidays.
@@ -80,12 +80,12 @@ const AcademicCalendar = () => {
                </div>
             </div>
             
-            <div className="bg-[#0a0f1e]/80 backdrop-blur-xl rounded-[2rem] border border-white/[0.04] overflow-hidden">
-              <div className="divide-y divide-white/[0.04]">
+            <div className="bg-[#0a0f1e]/80 backdrop-blur-xl rounded-4xl border border-white/4 overflow-hidden">
+              <div className="divide-y divide-white/4">
                 {semester.dates.map((item, i) => (
-                  <div key={i} className="p-6 flex items-center justify-between hover:bg-white/[0.02] transition-colors group">
+                  <div key={i} className="p-6 flex items-center justify-between hover:bg-white/2 transition-colors group">
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/[0.05] flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <div className="w-10 h-10 rounded-xl bg-white/3 border border-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
                         {getIcon(item.type)}
                       </div>
                       <div>
