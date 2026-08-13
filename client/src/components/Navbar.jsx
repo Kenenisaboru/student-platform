@@ -21,6 +21,7 @@ const Navbar = ({ onMenuToggle }) => {
   const [scrolled, setScrolled] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
 
   const pathnameRef = useRef(location.pathname);
   useEffect(() => {
@@ -84,10 +85,10 @@ const Navbar = ({ onMenuToggle }) => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[60] flex flex-col">
+    <header className="fixed top-0 left-0 right-0 z-60 flex flex-col">
       {/* Narrative Pro Banner */}
-      <div className="bg-[#02040a] text-white text-[9px] font-black py-1.5 px-6 hidden sm:flex justify-between items-center z-50 border-b border-white/[0.04] uppercase tracking-[0.25em]">
-        <div className="container mx-auto max-w-[1400px] flex justify-between items-center">
+      <div className="bg-[#02040a] text-white text-[9px] font-black py-1.5 px-6 hidden sm:flex justify-between items-center z-50 border-b border-white/4 uppercase tracking-[0.25em]">
+        <div className="container mx-auto max-w-350 flex justify-between items-center">
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-2 text-blue-400 group cursor-default">
               <Cpu className="w-3 h-3 group-hover:animate-pulse" />
@@ -110,15 +111,15 @@ const Navbar = ({ onMenuToggle }) => {
       </div>
 
       {/* Main Glass Navbar */}
-      <nav className={`transition-all duration-700 border-b ${scrolled ? 'bg-[#0a0f1e]/90 backdrop-blur-3xl border-white/[0.08] py-2 shadow-2xl' : 'bg-[#0a0f1e]/60 backdrop-blur-2xl border-white/[0.04] py-4'}`}>
-        <div className="container mx-auto px-6 max-w-[1400px] flex items-center justify-between">
+      <nav className={`transition-all duration-700 border-b ${scrolled ? 'bg-[#0a0f1e]/90 backdrop-blur-3xl border-white/8 py-2 shadow-2xl' : 'bg-[#0a0f1e]/60 backdrop-blur-2xl border-white/4 py-4'}`}>
+        <div className="container mx-auto px-6 max-w-350 flex items-center justify-between">
           
           {/* Logo & Identity */}
           <div className="flex items-center gap-6">
             {user && (
               <button
                 onClick={onMenuToggle}
-                className="lg:hidden p-2.5 bg-white/[0.03] hover:bg-white/[0.08] border border-white/5 rounded-xl text-slate-400 hover:text-white transition-all active:scale-90"
+                className="lg:hidden p-2.5 bg-white/3 hover:bg-white/8 border border-white/5 rounded-xl text-slate-400 hover:text-white transition-all active:scale-90"
               >
                 <Menu className="w-5 h-5" />
               </button>
@@ -126,7 +127,7 @@ const Navbar = ({ onMenuToggle }) => {
 
             <Link to="/" aria-label="Arsi Aseko University Home" className="flex items-center gap-4 group">
               <div className="relative">
-                 <div className="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-700 rounded-[1.2rem] flex items-center justify-center text-white shadow-xl shadow-blue-500/10 group-hover:shadow-blue-500/30 group-hover:scale-105 transition-all duration-500 border border-white/10">
+                 <div className="w-10 h-10 bg-linear-to-tr from-blue-600 to-indigo-700 rounded-[1.2rem] flex items-center justify-center text-white shadow-xl shadow-blue-500/10 group-hover:shadow-blue-500/30 group-hover:scale-105 transition-all duration-500 border border-white/10">
                     <span className="font-black text-xs">AAU</span>
                  </div>
                  <div className="absolute -inset-1 bg-blue-500/20 rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -140,12 +141,12 @@ const Navbar = ({ onMenuToggle }) => {
 
           {/* Command Search */}
           {user && (
-            <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-lg mx-12 relative group" role="search">
+            <form onSubmit={(e) => { handleSearch(e); setShowMobileSearch(false); }} className="hidden md:flex flex-1 max-w-lg mx-6 lg:mx-12 relative group" role="search">
               <input
                 type="text"
                 placeholder="Query database for students, archives, or tags..."
                 aria-label="Search students, archives, or tags"
-                className="w-full bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.06] hover:border-white/[0.12] rounded-2xl py-3 pl-12 pr-6 text-sm focus:bg-white/[0.05] focus:border-blue-500/40 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all duration-500 font-bold text-white placeholder:text-slate-700 shadow-inner"
+                className="w-full bg-white/2 hover:bg-white/4 border border-white/6 hover:border-white/12 rounded-2xl py-3 pl-12 pr-6 text-sm focus:bg-white/5 focus:border-blue-500/40 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all duration-500 font-bold text-white placeholder:text-slate-700 shadow-inner"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 id="search-input"
@@ -161,7 +162,15 @@ const Navbar = ({ onMenuToggle }) => {
           <div className="flex items-center gap-1 sm:gap-2">
             {user ? (
               <>
-                <div className="hidden md:flex items-center px-2 py-1 bg-[#0d1428] rounded-[1.5rem] border border-white/[0.06] shadow-inner" role="navigation" aria-label="Main Navigation">
+                {/* Mobile Search Button Toggle */}
+                <button
+                  onClick={() => setShowMobileSearch(!showMobileSearch)}
+                  aria-label="Toggle mobile search bar"
+                  className="md:hidden p-2.5 text-slate-400 hover:text-white hover:bg-white/4 rounded-xl transition-all"
+                >
+                  <Search className="w-5 h-5" />
+                </button>
+                <div className="hidden md:flex items-center px-2 py-1 bg-[#0d1428] rounded-3xl border border-white/6 shadow-inner" role="navigation" aria-label="Main Navigation">
                   <Link 
                     to="/" 
                     aria-label="Home Feed"
@@ -206,7 +215,7 @@ const Navbar = ({ onMenuToggle }) => {
                   to={`/profile/${user?._id}`} 
                   aria-label={`View your profile, ${user?.name}`}
                   aria-current={isActive(`/profile/${user?._id}`) ? 'page' : undefined}
-                  className={`ml-4 pl-4 border-l border-white/[0.08] hidden sm:flex items-center gap-3 group transition-all`}
+                  className={`ml-4 pl-4 border-l border-white/8 hidden sm:flex items-center gap-3 group transition-all`}
                 >
                   <div className="relative">
                     <img 
@@ -216,7 +225,7 @@ const Navbar = ({ onMenuToggle }) => {
                     />
                     <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-[3px] border-[#0a0f1e] rounded-full"></div>
                   </div>
-                  <div className="hidden xl:flex flex-col min-w-[80px]">
+                  <div className="hidden xl:flex flex-col min-w-20">
                     <div className="flex items-center gap-2">
                       <span className={`text-[13px] font-black leading-none tracking-tight group-hover:text-blue-400 transition-colors ${isActive(`/profile/${user?._id}`) ? 'text-white' : 'text-slate-400'}`}>
                         {user?.name?.split(' ')[0]}
@@ -253,6 +262,21 @@ const Navbar = ({ onMenuToggle }) => {
             )}
           </div>
         </div>
+        {user && showMobileSearch && (
+          <div className="md:hidden px-4 pb-3 pt-1 border-t border-white/5 bg-[#0a0f1e]/95 backdrop-blur-3xl animate-fadeInUp">
+            <form onSubmit={(e) => { handleSearch(e); setShowMobileSearch(false); }} className="relative">
+              <input
+                type="text"
+                placeholder="Query database..."
+                className="w-full bg-white/4 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder:text-slate-500 outline-none focus:border-blue-500/50"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                autoFocus
+              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4" />
+            </form>
+          </div>
+        )}
       </nav>
     </header>
   );
