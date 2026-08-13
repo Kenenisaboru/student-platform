@@ -48,9 +48,9 @@ const AcademicCalendar = () => {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative rounded-4xl p-8 mb-10 overflow-hidden bg-linear-to-br from-slate-900 to-[#0a0f1e] border border-white/5 shadow-2xl"
+        className="relative rounded-3xl p-8 mb-10 overflow-hidden bg-linear-to-br from-slate-900 to-[#0a0f1e] border border-white/5 shadow-2xl"
       >
-        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-[80px] mix-blend-screen"></div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-[80px]"></div>
         <div className="relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-4">
             <CalendarIcon className="w-3.5 h-3.5" /> Official Schedule
