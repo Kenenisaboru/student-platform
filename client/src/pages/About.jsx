@@ -91,7 +91,7 @@ const About = () => {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
-        className="relative rounded-4xl mb-6 overflow-hidden border border-white/6 shadow-[0_40px_120px_rgba(0,0,0,0.6)]"
+        className="relative rounded-3xl mb-6 overflow-hidden border border-white/6 shadow-[0_40px_120px_rgba(0,0,0,0.6)]"
         style={{ minHeight: '480px' }}
       >
         {/* Carousel + Parallax Background */}
@@ -219,7 +219,7 @@ const About = () => {
           initial={{ opacity: 0, x: -24 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
-          className="p-8 rounded-4xl bg-linear-to-br from-blue-900/20 to-transparent border border-blue-500/10 group hover:border-blue-500/25 transition-colors duration-300"
+          className="p-8 rounded-3xl bg-linear-to-br from-blue-900/20 to-transparent border border-blue-500/10 group hover:border-blue-500/25 transition-colors duration-300"
         >
           <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
             <Target className="w-6 h-6 text-blue-400" />
@@ -234,7 +234,7 @@ const About = () => {
           initial={{ opacity: 0, x: 24 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 }}
-          className="p-8 rounded-4xl bg-linear-to-br from-indigo-900/20 to-transparent border border-indigo-500/10 group hover:border-indigo-500/25 transition-colors duration-300"
+          className="p-8 rounded-3xl bg-linear-to-br from-indigo-900/20 to-transparent border border-indigo-500/10 group hover:border-indigo-500/25 transition-colors duration-300"
         >
           <div className="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
             <Eye className="w-6 h-6 text-indigo-400" />
@@ -263,7 +263,7 @@ const About = () => {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.45 + idx * 0.1 }}
-              className="bg-[#0a0f1e]/80 backdrop-blur-xl p-8 rounded-4xl border border-white/4 text-center group hover:border-white/12 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)] transition-all duration-300"
+              className="bg-[#0a0f1e]/80 backdrop-blur-xl p-8 rounded-3xl border border-white/4 text-center group hover:border-white/12 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)] transition-all duration-300"
             >
               <div className="w-14 h-14 mx-auto rounded-2xl bg-white/3 border border-white/6 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-blue-500/10 group-hover:border-blue-500/20 transition-all duration-300">
                 <val.icon className="w-6 h-6 text-slate-400 group-hover:text-blue-400 transition-colors duration-300" />
