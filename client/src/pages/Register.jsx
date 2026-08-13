@@ -70,7 +70,7 @@ const Register = () => {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="max-w-5xl w-full relative z-10 flex flex-col lg:flex-row rounded-4xl shadow-2xl overflow-hidden glass-card"
+        className="max-w-5xl w-full relative z-10 flex flex-col lg:flex-row rounded-3xl shadow-2xl overflow-hidden glass-card"
       >
         {/* Left Side */}
         <div className="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center relative bg-linear-to-br from-blue-900/20 to-indigo-900/20 z-20 overflow-hidden border-r border-white/4">
