@@ -50,7 +50,7 @@ const MobileDrawer = ({ isOpen, onClose }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-60"
             onClick={onClose}
           />
 
@@ -60,13 +60,13 @@ const MobileDrawer = ({ isOpen, onClose }) => {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 32 }}
-            className="fixed left-0 top-0 bottom-0 w-[300px] glass z-[61] flex flex-col overflow-y-auto"
+            className="fixed left-0 top-0 bottom-0 w-70 sm:w-[320px] max-w-[85vw] glass z-61 flex flex-col overflow-y-auto"
             id="mobile-drawer"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-5 border-b border-white/[0.05]">
+            <div className="flex items-center justify-between p-5 border-b border-white/5">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <div className="w-10 h-10 bg-linear-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
                   <span className="font-extrabold text-white text-sm">AAU</span>
                 </div>
                 <div>
@@ -88,9 +88,9 @@ const MobileDrawer = ({ isOpen, onClose }) => {
             <Link
               to={`/profile/${user?._id}`}
               onClick={handleNavClick}
-              className="m-4 p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04] flex items-center gap-3.5 group hover:bg-white/[0.05] hover:border-white/[0.08] transition-all relative overflow-hidden"
+              className="m-4 p-4 rounded-2xl bg-white/2 border border-white/4 flex items-center gap-3.5 group hover:bg-white/5 hover:border-white/8 transition-all relative overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <img
                 src={user?.profilePicture}
                 alt={user?.name}
@@ -123,7 +123,7 @@ const MobileDrawer = ({ isOpen, onClose }) => {
                     className={`flex items-center gap-3.5 px-4 py-3.5 rounded-xl font-semibold text-[14px] transition-all duration-200 ${
                       active
                         ? 'bg-blue-500/10 text-blue-400'
-                        : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                        : 'text-slate-400 hover:text-white hover:bg-white/4'
                     }`}
                   >
                     <Icon className="w-5 h-5" />
@@ -149,11 +149,11 @@ const MobileDrawer = ({ isOpen, onClose }) => {
             </nav>
 
             {/* Bottom Section */}
-            <div className="p-4 border-t border-white/[0.05] space-y-1">
+            <div className="p-4 border-t border-white/5 space-y-1">
               <Link 
                 to="/settings"
                 onClick={handleNavClick}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:text-slate-300 hover:bg-white/[0.04] transition-all text-[13px] font-medium"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:text-slate-300 hover:bg-white/4 transition-all text-[13px] font-medium"
               >
                 <Settings className="w-4 h-4" />
                 Settings
