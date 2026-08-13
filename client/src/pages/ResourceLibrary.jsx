@@ -76,15 +76,15 @@ const ResourceLibrary = () => {
           className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105"
           alt="Campus Banner"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#060a14] via-[#060a14]/80 to-transparent" />
-        <div className="absolute top-0 right-0 w-[500px] h-full bg-blue-500/10 rounded-full blur-[120px] -mr-40 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-linear-to-r from-[#060a14] via-[#060a14]/80 to-transparent" />
+        <div className="absolute top-0 right-0 w-125 h-full bg-blue-500/10 rounded-full blur-[120px] -mr-40 pointer-events-none"></div>
         
         <div className="relative z-10 px-10 md:px-20 max-w-4xl">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="inline-flex items-center gap-3 bg-blue-600/10 backdrop-blur-xl border border-blue-500/20 px-4 py-2 rounded-2xl text-blue-400 text-[10px] font-black uppercase tracking-[0.3em] mb-6">
             <Database className="w-3.5 h-3.5" /> Synchronized Library
           </motion.div>
           <h1 className="text-5xl md:text-7xl font-black text-white mb-4 tracking-tighter leading-none">
-            Resource <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">Vault.</span>
+            Resource <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 via-indigo-400 to-purple-400">Vault.</span>
           </h1>
           <p className="text-slate-400 text-lg font-medium max-w-xl leading-relaxed opacity-80">
             Arsi Aseko University's official decentralized repository for academic assets, research verified materials, and collaborative notes.
@@ -95,8 +95,8 @@ const ResourceLibrary = () => {
       {/* Modern Control Center (Search/Filter) */}
       <div className="flex flex-col xl:flex-row gap-6 mb-12 items-end xl:items-center">
          <div className="flex-1 w-full relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-[2rem] blur opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
-            <div className="relative bg-[#0d1428] rounded-[1.8rem] border border-white/[0.08] flex items-center px-6 py-1 shadow-2xl">
+            <div className="absolute -inset-1 bg-linear-to-r from-blue-500/20 to-purple-500/20 rounded-4xl blur opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
+            <div className="relative bg-[#0d1428] rounded-[1.8rem] border border-white/8 flex items-center px-6 py-1 shadow-2xl">
                <Search className="w-5 h-5 text-slate-600 mr-3" />
                <input 
                   type="text" 
@@ -108,13 +108,13 @@ const ResourceLibrary = () => {
             </div>
          </div>
 
-         <div className="flex gap-4 w-full xl:w-auto">
-            <div className="flex gap-1.5 p-1.5 bg-[#0d1428] rounded-2xl border border-white/[0.05] overflow-x-auto no-scrollbar max-w-[500px]">
+         <div className="flex flex-col sm:flex-row gap-4 w-full xl:w-auto">
+            <div className="flex gap-1.5 p-1.5 bg-[#0d1428] rounded-2xl border border-white/5 overflow-x-auto no-scrollbar max-w-full xl:max-w-125">
                {['', 'PDF', 'Research', 'Book', 'Notes'].map(cat => (
                  <button 
                    key={cat}
                    onClick={() => setCategory(cat)}
-                   className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${category === cat ? 'bg-white text-[#060a14] shadow-xl' : 'text-slate-500 hover:text-white hover:bg-white/[0.03]'}`}
+                   className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${category === cat ? 'bg-white text-[#060a14] shadow-xl' : 'text-slate-500 hover:text-white hover:bg-white/3'}`}
                  >
                    {cat || 'All Assets'}
                  </button>
@@ -123,7 +123,7 @@ const ResourceLibrary = () => {
 
             <button 
                onClick={() => setShowUpload(true)}
-               className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest flex items-center gap-3 transition-all shadow-xl shadow-blue-600/20 active:scale-95 whitespace-nowrap border border-white/10"
+               className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 transition-all shadow-xl shadow-blue-600/20 active:scale-95 whitespace-nowrap border border-white/10"
             >
                <Upload className="w-4 h-4" /> Deposit Material
             </button>
@@ -135,8 +135,8 @@ const ResourceLibrary = () => {
         <AnimatePresence mode="popLayout">
           {loading ? (
             [...Array(6)].map((_, i) => (
-              <div key={i} className="h-64 bg-white/[0.02] rounded-[2.5rem] border border-white/[0.05] animate-pulse relative overflow-hidden">
-                 <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none"></div>
+              <div key={i} className="h-64 bg-white/2 rounded-[2.5rem] border border-white/5 animate-pulse relative overflow-hidden">
+                 <div className="absolute inset-0 bg-linear-to-br from-white/2 to-transparent pointer-events-none"></div>
               </div>
             ))
           ) : resources.length > 0 ? (
@@ -146,14 +146,14 @@ const ResourceLibrary = () => {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="group relative p-8 rounded-[3rem] bg-[#0d1428] border border-white/[0.05] hover:border-blue-500/20 transition-all duration-500 shadow-xl overflow-hidden"
+                className="group relative p-8 rounded-[3rem] bg-[#0d1428] border border-white/5 hover:border-blue-500/20 transition-all duration-500 shadow-xl overflow-hidden"
               >
                 {/* Background Accent */}
                 <div className="absolute -right-10 -top-10 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl group-hover:bg-blue-500/10 transition-colors" />
 
                 <div className="relative z-10 flex flex-col h-full">
                    <div className="flex items-start justify-between mb-8">
-                      <div className={`p-4 rounded-2xl bg-white/[0.03] border border-white/[0.05] shadow-inner transition-all group-hover:scale-110 group-hover:border-blue-500/30 ${res.category === 'PDF' ? 'text-rose-400' : 'text-blue-400'}`}>
+                      <div className={`p-4 rounded-2xl bg-white/3 border border-white/5 shadow-inner transition-all group-hover:scale-110 group-hover:border-blue-500/30 ${res.category === 'PDF' ? 'text-rose-400' : 'text-blue-400'}`}>
                          <FileText className="w-7 h-7" />
                       </div>
                       {(res.author?._id === user?._id || user?.role === 'admin') && (
@@ -172,7 +172,7 @@ const ResourceLibrary = () => {
                       <p className="text-slate-500 text-sm font-medium leading-[1.6] line-clamp-2">{res.description}</p>
                    </div>
 
-                   <div className="mt-auto flex items-center justify-between pt-6 border-t border-white/[0.04]">
+                   <div className="mt-auto flex items-center justify-between pt-6 border-t border-white/4">
                       <div className="flex items-center gap-3">
                          <div className="relative">
                             <img src={res.author?.profilePicture} className="w-8 h-8 rounded-xl object-cover ring-2 ring-white/5" alt="" />
@@ -186,7 +186,7 @@ const ResourceLibrary = () => {
                       <a 
                         href={res.fileUrl} 
                         target="_blank" 
-                        className="w-10 h-10 flex items-center justify-center bg-white/[0.04] hover:bg-white text-slate-300 hover:text-[#060a14] rounded-xl transition-all shadow-xl hover:shadow-white/5 border border-white/[0.05]"
+                        className="w-10 h-10 flex items-center justify-center bg-white/4 hover:bg-white text-slate-300 hover:text-[#060a14] rounded-xl transition-all shadow-xl hover:shadow-white/5 border border-white/5"
                       >
                          <Download className="w-4 h-4" />
                       </a>
@@ -195,8 +195,8 @@ const ResourceLibrary = () => {
               </motion.div>
             ))
           ) : (
-            <div className="col-span-full py-20 bg-white/[0.02] rounded-[3rem] border border-white/[0.05] border-dashed flex flex-col items-center justify-center text-center">
-               <div className="w-20 h-20 bg-white/[0.03] rounded-[2rem] flex items-center justify-center mb-8">
+            <div className="col-span-full py-20 bg-white/2 rounded-[3rem] border border-white/5 border-dashed flex flex-col items-center justify-center text-center">
+               <div className="w-20 h-20 bg-white/3 rounded-4xl flex items-center justify-center mb-8">
                   <Database className="w-10 h-10 text-slate-800" />
                </div>
                <h3 className="text-2xl font-black text-white mb-2 tracking-tighter">Vault Silent</h3>
@@ -209,7 +209,7 @@ const ResourceLibrary = () => {
       {/* Pro Deposit Modal */}
       <AnimatePresence>
         {showUpload && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-6">
+          <div className="fixed inset-0 z-200 flex items-center justify-center p-6">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowUpload(false)} className="absolute inset-0 bg-[#060a14]/90 backdrop-blur-xl" />
             <motion.div 
                initial={{ scale: 0.95, opacity: 0, y: 20 }} 
@@ -222,7 +222,7 @@ const ResourceLibrary = () => {
 
               <div className="relative z-10">
                  <div className="flex items-center gap-4 mb-10">
-                    <div className="w-14 h-14 bg-blue-600/10 rounded-[1.5rem] flex items-center justify-center border border-blue-600/20">
+                    <div className="w-14 h-14 bg-blue-600/10 rounded-3xl flex items-center justify-center border border-blue-600/20">
                        <Share2 className="w-6 h-6 text-blue-400" />
                     </div>
                     <div>
@@ -237,14 +237,14 @@ const ResourceLibrary = () => {
                         <label className="text-[11px] font-black text-slate-600 uppercase tracking-widest ml-1">Title Designation</label>
                         <input 
                            type="text" required
-                           className="w-full bg-white/[0.04] border border-white/[0.1] rounded-2xl py-4 px-6 text-white font-black text-sm tracking-tight outline-none focus:border-blue-500 transition-all shadow-inner" 
+                           className="w-full bg-white/4 border border-white/10 rounded-2xl py-4 px-6 text-white font-black text-sm tracking-tight outline-none focus:border-blue-500 transition-all shadow-inner" 
                            onChange={e => setNewResource({...newResource, title: e.target.value})}
                          />
                       </div>
                       <div className="space-y-2">
                          <label className="text-[11px] font-black text-slate-600 uppercase tracking-widest ml-1">Resource Category</label>
                          <select 
-                           className="w-full bg-white/[0.04] border border-white/[0.1] rounded-2xl py-4 px-6 text-white font-black text-sm tracking-tight outline-none focus:border-blue-500 transition-all shadow-inner appearance-none"
+                           className="w-full bg-white/4 border border-white/10 rounded-2xl py-4 px-6 text-white font-black text-sm tracking-tight outline-none focus:border-blue-500 transition-all shadow-inner appearance-none"
                            onChange={e => setNewResource({...newResource, category: e.target.value})}
                          >
                            <option value="Notes">Faculty Notes</option>
@@ -260,7 +260,7 @@ const ResourceLibrary = () => {
                       <input 
                         type="url" required
                         placeholder="https://drive.google.com/secure-node/..."
-                        className="w-full bg-white/[0.04] border border-white/[0.1] rounded-2xl py-4 px-6 text-white font-black text-sm tracking-tight outline-none focus:border-blue-500 transition-all shadow-inner" 
+                        className="w-full bg-white/4 border border-white/10 rounded-2xl py-4 px-6 text-white font-black text-sm tracking-tight outline-none focus:border-blue-500 transition-all shadow-inner" 
                         onChange={e => setNewResource({...newResource, fileUrl: e.target.value})}
                       />
                    </div>
@@ -269,7 +269,7 @@ const ResourceLibrary = () => {
                       <label className="text-[11px] font-black text-slate-600 uppercase tracking-widest ml-1">Asset Synopsis</label>
                       <textarea 
                         rows="3" required
-                        className="w-full bg-white/[0.04] border border-white/[0.1] rounded-[2rem] py-5 px-6 text-slate-300 font-bold text-sm leading-relaxed outline-none focus:border-blue-500 transition-all shadow-inner resize-none"
+                        className="w-full bg-white/4 border border-white/10 rounded-4xl py-5 px-6 text-slate-300 font-bold text-sm leading-relaxed outline-none focus:border-blue-500 transition-all shadow-inner resize-none"
                         placeholder="Analyze the contents of this academic material..."
                         onChange={e => setNewResource({...newResource, description: e.target.value})}
                       />
