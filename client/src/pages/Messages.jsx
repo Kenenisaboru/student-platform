@@ -184,7 +184,7 @@ const Messages = () => {
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none"></div>
 
         {/* Sidebar: Conversations List */}
-        <div className={`w-full sm:w-[350px] border-r border-white/8 flex flex-col z-10 ${id && 'hidden sm:flex'}`}>
+        <div className={`w-full sm:w-87.5 border-r border-white/8 flex flex-col z-10 ${id && 'hidden sm:flex'}`}>
           <div className="p-6">
             <div className="flex items-center justify-between mb-6">
                <h2 className="text-2xl font-black text-white tracking-tighter">Portal Chat</h2>
@@ -332,7 +332,7 @@ const Messages = () => {
                     })
                   ) : (
                     <div className="h-full flex flex-col items-center justify-center opacity-30">
-                      <div className="w-20 h-20 rounded-4xl bg-white/4 border border-white/5 flex items-center justify-center mb-6">
+                      <div className="w-20 h-20 rounded-3xl bg-white/4 border border-white/5 flex items-center justify-center mb-6">
                         <MessageSquare className="w-8 h-8 text-slate-300" />
                       </div>
                       <p className="font-black text-xs uppercase tracking-[0.3em] text-white">Initialize Signal</p>
