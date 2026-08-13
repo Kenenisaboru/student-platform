@@ -203,7 +203,7 @@ const Login = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 1 }}
-            className="w-full max-w-[460px] mx-auto lg:ml-auto"
+            className="w-full max-w-115 mx-auto lg:ml-auto"
           >
             <div className="group relative">
               {/* Outer Glow Effect */}
@@ -376,7 +376,7 @@ const Login = () => {
           </div>
 
           {/* Bento Grid Redesign */}
-          <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-3 gap-5 h-auto lg:h-[700px]">
+          <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-3 gap-5 h-auto lg:h-175">
             {/* Main Feature - Large Tall */}
             <motion.div
               whileHover={{ scale: 0.99 }}
@@ -393,7 +393,7 @@ const Login = () => {
             {/* Top Right High */}
             <motion.div
               whileHover={{ scale: 0.99 }}
-              className="md:col-span-2 md:row-span-1 relative rounded-4xl overflow-hidden group border border-white/8"
+              className="md:col-span-2 md:row-span-1 relative rounded-3xl overflow-hidden group border border-white/8"
             >
               <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" alt="Library" />
               <div className="absolute inset-0 bg-blue-600/10 mix-blend-overlay group-hover:opacity-0 transition-opacity" />
@@ -437,7 +437,7 @@ const Login = () => {
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-3xl md:text-5xl font-black text-white mb-6">Secure Your Digital ID</h2>
           <p className="text-blue-100 text-lg mb-10 opacity-90 max-w-2xl mx-auto font-medium">Join Arsi Aseko's secure network today and access global opportunities with your verified student profile.</p>
-          <Link to="/register" className="inline-flex items-center gap-3 px-10 py-5 bg-white text-blue-600 rounded-4xl font-black text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all">
+          <Link to="/register" className="inline-flex items-center gap-3 px-10 py-5 bg-white text-blue-600 rounded-3xl font-black text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all">
             Complete Registration <Sparkles className="w-6 h-6 text-blue-500" />
           </Link>
         </div>
