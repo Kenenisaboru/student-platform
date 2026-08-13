@@ -48,7 +48,7 @@ const VirtualID = () => {
             <Fingerprint className="w-3 h-3" /> Secure Identity Node
          </motion.div>
          <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-4 leading-none">
-            Digital <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Credential.</span>
+            Digital <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-indigo-400">Credential.</span>
          </h1>
          <p className="text-slate-500 font-medium max-w-xl leading-relaxed">
             Arsi Aseko University's official cryptographic identity card for campus access, resource authorization, and student verification.
@@ -67,11 +67,11 @@ const VirtualID = () => {
                 rotateY,
                 transformStyle: "preserve-3d",
              }}
-             className="relative w-[340px] sm:w-[380px] h-[550px] bg-gradient-to-br from-[#0d1428] via-[#0a0f1e] to-[#060a14] rounded-[3rem] p-10 border border-white/[0.08] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.7)] group overflow-hidden"
+             className="relative w-full max-w-85 sm:max-w-95 h-137.5 bg-linear-to-br from-[#0d1428] via-[#0a0f1e] to-[#060a14] rounded-[3rem] p-6 sm:p-10 border border-white/8 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.7)] group overflow-hidden"
            >
               {/* Background Aesthetic Layers */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px] group-hover:bg-blue-600/20 transition-all duration-700"></div>
-              <div className="absolute inset-0 bg-grid-white/[0.02] [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.1))]"></div>
+              <div className="absolute inset-0 bg-grid-white/[0.02] mask-[linear-gradient(0deg,white,rgba(255,255,255,0.1))]"></div>
               
               {/* Card Content Overlay */}
               <div className="relative z-10 flex flex-col h-full" style={{ transform: "translateZ(50px)" }}>
@@ -90,7 +90,7 @@ const VirtualID = () => {
                  {/* Identity Core */}
                  <div className="flex flex-col items-center mb-10">
                     <div className="relative mb-6">
-                       <div className="p-1 rounded-[2.5rem] bg-gradient-to-br from-blue-500/40 to-transparent backdrop-blur-xl border border-white/10 shadow-lg">
+                       <div className="p-1 rounded-[2.5rem] bg-linear-to-br from-blue-500/40 to-transparent backdrop-blur-xl border border-white/10 shadow-lg">
                           <img src={user.profilePicture} className="w-32 h-32 rounded-[2.2rem] object-cover ring-2 ring-black" alt="" />
                        </div>
                        <div className="absolute -bottom-1 -right-1 w-9 h-9 bg-emerald-500 rounded-2xl flex items-center justify-center border-4 border-[#0d1428] shadow-lg text-white">
@@ -130,14 +130,14 @@ const VirtualID = () => {
               </div>
 
               {/* Holographic Shift Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 group-hover:opacity-100 transition-opacity pointer-events-none opacity-0"></div>
+              <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-transparent to-purple-500/5 group-hover:opacity-100 transition-opacity pointer-events-none opacity-0"></div>
            </motion.div>
         </div>
 
         {/* The Back / Verification Panel */}
         <div className="flex flex-col gap-6">
-           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 }} className="w-[340px] h-[340px] bg-[#0d1428] rounded-[3rem] p-12 border border-white/[0.08] shadow-2xl flex flex-col items-center justify-center relative overflow-hidden group">
-              <div className="absolute -inset-10 bg-gradient-to-br from-blue-600/10 to-transparent blur-3xl pointer-events-none"></div>
+           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 }} className="w-full max-w-85 h-85 bg-[#0d1428] rounded-[3rem] p-8 sm:p-12 border border-white/8 shadow-2xl flex flex-col items-center justify-center relative overflow-hidden group">
+              <div className="absolute -inset-10 bg-linear-to-br from-blue-600/10 to-transparent blur-3xl pointer-events-none"></div>
               <div className="relative z-10 bg-white p-6 rounded-[2.5rem] shadow-2xl mb-8 group-hover:scale-110 transition-transform duration-500 ring-4 ring-white/10">
                  <img src={qrUrl} className="w-32 h-32" alt="QR" />
               </div>
@@ -152,7 +152,7 @@ const VirtualID = () => {
                 onClick={downloadID}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="p-6 rounded-[2rem] bg-white/[0.03] border border-white/5 flex flex-col items-center gap-3 group hover:bg-white transition-all"
+                className="p-6 rounded-4xl bg-white/3 border border-white/5 flex flex-col items-center gap-3 group hover:bg-white transition-all"
               >
                  <Download className="w-5 h-5 text-slate-500 group-hover:text-[#060a14]" />
                  <span className="text-[9px] font-black uppercase text-slate-500 group-hover:text-[#060a14] tracking-widest">Download Asset</span>
@@ -160,14 +160,14 @@ const VirtualID = () => {
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="p-6 rounded-[2rem] bg-white/[0.03] border border-white/5 flex flex-col items-center gap-3 group hover:bg-blue-600 transition-all hover:border-blue-500"
+                className="p-6 rounded-4xl bg-white/3 border border-white/5 flex flex-col items-center gap-3 group hover:bg-blue-600 transition-all hover:border-blue-500"
               >
                  <Share2 className="w-5 h-5 text-slate-500 group-hover:text-white" />
                  <span className="text-[9px] font-black uppercase text-slate-500 group-hover:text-white tracking-widest">Share Signal</span>
               </motion.button>
            </div>
 
-           <div className="p-8 rounded-[2.5rem] bg-gradient-to-br from-blue-600/10 to-transparent border border-blue-500/10 flex items-start gap-4">
+           <div className="p-8 rounded-[2.5rem] bg-linear-to-br from-blue-600/10 to-transparent border border-blue-500/10 flex items-start gap-4">
               <Info className="w-5 h-5 text-blue-400 shrink-0" />
               <div>
                  <h4 className="text-white font-black text-xs uppercase tracking-widest mb-2 leading-none">Security Protocol</h4>
