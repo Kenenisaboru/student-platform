@@ -101,7 +101,7 @@ function AppContent() {
       <Suspense fallback={<LoadingPage />}>
         {!isAuthPath && showLayout ? (
           /* ===== 3-Column Layout ===== */
-            <div className="grow pt-26 sm:pt-30">
+            <div className="grow pt-20 sm:pt-28 lg:pt-32">
             <div className="mx-auto max-w-7xl px-4 flex gap-6">
               <LeftSidebar />
               <main className="flex-1 min-w-0 pb-24 lg:pb-10">
