@@ -30,21 +30,20 @@ const LeftSidebar = () => {
   const isActive = (path) => location.pathname === path;
 
   const mainNav = [
-    { path: '/', icon: Home, label: 'Home Feed' },
-    { path: '/search?q=', icon: Search, label: 'Explore Ecosystem', matchPath: '/search' },
-    { path: '/events', icon: Calendar, label: 'Events & Calendar' },
-    { path: '/gallery', icon: ImageIcon, label: 'Campus Gallery' },
+    { path: '/', icon: Home, label: 'Home' },
+    { path: '/search?q=', icon: Search, label: 'Explore', matchPath: '/search' },
+    { path: '/events', icon: Calendar, label: 'Events' },
+    { path: '/gallery', icon: ImageIcon, label: 'Gallery' },
     { path: '/notifications', icon: Bell, label: 'Notifications', badge: true },
-    { path: '/messages', icon: MessageSquare, label: 'Portal Chat' },
-    { path: '/library', icon: BookOpen, label: 'Resource Vault' },
-    { path: '/virtual-id', icon: CreditCard, label: 'Digital ID Card' },
-    { path: '/settings', icon: Settings, label: 'Advanced Settings' },
+    { path: '/messages', icon: MessageSquare, label: 'Messages' },
+    { path: '/library', icon: BookOpen, label: 'Library' },
+    { path: '/virtual-id', icon: CreditCard, label: 'ID Card' },
+    { path: '/settings', icon: Settings, label: 'Settings' },
   ];
 
   return (
     <aside className="hidden lg:flex flex-col w-[280px] shrink-0 sticky top-24 h-[calc(100vh-7rem)] overflow-y-auto lg:pr-4 pb-12 scrollbar-thin" id="left-sidebar">
       
-      {/* Premium Profile Card */}
       <Link
         to={`/profile/${user?._id}`}
         className="group relative p-[1px] rounded-[2rem] bg-gradient-to-br from-white/10 via-transparent to-white/5 mb-8 overflow-hidden transition-all hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]"
@@ -63,21 +62,17 @@ const LeftSidebar = () => {
               {user?.name}
             </p>
             <p className="text-[10px] font-bold text-slate-500 truncate uppercase tracking-widest mt-0.5">
-              {user?.university || 'Scholar'}
+              {user?.university || 'Student'}
             </p>
           </div>
           <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" />
         </div>
-        {/* Hover Inner Glow */}
-        <div className="absolute inset-0 bg-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
       </Link>
 
-      {/* Navigation Headers */}
       <div className="px-5 mb-4">
-        <h4 className="text-[10px] font-black text-slate-600 uppercase tracking-[0.3em]">Core Directives</h4>
+        <h4 className="text-[10px] font-black text-slate-600 uppercase tracking-[0.3em]">Navigation</h4>
       </div>
 
-      {/* Main Navigation */}
       <nav className="space-y-1.5 mb-10 px-1">
         {mainNav.map((item) => {
           const active = item.matchPath
@@ -129,12 +124,11 @@ const LeftSidebar = () => {
             }`}
           >
             <ShieldCheck className="w-5 h-5" />
-            <span>Admin Terminal</span>
+            <span>Admin</span>
           </Link>
         )}
       </nav>
 
-      {/* Pro Platform Status */}
       <div className="mx-2 mb-10 p-6 rounded-[2.5rem] bg-[#0d1428] border border-white/[0.05] relative overflow-hidden group">
         <div className="absolute -top-10 -right-10 w-24 h-24 bg-blue-600/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700" />
         <div className="relative z-10">
@@ -143,29 +137,28 @@ const LeftSidebar = () => {
                 <Sparkles className="w-4 h-4 text-gradient bg-clip-text text-blue-400" />
              </div>
              <div>
-                <h4 className="font-black text-white text-xs tracking-tighter">Portal Pro</h4>
+                <h4 className="font-black text-white text-xs tracking-tighter">Community</h4>
                 <div className="flex items-center gap-1.5">
                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                   <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest">Active Status</span>
+                   <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest">Online</span>
                 </div>
              </div>
           </div>
           <p className="text-[11px] text-slate-500 font-medium leading-relaxed mb-5">
-            Arsi Aseko University's official student communication environment is online.
+            Arsi Aseko University's student communication platform is online.
           </p>
           <Link to="/library" className="w-full py-2.5 bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 group-hover:border-blue-500/30">
-            Verify Network <ChevronRight className="w-3 h-3 text-blue-500" />
+            Library <ChevronRight className="w-3 h-3 text-blue-500" />
           </Link>
         </div>
       </div>
 
-      {/* Logout Strategy */}
       <button
         onClick={logout}
-        className="flex items-center gap-4 px-6 py-4 text-slate-600 hover:text-rose-400 hover:bg-rose-500/5 rounded-[1.5rem] transition-all text-xs font-black uppercase tracking-[0.15em] mt-auto border border-transparent hover:border-rose-500/10"
+        className="flex items-center gap-4 px-6 py-4 text-slate-600 hover:text-rose-400 hover:bg-rose-500/5 rounded-[1.5rem] transition-all text-xs font-bold tracking-tight mt-auto border border-transparent hover:border-rose-500/10"
       >
         <LogOut className="w-4 h-4" />
-        Terminate Session
+        Sign Out
       </button>
     </aside>
   );
