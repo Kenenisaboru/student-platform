@@ -1,10 +1,8 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useSocket } from '../context/SocketContext';
-import { useAuth } from '../context/AuthContext';
 
 const useTypingIndicator = (recipientId) => {
   const { socket } = useSocket();
-  const { user } = useAuth();
   const [isTyping, setIsTyping] = useState(false);
   const typingTimeoutRef = useRef(null);
 
