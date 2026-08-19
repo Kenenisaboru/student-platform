@@ -311,6 +311,9 @@ const Login = () => {
                       Request Enrollment
                     </Link>
                   </p>
+                  <Link to="/#team" className="mt-4 inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-400/70 hover:text-amber-400 transition-all">
+                    <Sparkles className="w-3 h-3" /> Learn more about this platform
+                  </Link>
                 </div>
               </div>
             </div>
@@ -321,6 +324,31 @@ const Login = () => {
         <div className="absolute bottom-10 left-12 hidden lg:flex flex-col items-center gap-4">
           <div className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em] [writing-mode:vertical-lr] rotate-180">Discovery</div>
           <div className="w-px h-20 bg-linear-to-b from-blue-500/50 to-transparent"></div>
+        </div>
+      </section>
+
+      {/* About Platform Banner */}
+      <section className="py-16 px-4">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-col sm:flex-row items-center justify-between gap-6 p-8 rounded-3xl bg-gradient-to-r from-amber-500/[0.06] to-orange-500/[0.04] border border-amber-500/15"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/25 flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-amber-400" />
+              </div>
+              <div>
+                <h3 className="text-lg font-black text-white">New to Arsi Aseko?</h3>
+                <p className="text-slate-500 text-sm">See what this platform can do for you — student stories, features, and more.</p>
+              </div>
+            </div>
+            <Link to="/#team" className="shrink-0 px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:from-amber-400 hover:to-orange-400 transition-all shadow-lg shadow-amber-500/20 active:scale-95 flex items-center gap-2">
+              About <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </motion.div>
         </div>
       </section>
 
