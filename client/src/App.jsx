@@ -35,8 +35,7 @@ const VerifyEmailPending = lazy(() => import('./pages/VerifyEmailPending'));
 // New Pages
 const Events = lazy(() => import('./pages/Events'));
 const CampusGallery = lazy(() => import('./pages/CampusGallery'));
-const About = lazy(() => import('./pages/About'));
-const PlatformAbout = lazy(() => import('./pages/PlatformAbout'));
+const Landing = lazy(() => import('./pages/Landing'));
 const AcademicCalendar = lazy(() => import('./pages/AcademicCalendar'));
 const Announcements = lazy(() => import('./pages/Announcements'));
 
@@ -69,7 +68,7 @@ const AdminRoute = ({ children }) => {
 
 // Pages that should NOT show the 3-column layout
 const isFullWidthPath = (path) => {
-  const prefixes = ['/login', '/register', '/forgot-password', '/reset-password', '/verify-email', '/verify-email-pending'];
+  const prefixes = ['/', '/login', '/register', '/forgot-password', '/reset-password', '/verify-email', '/verify-email-pending'];
   return prefixes.some(prefix => path.startsWith(prefix));
 };
 
@@ -96,7 +95,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-(--background) text-(--foreground) transition-colors duration-300">
-      <Navbar onMenuToggle={() => setDrawerOpen(true)} />
+      {!(location.pathname === '/' && !user) && <Navbar onMenuToggle={() => setDrawerOpen(true)} />}
       <MobileDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
 
       <Suspense fallback={<LoadingPage />}>
@@ -122,10 +121,8 @@ function AppContent() {
                     <Route path="/admin" element={<AdminRoute><PageTransition><AdminDashboard /></PageTransition></AdminRoute>} />
                     <Route path="/events" element={<ProtectedRoute><PageTransition><Events /></PageTransition></ProtectedRoute>} />
                     <Route path="/gallery" element={<ProtectedRoute><PageTransition><CampusGallery /></PageTransition></ProtectedRoute>} />
-                    <Route path="/about" element={<PageTransition><About /></PageTransition>} />
-                    <Route path="/platform" element={<PageTransition><PlatformAbout /></PageTransition>} />
-                    <Route path="/academic-calendar" element={<ProtectedRoute><PageTransition><AcademicCalendar /></PageTransition></ProtectedRoute>} />
                     <Route path="/announcements" element={<ProtectedRoute><PageTransition><Announcements /></PageTransition></ProtectedRoute>} />
+                    <Route path="/academic-calendar" element={<ProtectedRoute><PageTransition><AcademicCalendar /></PageTransition></ProtectedRoute>} />
                     <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
                   </Routes>
                 </AnimatePresence>
@@ -143,7 +140,7 @@ function AppContent() {
               <Route path="/reset-password/:token" element={<ResetPassword />} />
               <Route path="/verify-email/:token" element={<VerifyEmail />} />
               <Route path="/verify-email-pending" element={<VerifyEmailPending />} />
-              <Route path="/platform" element={<PageTransition><PlatformAbout /></PageTransition>} />
+              <Route path="/" element={<PageTransition><Landing /></PageTransition>} />
               <Route path="*" element={<Navigate to={user ? "/" : "/login"} />} />
             </Routes>
           </main>
