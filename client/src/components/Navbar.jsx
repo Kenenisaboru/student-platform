@@ -1,19 +1,18 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Home, Bell, User, PlusSquare, Search, LogOut, ShieldCheck, Sparkles, Menu, MessageSquare, Database, Cpu, Globe, Zap } from 'lucide-react';
+import { useSocket } from '../context/SocketContext';
+import { Home, Bell, User, PlusSquare, Search, LogOut, ShieldCheck, Sparkles, Menu, MessageSquare, Cpu, Globe, Zap } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
 import API from '../api/axios';
-import sharedSocket, { connectSocket } from '../utils/socket';
 import { getSocketURL } from '../lib/apiUrl';
 import { toast } from 'sonner';
 import ThemeToggle from './ThemeToggle';
 import ProBadge from './ProBadge';
 
-
 const Navbar = ({ onMenuToggle }) => {
   const { user, logout } = useAuth();
+  const { socket } = useSocket();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
@@ -35,20 +34,19 @@ const Navbar = ({ onMenuToggle }) => {
       const notifications = Array.isArray(res.data) ? res.data : [];
       const unread = notifications.filter(n => n && !n.read).length;
       setUnreadCount(unread);
-    }).catch(err => {
-      console.warn('Notifications fetch failed:', err.message);
-      setUnreadCount(0);
-    });
+    }).catch(() => setUnreadCount(0));
 
     API.get('/messages/unread-count').then(res => {
       setUnreadMessages(res.data.unreadCount);
-    }).catch(console.error);
+    }).catch(() => {});
 
-    axios.get(getSocketURL()).then(() => setServerStatus('online')).catch(() => setServerStatus('offline'));
+    import('axios').then(({ default: axios }) => {
+      axios.get(getSocketURL()).then(() => setServerStatus('online')).catch(() => setServerStatus('offline'));
+    });
+  }, [user?._id]);
 
-    if (user?.isVerified || user?.role === 'admin') {
-      connectSocket();
-    }
+  useEffect(() => {
+    if (!socket) return;
 
     const handleNewNotification = (notification) => {
       setUnreadCount(prev => prev + 1);
@@ -62,14 +60,14 @@ const Navbar = ({ onMenuToggle }) => {
       }
     };
 
-    sharedSocket.on('new_notification', handleNewNotification);
-    sharedSocket.on('new_message', handleNewMessage);
+    socket.on('new_notification', handleNewNotification);
+    socket.on('new_message', handleNewMessage);
 
     return () => {
-      sharedSocket.off('new_notification', handleNewNotification);
-      sharedSocket.off('new_message', handleNewMessage);
+      socket.off('new_notification', handleNewNotification);
+      socket.off('new_message', handleNewMessage);
     };
-  }, [user?._id]);
+  }, [socket]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -86,7 +84,6 @@ const Navbar = ({ onMenuToggle }) => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-60 flex flex-col">
-      {/* Narrative Pro Banner */}
       <div className="bg-[#02040a] text-white text-[9px] font-black py-1.5 px-6 hidden sm:flex justify-between items-center z-50 border-b border-white/4 uppercase tracking-[0.25em]">
         <div className="container mx-auto max-w-350 flex justify-between items-center">
           <div className="flex items-center space-x-6">
@@ -110,11 +107,8 @@ const Navbar = ({ onMenuToggle }) => {
         </div>
       </div>
 
-      {/* Main Glass Navbar */}
       <nav className={`transition-all duration-700 border-b ${scrolled ? 'bg-[#0a0f1e]/90 backdrop-blur-3xl border-white/8 py-2 shadow-2xl' : 'bg-[#0a0f1e]/60 backdrop-blur-2xl border-white/4 py-4'}`}>
         <div className="container mx-auto px-6 max-w-350 flex items-center justify-between">
-          
-          {/* Logo & Identity */}
           <div className="flex items-center gap-6">
             {user && (
               <button
@@ -139,7 +133,6 @@ const Navbar = ({ onMenuToggle }) => {
             </Link>
           </div>
 
-          {/* Command Search */}
           {user && (
             <form onSubmit={(e) => { handleSearch(e); setShowMobileSearch(false); }} className="hidden md:flex flex-1 max-w-lg mx-6 lg:mx-12 relative group" role="search">
               <input
@@ -158,11 +151,9 @@ const Navbar = ({ onMenuToggle }) => {
             </form>
           )}
 
-          {/* Action Modules */}
           <div className="flex items-center gap-1 sm:gap-2">
             {user ? (
               <>
-                {/* Mobile Search Button Toggle */}
                 <button
                   onClick={() => setShowMobileSearch(!showMobileSearch)}
                   aria-label="Toggle mobile search bar"
@@ -210,7 +201,6 @@ const Navbar = ({ onMenuToggle }) => {
                   </Link>
                 </div>
 
-                {/* Profile Identity */}
                 <Link 
                   to={`/profile/${user?._id}`} 
                   aria-label={`View your profile, ${user?.name}`}
