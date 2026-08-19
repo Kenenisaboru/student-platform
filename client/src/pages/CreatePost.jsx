@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../api/axios';
+import { useAuth } from '../context/AuthContext';
 import { Loader2, Send, Tag, X, ArrowLeft, PenTool, Sparkles, ImagePlus, ListChecks, Calendar, ShieldCheck, Zap, Layers, Globe, PlusSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -8,6 +9,7 @@ import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 
 const CreatePost = () => {
+  const { user } = useAuth();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [tags, setTags] = useState([]);
@@ -64,7 +66,7 @@ const CreatePost = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !content) {
-      toast.error('Identity required. Title and content must be populated.');
+      toast.error('Title and content are required.');
       return;
     }
 
@@ -86,10 +88,10 @@ const CreatePost = () => {
       }
 
       await API.post('/posts', formData);
-      toast.success('Transmission active. Post published to ecosystem.');
+      toast.success('Post published successfully!');
       navigate('/');
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Transmission failed.');
+    } catch {
+      toast.error('Failed to publish post.');
     } finally {
       setLoading(false);
     }
@@ -129,8 +131,8 @@ const CreatePost = () => {
                </div>
             </div>
             <div>
-              <h1 className="text-4xl font-black text-white tracking-tighter leading-none mb-2">Initialize Transmission.</h1>
-              <p className="text-slate-500 font-bold text-xs uppercase tracking-widest leading-relaxed">Broadcast your academic findings to the university ecosystem.</p>
+              <h1 className="text-4xl font-black text-white tracking-tighter leading-none mb-2">Create Post</h1>
+              <p className="text-slate-500 font-bold text-xs uppercase tracking-widest leading-relaxed">Share your thoughts with the community.</p>
             </div>
           </div>
 
@@ -138,14 +140,14 @@ const CreatePost = () => {
             {/* Title Node */}
             <div className="space-y-3 group">
               <div className="flex items-center justify-between px-1">
-                 <label className="text-[11px] font-black text-slate-500 uppercase tracking-[0.3em]">Transmission Header</label>
-                 <div className="px-2 py-0.5 rounded bg-blue-600/10 text-[9px] font-black text-blue-400 border border-blue-500/10 uppercase tracking-widest">Required Node</div>
+                 <label className="text-[11px] font-black text-slate-500 uppercase tracking-[0.3em]">Title</label>
+                 <div className="px-2 py-0.5 rounded bg-blue-600/10 text-[9px] font-black text-blue-400 border border-blue-500/10 uppercase tracking-widest">Required</div>
               </div>
               <div className="relative">
                  <input 
                     type="text" required 
                     className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.08] rounded-2xl py-5 px-6 focus:border-blue-500/40 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-black text-white text-xl tracking-tight placeholder:text-slate-700 shadow-inner" 
-                    placeholder="Enter discussion identifier..." 
+                     placeholder="Enter a title..."
                     value={title} 
                     onChange={(e) => setTitle(e.target.value)} 
                  />
@@ -154,7 +156,7 @@ const CreatePost = () => {
 
             {/* Content Core */}
             <div className="space-y-3">
-              <label className="text-[11px] font-black text-slate-500 uppercase tracking-[0.3em] ml-1">Knowledge Core (Rich Text)</label>
+              <label className="text-[11px] font-black text-slate-500 uppercase tracking-[0.3em] ml-1">Content</label>
               <div className="quill-pro-wrapper overflow-hidden rounded-[2rem] border border-white/[0.08] bg-[#0d1428]/50 shadow-inner">
                 <ReactQuill 
                   ref={quillRef}
@@ -162,7 +164,7 @@ const CreatePost = () => {
                   value={content} 
                   onChange={setContent}
                   modules={modules}
-                  placeholder="Analyze data, ask questions, or broadcast collaborative findings..."
+                   placeholder="Write something..."
                 />
               </div>
             </div>
@@ -172,7 +174,7 @@ const CreatePost = () => {
                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full blur-3xl pointer-events-none"></div>
                
                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6">
-                 <h4 className="text-white font-black text-sm uppercase tracking-widest mr-auto w-full sm:w-auto border-b border-white/5 sm:border-0 pb-3 sm:pb-0 mb-2 sm:mb-0">Asset Integration</h4>
+                 <h4 className="text-white font-black text-sm uppercase tracking-widest mr-auto w-full sm:w-auto border-b border-white/5 sm:border-0 pb-3 sm:pb-0 mb-2 sm:mb-0">Media</h4>
                  <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                     <button 
                         type="button" 
@@ -180,7 +182,7 @@ const CreatePost = () => {
                         className={`flex items-center gap-3 px-5 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${image ? 'bg-blue-600 text-white border-white/20' : 'bg-white/[0.03] border-white/10 text-slate-500 hover:text-white hover:bg-white/[0.05]'}`}
                     >
                         <ImagePlus className="w-4 h-4" />
-                        {image ? 'Visual Node Sync' : 'Link Visual Asset'}
+                        {image ? 'Image Attached' : 'Add Image'}
                         <input id="image-upload" type="file" className="hidden" accept="image/*" onChange={handleImageSelect} />
                     </button>
 
@@ -190,7 +192,7 @@ const CreatePost = () => {
                         className={`flex items-center gap-3 px-5 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${showPoll ? 'bg-indigo-600 text-white border-white/20' : 'bg-white/[0.03] border-white/10 text-slate-500 hover:text-white hover:bg-white/[0.05]'}`}
                     >
                         <ListChecks className="w-4 h-4" />
-                        {showPoll ? 'Terminal Poll Off' : 'Engage Poll Node'}
+                        {showPoll ? 'Remove Poll' : 'Add Poll'}
                     </button>
                  </div>
                </div>
@@ -201,7 +203,7 @@ const CreatePost = () => {
                         <img src={imagePreview} alt="Preview" className="w-full h-64 object-cover" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity flex items-end p-6">
                            <button type="button" onClick={removeImage} className="flex items-center gap-2 px-4 py-2 bg-rose-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl">
-                              <X className="w-4 h-4" /> Purge Asset
+                               <X className="w-4 h-4" /> Remove
                            </button>
                         </div>
                     </motion.div>
@@ -213,17 +215,17 @@ const CreatePost = () => {
                         
                         <div className="space-y-4">
                             <label className="text-[10px] font-black text-indigo-400 uppercase tracking-widest ml-1 flex items-center gap-2">
-                               <Globe className="w-3.5 h-3.5" /> Opinion Parameter Question
-                            </label>
-                            <input type="text" className="w-full bg-black/40 border border-white/[0.08] rounded-2xl py-4 px-6 text-white font-bold text-sm focus:border-indigo-500/40 outline-none shadow-inner" placeholder="Enter query for community analysis..." value={pollQuestion} onChange={(e) => setPollQuestion(e.target.value)} />
+                               <Globe className="w-3.5 h-3.5" /> Poll Question
+                             </label>
+                             <input type="text" className="w-full bg-black/40 border border-white/[0.08] rounded-2xl py-4 px-6 text-white font-bold text-sm focus:border-indigo-500/40 outline-none shadow-inner" placeholder="Ask a question..." value={pollQuestion} onChange={(e) => setPollQuestion(e.target.value)} />
                         </div>
                         
                         <div className="space-y-3">
-                            <label className="text-[10px] font-black text-indigo-400 uppercase tracking-widest ml-1">Polling Node Options (Minimum: 2)</label>
+                            <label className="text-[10px] font-black text-indigo-400 uppercase tracking-widest ml-1">Options (minimum 2)</label>
                             {pollOptions.map((opt, idx) => (
                               <div key={idx} className="flex gap-3 items-center group/opt">
                                 <div className="w-8 h-8 rounded-lg bg-indigo-600/20 flex items-center justify-center text-[10px] font-black text-indigo-400 border border-indigo-500/10">0{idx+1}</div>
-                                <input type="text" className="flex-1 bg-black/20 border border-white/[0.08] group-hover/opt:border-indigo-500/20 rounded-xl py-3 px-6 text-white font-bold text-sm focus:border-indigo-500/40 outline-none transition-all shadow-inner" placeholder={`Coordinate ${idx + 1}`} value={opt} onChange={(e) => handlePollOptionChange(idx, e.target.value)} />
+                                <input type="text" className="flex-1 bg-black/20 border border-white/[0.08] group-hover/opt:border-indigo-500/20 rounded-xl py-3 px-6 text-white font-bold text-sm focus:border-indigo-500/40 outline-none transition-all shadow-inner" placeholder={`Option ${idx + 1}`} value={opt} onChange={(e) => handlePollOptionChange(idx, e.target.value)} />
                                 {pollOptions.length > 2 && (
                                   <button type="button" onClick={() => removePollOption(idx)} className="p-2.5 text-slate-700 hover:text-rose-500 transition-colors"><X className="w-4.5 h-4.5" /></button>
                                 )}
@@ -231,13 +233,13 @@ const CreatePost = () => {
                             ))}
                             {pollOptions.length < 6 && (
                               <button type="button" onClick={handleAddPollOption} className="mt-2 flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-500/5 hover:bg-indigo-500/10 text-indigo-400 text-[10px] font-black uppercase tracking-widest transition-all">
-                                <PlusSquare className="w-4 h-4" /> Expand Polling Nodes
+                                <PlusSquare className="w-4 h-4" /> Add Option
                               </button>
                             )}
                         </div>
 
                         <div className="pt-4 border-t border-indigo-500/10">
-                            <label className="text-[10px] font-black text-indigo-400 uppercase tracking-widest ml-1 mb-3 block">Signal Expiration Timeframe</label>
+                            <label className="text-[10px] font-black text-indigo-400 uppercase tracking-widest ml-1 mb-3 block">Poll End Date</label>
                             <div className="relative max-w-sm">
                                 <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-500" />
                                 <input type="datetime-local" className="w-full pl-12 pr-6 py-3.5 bg-black/40 border border-white/[0.08] rounded-2xl text-white font-bold text-xs focus:border-indigo-500/40 outline-none shadow-inner" value={pollEndsAt} onChange={(e) => setPollEndsAt(e.target.value)} />
@@ -250,12 +252,12 @@ const CreatePost = () => {
 
             {/* Tag Hub */}
             <div className="space-y-4">
-              <label className="text-[11px] font-black text-slate-500 uppercase tracking-[0.3em] ml-1">Meta Categorization / Tags</label>
+              <label className="text-[11px] font-black text-slate-500 uppercase tracking-[0.3em] ml-1">Tags</label>
               <div className="relative group/tags">
                 <input 
                     type="text" 
                     className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.08] rounded-2xl py-4.5 pl-14 pr-6 focus:border-blue-500/40 outline-none transition-all text-white font-black text-sm tracking-tight placeholder:text-slate-700 shadow-inner" 
-                    placeholder="Enter Meta Keys (press Enter)..." 
+                    placeholder="Add tags (press Enter)..." 
                     value={tagInput} 
                     onChange={(e) => setTagInput(e.target.value)} 
                     onKeyDown={handleAddTag} 
@@ -276,7 +278,7 @@ const CreatePost = () => {
                       <button type="button" onClick={() => removeTag(index)} className="hover:text-white transition-colors"><X className="w-3.5 h-3.5" /></button>
                     </motion.div>
                   ))}
-                  {tags.length === 0 && <p className="text-[10px] font-black text-slate-800 uppercase tracking-widest px-1 italic">No Meta categorization applied</p>}
+                  {tags.length === 0 && <p className="text-[10px] font-black text-slate-800 uppercase tracking-widest px-1 italic">No tags added</p>}
                 </div>
               </AnimatePresence>
             </div>
@@ -287,7 +289,7 @@ const CreatePost = () => {
                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
                       <ShieldCheck className="w-4 h-4" />
                    </div>
-                   <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Authorized Session Active</p>
+                   <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Logged in as {user?.email}</p>
                 </div>
                 
                 <motion.button 
@@ -297,7 +299,7 @@ const CreatePost = () => {
                     disabled={loading}
                     className="w-full sm:w-auto bg-white text-[#060a14] px-12 py-4.5 rounded-[1.8rem] flex items-center justify-center font-black shadow-2xl shadow-white/5 disabled:opacity-30 transition-all text-xs uppercase tracking-[0.2em] border border-white/20"
                 >
-                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Send className="w-4 h-4 mr-3" /> Commit Transmission</>}
+                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Send className="w-4 h-4 mr-3" /> Publish</>}
                 </motion.button>
             </div>
           </form>
