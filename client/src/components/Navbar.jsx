@@ -89,11 +89,11 @@ const Navbar = ({ onMenuToggle }) => {
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-2 text-blue-400 group cursor-default">
               <Cpu className="w-3 h-3 group-hover:animate-pulse" />
-              <span>Core Terminal Active</span>
+              <span>Online</span>
             </div>
             <div className="flex items-center space-x-2 text-slate-600">
               <Globe className="w-3 h-3" />
-              <span>Universal Access Point</span>
+              <span>Arsi Aseko University</span>
             </div>
           </div>
           <div className="flex items-center space-x-6 text-slate-500">
@@ -102,7 +102,7 @@ const Navbar = ({ onMenuToggle }) => {
                 <span className="group-hover:text-slate-300 transition-colors">Server: {serverStatus}</span>
              </div>
              <span className="opacity-10 text-white">|</span>
-             <Link to="/settings" className="hover:text-blue-400 transition-colors">System Prefs</Link>
+             <Link to="/settings" className="hover:text-blue-400 transition-colors">Settings</Link>
           </div>
         </div>
       </div>
@@ -128,7 +128,7 @@ const Navbar = ({ onMenuToggle }) => {
               </div>
               <div className="hidden xl:flex flex-col">
                 <span className="text-lg font-black text-white leading-none tracking-tighter">Arsi Aseko <span className="text-blue-500">University</span></span>
-                <span className="text-[10px] font-black text-slate-600 uppercase tracking-[0.3em] mt-1">Student Command Center</span>
+                <span className="text-[10px] font-black text-slate-600 uppercase tracking-[0.3em] mt-1">Student Portal</span>
               </div>
             </Link>
           </div>
@@ -137,7 +137,7 @@ const Navbar = ({ onMenuToggle }) => {
             <form onSubmit={(e) => { handleSearch(e); setShowMobileSearch(false); }} className="hidden md:flex flex-1 max-w-lg mx-6 lg:mx-12 relative group" role="search">
               <input
                 type="text"
-                placeholder="Query database for students, archives, or tags..."
+                placeholder="Search students, posts, or tags..."
                 aria-label="Search students, archives, or tags"
                 className="w-full bg-white/2 hover:bg-white/4 border border-white/6 hover:border-white/12 rounded-2xl py-3 pl-12 pr-6 text-sm focus:bg-white/5 focus:border-blue-500/40 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all duration-500 font-bold text-white placeholder:text-slate-700 shadow-inner"
                 value={searchQuery}
@@ -192,7 +192,7 @@ const Navbar = ({ onMenuToggle }) => {
                   </Link>
                   <Link 
                     to="/create-post" 
-                    aria-label="Initialize Transmission (Create Post)"
+                    aria-label="Create Post"
                     aria-current={isActive('/create-post') ? 'page' : undefined}
                     className={`p-2.5 rounded-xl transition-all relative ${isActive('/create-post') ? 'text-white' : 'text-slate-600 hover:text-white'}`}
                   >
@@ -246,7 +246,7 @@ const Navbar = ({ onMenuToggle }) => {
                   Sign In
                 </Link>
                 <Link to="/register" className="hidden sm:block px-6 py-3 text-[11px] font-black uppercase tracking-widest bg-white text-[#060a14] rounded-2xl hover:bg-blue-50 transition-all shadow-xl active:scale-95">
-                  Authorize Account
+                  Sign Up
                 </Link>
               </div>
             )}
