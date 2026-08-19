@@ -71,7 +71,7 @@ const PostCard = ({ post: initialPost, onDelete }) => {
       const { data } = await API.post(`/users/save/${post._id}`);
       setBookmarked(data.isSaved);
       toast.success(data.isSaved ? 'Saved to bookmarks!' : 'Removed from bookmarks');
-    } catch (err) {
+    } catch {
       toast.error('Failed to update bookmark');
     }
   };
@@ -126,7 +126,6 @@ const PostCard = ({ post: initialPost, onDelete }) => {
 
   const isAuthor = user?._id === post.author?._id;
   const isAdmin = user?.role === 'admin';
-  const hasVoted = post.poll?.options?.some(opt => opt.votes?.includes(user?._id));
   const totalVotes = post.poll?.options?.reduce((acc, opt) => acc + (opt.votes?.length || 0), 0) || 0;
 
   return (
