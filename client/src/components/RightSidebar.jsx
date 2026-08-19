@@ -68,40 +68,38 @@ const RightSidebar = () => {
   return (
     <aside className="hidden xl:flex flex-col w-[300px] shrink-0 sticky top-24 h-[calc(100vh-7rem)] overflow-y-auto pl-4 pb-12 space-y-6 scrollbar-thin" id="right-sidebar">
       
-      {/* High-Performance Stats Bento */}
       <div className="p-6 rounded-[2.5rem] glass border border-white/[0.05] relative overflow-hidden group">
         <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl group-hover:bg-blue-500/10 transition-colors duration-700" />
         <div className="flex items-center gap-3 mb-6">
           <div className="w-9 h-9 bg-blue-600/10 rounded-xl flex items-center justify-center border border-blue-600/20">
             <BarChart3 className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
           </div>
-          <h3 className="font-black text-white text-xs uppercase tracking-[0.2em]">Platform Metrics</h3>
+          <h3 className="font-black text-white text-xs uppercase tracking-[0.2em]">Stats</h3>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04] hover:border-blue-500/20 transition-all">
-            <p className="text-2xl font-black text-white tracking-tighter tabular-nums">{stats.totalStudents || '1.2k'}</p>
-            <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest mt-1">Total Scholars</p>
+            <p className="text-2xl font-black text-white tracking-tighter tabular-nums">{stats.totalStudents || '0'}</p>
+            <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mt-1">Students</p>
           </div>
           <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04] hover:border-blue-500/20 transition-all">
-            <p className="text-2xl font-black text-white tracking-tighter tabular-nums">{stats.totalPosts || '4.5k'}</p>
-            <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest mt-1">Discussions</p>
+            <p className="text-2xl font-black text-white tracking-tighter tabular-nums">{stats.totalPosts || '0'}</p>
+            <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mt-1">Posts</p>
           </div>
         </div>
       </div>
 
-      {/* Live Member Pulse */}
       <div className="p-6 rounded-[2.5rem] glass border border-white/[0.05] relative overflow-hidden group">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-emerald-600/10 rounded-xl flex items-center justify-center border border-emerald-600/20">
               <Users className="w-4 h-4 text-emerald-400" />
             </div>
-            <h3 className="font-black text-white text-xs uppercase tracking-[0.2em]">Active Pulse</h3>
+            <h3 className="font-black text-white text-xs uppercase tracking-[0.2em]">Online</h3>
           </div>
           <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/10">
-            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-            <span className="text-[9px] font-black text-emerald-400 uppercase tracking-tighter">Live Hub</span>
+            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+            <span className="text-[9px] font-black text-emerald-400 uppercase tracking-tighter">Live</span>
           </div>
         </div>
 
@@ -144,7 +142,7 @@ const RightSidebar = () => {
                   </div>
                   <p className="text-[9px] font-bold text-slate-600 truncate uppercase tracking-widest mt-0.5">
                     {u.isOnline ? (
-                      <span className="text-emerald-500/80">Broadcasting Now</span>
+                      <span className="text-emerald-500/80">Online</span>
                     ) : (
                        <span className="flex items-center gap-1">
                           <Clock className="w-2.5 h-2.5" />
@@ -155,18 +153,17 @@ const RightSidebar = () => {
                 </div>
               </Link>
             ))}
-            {topUsers.length === 0 && <p className="text-slate-700 text-[11px] font-black uppercase text-center py-4 tracking-widest italic">Quiet Terminal</p>}
+            {topUsers.length === 0 && <p className="text-slate-700 text-[11px] font-bold uppercase text-center py-4 tracking-widest">No one online</p>}
           </div>
         )}
       </div>
 
-      {/* Narrative Trending Tags */}
       <div className="p-6 rounded-[2.5rem] glass border border-white/[0.05] relative overflow-hidden group">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-9 h-9 bg-purple-600/10 rounded-xl flex items-center justify-center border border-purple-600/20">
-            <Sparkles className="w-4 h-4 text-purple-400 text-gradient" />
+            <TrendingUp className="w-4 h-4 text-purple-400" />
           </div>
-          <h3 className="font-black text-white text-xs uppercase tracking-[0.2em]">Viral Topics</h3>
+          <h3 className="font-black text-white text-xs uppercase tracking-[0.2em]">Trending</h3>
         </div>
 
         <div className="space-y-1">
@@ -189,18 +186,17 @@ const RightSidebar = () => {
               </Link>
             ))
           ) : (
-            <p className="text-slate-700 text-[11px] font-black uppercase text-center py-4 tracking-widest italic">Feed Inactive</p>
+            <p className="text-slate-700 text-[11px] font-bold uppercase text-center py-4 tracking-widest">Nothing trending yet</p>
           )}
         </div>
       </div>
 
-      {/* Department Dominance Leaderboard */}
       <div className="p-6 rounded-[2.5rem] glass border border-white/[0.05] relative overflow-hidden group">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-9 h-9 bg-amber-600/10 rounded-xl flex items-center justify-center border border-amber-600/20">
             <Trophy className="w-4 h-4 text-amber-400" />
           </div>
-          <h3 className="font-black text-white text-xs uppercase tracking-[0.2em]">Campus Dominance</h3>
+          <h3 className="font-black text-white text-xs uppercase tracking-[0.2em]">Departments</h3>
         </div>
 
         <div className="space-y-5">
@@ -223,12 +219,11 @@ const RightSidebar = () => {
               </div>
             ))
           ) : (
-            <p className="text-slate-700 text-[11px] font-black uppercase text-center py-4 tracking-widest italic">Calibrating Ranks...</p>
+            <p className="text-slate-700 text-[11px] font-bold uppercase text-center py-4 tracking-widest">No data yet</p>
           )}
         </div>
       </div>
 
-      {/* PWA Pro Mobile Card */}
       {isInstallable && (
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -238,10 +233,10 @@ const RightSidebar = () => {
           <div className="absolute -right-6 -top-6 w-24 h-24 bg-blue-500/10 rounded-full blur-3xl" />
           <div className="flex items-center gap-3 mb-4">
             <Smartphone className="w-5 h-5 text-blue-400" />
-            <h3 className="font-black text-white text-xs uppercase tracking-[0.2em]">Native Portal</h3>
+            <h3 className="font-black text-white text-xs uppercase tracking-[0.2em]">Mobile App</h3>
           </div>
           <p className="text-[11px] text-slate-500 leading-relaxed mb-6 font-medium">
-            Transform your browser session into a high-performance native application.
+            Install the app for a better experience on your phone.
           </p>
           <button
             onClick={() => {
@@ -255,19 +250,18 @@ const RightSidebar = () => {
             }}
             className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-blue-600/20 active:scale-95 border border-white/10"
           >
-            Deploy Native App
+            Install App
           </button>
         </motion.div>
       )}
 
-      {/* Pro Study Hub Card */}
       <div className="p-6 rounded-[2.5rem] bg-gradient-to-br from-indigo-600/10 to-purple-600/10 border border-indigo-500/20 relative overflow-hidden group">
         <div className="flex items-center gap-3 mb-4">
           <BookOpen className="w-5 h-5 text-indigo-400" />
-          <h3 className="font-black text-white text-xs uppercase tracking-[0.2em]">Research Core</h3>
+          <h3 className="font-black text-white text-xs uppercase tracking-[0.2em]">Library</h3>
         </div>
         <p className="text-[11px] text-slate-500 leading-relaxed mb-6 font-medium">
-          Access the community-driven database of validated research and course materials.
+          Browse shared study materials and course resources.
         </p>
         <Link
           to="/library"
@@ -279,8 +273,7 @@ const RightSidebar = () => {
 
       <div className="px-6">
         <p className="text-[9px] text-slate-700 font-black uppercase tracking-[0.4em] leading-relaxed">
-          Arsi Aseko University Platform <br />
-          Enterprise Student Environment
+          Arsi Aseko University Platform
         </p>
       </div>
     </aside>
