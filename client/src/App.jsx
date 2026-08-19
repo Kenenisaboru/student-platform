@@ -36,6 +36,7 @@ const VerifyEmailPending = lazy(() => import('./pages/VerifyEmailPending'));
 const Events = lazy(() => import('./pages/Events'));
 const CampusGallery = lazy(() => import('./pages/CampusGallery'));
 const About = lazy(() => import('./pages/About'));
+const PlatformAbout = lazy(() => import('./pages/PlatformAbout'));
 const AcademicCalendar = lazy(() => import('./pages/AcademicCalendar'));
 const Announcements = lazy(() => import('./pages/Announcements'));
 
@@ -122,6 +123,7 @@ function AppContent() {
                     <Route path="/events" element={<ProtectedRoute><PageTransition><Events /></PageTransition></ProtectedRoute>} />
                     <Route path="/gallery" element={<ProtectedRoute><PageTransition><CampusGallery /></PageTransition></ProtectedRoute>} />
                     <Route path="/about" element={<PageTransition><About /></PageTransition>} />
+                    <Route path="/platform" element={<ProtectedRoute><PageTransition><PlatformAbout /></PageTransition></ProtectedRoute>} />
                     <Route path="/academic-calendar" element={<ProtectedRoute><PageTransition><AcademicCalendar /></PageTransition></ProtectedRoute>} />
                     <Route path="/announcements" element={<ProtectedRoute><PageTransition><Announcements /></PageTransition></ProtectedRoute>} />
                     <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
