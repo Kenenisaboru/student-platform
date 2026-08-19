@@ -74,8 +74,30 @@ exports.createComment = async (req, res) => {
       // We don't return an error to the user because the comment was already saved
     }
 
-    const populatedComment = await comment.populate('author', 'name profilePicture');
+    const populatedComment = await comment.populate('author', 'name profilePicture role isVerified');
     res.status(201).json(populatedComment);
+
+    // Emit real-time comment event
+    try {
+      const io = req.app.get('socketio');
+      if (io) {
+        const commentPayload = populatedComment.toObject();
+        // Notify post author
+        if (post && post.author.toString() !== req.user._id.toString()) {
+          io.to(post.author.toString()).emit('new_comment', {
+            postId,
+            comment: commentPayload
+          });
+        }
+        // Broadcast to anyone viewing the same post
+        io.to(postId.toString()).emit('new_comment', {
+          postId,
+          comment: commentPayload
+        });
+      }
+    } catch (socketError) {
+      console.error('Socket emit error:', socketError);
+    }
   } catch (error) {
     console.error('Create comment error:', error);
     res.status(500).json({ message: error.message });
@@ -98,8 +120,8 @@ exports.getCommentsByPost = async (req, res) => {
     const comments = await Comment.find({ 
       post: req.params.postId, 
       parentComment: null 
-    })
-      .populate('author', 'name profilePicture')
+    }).hint({ post: 1, createdAt: -1 })
+      .populate('author', 'name profilePicture role isVerified')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
@@ -109,8 +131,8 @@ exports.getCommentsByPost = async (req, res) => {
     const replies = await Comment.find({
       post: req.params.postId,
       parentComment: { $in: commentIds }
-    })
-      .populate('author', 'name profilePicture')
+    }).hint({ post: 1, parentComment: 1 })
+      .populate('author', 'name profilePicture role isVerified')
       .sort({ createdAt: 1 });
 
     // Attach replies to their parent comments
@@ -176,6 +198,25 @@ exports.likeComment = async (req, res) => {
 
     await comment.save();
     res.json(comment);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.updateComment = async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.id);
+    if (!comment) return res.status(404).json({ message: 'Comment not found' });
+
+    if (comment.author.toString() !== req.user._id.toString()) {
+      return res.status(401).json({ message: 'User not authorized' });
+    }
+
+    comment.content = req.body.content;
+    await comment.save();
+
+    const populatedComment = await comment.populate('author', 'name profilePicture role isVerified');
+    res.json(populatedComment);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
