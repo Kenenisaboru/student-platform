@@ -3,7 +3,6 @@ import API from '../api/axios';
 import PostCard from '../components/PostCard';
 import { Plus, Calendar, Zap, MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { PostSkeleton } from '../components/Skeleton';
 import { toast } from 'sonner';
@@ -77,7 +76,7 @@ const Home = () => {
         await API.delete(`/posts/${id}`);
         setPosts(posts.filter(p => p._id !== id));
         toast.success('Post deleted successfully');
-      } catch (err) {
+      } catch {
         toast.error('Failed to delete post');
       }
     }
