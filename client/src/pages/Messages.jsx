@@ -148,7 +148,7 @@ const Messages = () => {
 
         const msgRes = await API.get(`/messages/${conversation._id}`);
         setMessages(msgRes.data);
-      } catch (err) {
+      } catch {
         toast.error('Could not load messages');
         navigate('/messages');
       } finally {
@@ -207,7 +207,7 @@ const Messages = () => {
           })
           .sort((a, b) => new Date(b.lastMessageAt) - new Date(a.lastMessageAt))
       );
-    } catch (err) {
+    } catch {
       toast.error('Failed to send message');
     }
   };
@@ -264,7 +264,7 @@ const Messages = () => {
       setSelectedUsers([]);
       navigate(`/messages/${data._id}`);
       toast.success('Group created');
-    } catch (err) {
+    } catch {
       toast.error('Failed to create group');
     } finally {
       setCreatingGroup(false);
@@ -302,7 +302,7 @@ const Messages = () => {
       setParticipantSearch('');
       setParticipantSearchResults([]);
       toast.success('Members added');
-    } catch (err) {
+    } catch {
       toast.error('Failed to add members');
     }
   };
@@ -315,7 +315,7 @@ const Messages = () => {
       setActiveConversation(data);
       setConversations((prev) => prev.map((c) => (c._id === data._id ? data : c)));
       toast.success('Member removed');
-    } catch (err) {
+    } catch {
       toast.error('Failed to remove member');
     }
   };
