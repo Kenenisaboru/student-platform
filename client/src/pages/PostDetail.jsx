@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import API from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import PostCard from '../components/PostCard';
-import { Loader2, Send, Trash2, MessageSquare, ArrowLeft, CornerDownRight, Reply, Heart } from 'lucide-react';
+import { Loader2, Send, Trash2, MessageSquare, ArrowLeft, CornerDownRight, Reply, Heart, Pencil, X, AlertTriangle } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -17,12 +17,16 @@ const PostDetail = () => {
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState('');
   const [replyText, setReplyText] = useState('');
-  const [replyTo, setReplyTo] = useState(null); // comment ID
+  const [replyTo, setReplyTo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [editingComment, setEditingComment] = useState(null);
+  const [editText, setEditText] = useState('');
+  const editRef = useRef(null);
 
   const fetchPost = useCallback(async () => {
     try {
@@ -54,6 +58,13 @@ const PostDetail = () => {
     fetchComments(1);
   }, [fetchPost, fetchComments]);
 
+  useEffect(() => {
+    if (editingComment && editRef.current) {
+      editRef.current.focus();
+      editRef.current.setSelectionRange(editRef.current.value.length, editRef.current.value.length);
+    }
+  }, [editingComment]);
+
   const handleComment = async (e) => {
     e.preventDefault();
     const text = replyTo ? replyText : commentText;
@@ -67,7 +78,6 @@ const PostDetail = () => {
       });
 
       if (replyTo) {
-        // Find parent and add to its replies locally
         setComments(prev => prev.map(c => {
           if (c._id === replyTo) {
             return { ...c, replies: [...(c.replies || []), data] };
@@ -90,8 +100,13 @@ const PostDetail = () => {
     }
   };
 
-  const deleteComment = async (commentId, parentId = null) => {
-    if (!window.confirm('Are you sure you want to delete this comment?')) return;
+  const confirmDelete = (commentId, parentId = null) => {
+    setDeleteTarget({ commentId, parentId });
+  };
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    const { commentId, parentId } = deleteTarget;
     try {
       await API.delete(`/comments/${commentId}`);
       
@@ -106,14 +121,51 @@ const PostDetail = () => {
         setComments(prev => prev.filter(c => c._id !== commentId));
       }
       
-      fetchPost(); // Refresh post to get updated comment count (cascading deletes)
+      fetchPost();
       toast.success('Comment deleted');
     } catch (err) {
       toast.error('Failed to delete comment');
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
-  const handleLikeComment = async (commentId, parentId = null) => {
+  const startEditing = (comment) => {
+    setEditingComment(comment._id);
+    setEditText(comment.content);
+  };
+
+  const cancelEditing = () => {
+    setEditingComment(null);
+    setEditText('');
+  };
+
+  const saveEdit = async (commentId, parentId = null) => {
+    if (!editText.trim()) return;
+    try {
+      const { data } = await API.put(`/comments/${commentId}`, { content: editText });
+
+      const updateInList = (list) => list.map(c => {
+        if (c._id === commentId) return { ...c, content: data.content, updatedAt: data.updatedAt };
+        if (c.replies) return { ...c, replies: updateInList(c.replies) };
+        return c;
+      });
+
+      setComments(updateInList(comments));
+      setEditingComment(null);
+      setEditText('');
+      toast.success('Comment updated');
+    } catch (err) {
+      toast.error('Failed to update comment');
+    }
+  };
+
+  const handleEditKeyDown = (e, commentId, parentId) => {
+    if (e.key === 'Escape') cancelEditing();
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) saveEdit(commentId, parentId);
+  };
+
+  const handleLikeComment = async (commentId) => {
     try {
       const { data } = await API.post(`/comments/${commentId}/like`);
       
@@ -137,10 +189,17 @@ const PostDetail = () => {
 
   if (!post) return (
     <div className="max-w-2xl mx-auto py-20 px-4 text-center">
-      <h2 className="text-2xl font-bold text-white mb-4">Post not found</h2>
-      <button onClick={() => navigate('/')} className="btn-outline inline-flex items-center"><ArrowLeft className="w-4 h-4 mr-2" /> Back to Feed</button>
+      <p className="text-slate-400 text-sm mb-4">Post not found.</p>
+      <button onClick={() => navigate('/')} className="text-blue-400 hover:text-blue-300 text-sm font-medium inline-flex items-center">
+        <ArrowLeft className="w-4 h-4 mr-1" /> Back to Feed
+      </button>
     </div>
   );
+
+  const isEdited = (comment) => {
+    if (!comment.updatedAt || !comment.createdAt) return false;
+    return new Date(comment.updatedAt).getTime() - new Date(comment.createdAt).getTime() > 1000;
+  };
 
   const CommentItem = ({ comment, isReply = false, parentId = null }) => (
     <div className={`flex space-x-3 group ${isReply ? 'mt-3 pl-8 sm:pl-12 relative' : ''}`}>
@@ -153,41 +212,80 @@ const PostDetail = () => {
                <span className="font-bold text-white text-[13px]">{comment.author.name}</span>
                {comment.author._id === post.author._id && <span className="text-[9px] bg-blue-500/10 text-blue-400 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">Author</span>}
             </div>
-            <p className="text-[10px] text-slate-600 font-medium">{formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}</p>
+            <div className="flex items-center gap-2">
+              {isEdited(comment) && <span className="text-[9px] text-slate-600 italic">(edited)</span>}
+              <p className="text-[10px] text-slate-600 font-medium">{formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}</p>
+            </div>
           </div>
-          <p className="text-slate-400 text-sm leading-relaxed">{comment.content}</p>
+          
+          {editingComment === comment._id ? (
+            <div>
+              <textarea
+                ref={editRef}
+                value={editText}
+                onChange={(e) => setEditText(e.target.value)}
+                onKeyDown={(e) => handleEditKeyDown(e, comment._id, parentId)}
+                className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white placeholder:text-slate-600 outline-none focus:border-blue-500/30 resize-none"
+                rows={3}
+              />
+              <div className="flex items-center gap-2 mt-2 justify-end">
+                <button onClick={cancelEditing} className="text-[11px] text-slate-500 hover:text-slate-300 font-medium px-3 py-1 rounded-lg transition-colors">
+                  Cancel
+                </button>
+                <button
+                  onClick={() => saveEdit(comment._id, parentId)}
+                  disabled={!editText.trim()}
+                  className="text-[11px] bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1 rounded-lg disabled:opacity-40 transition-colors"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          ) : (
+            <p className="text-slate-400 text-sm leading-relaxed">{comment.content}</p>
+          )}
         </div>
         
-        <div className="flex items-center mt-1.5 ml-2 space-x-4">
-          <button 
-            onClick={() => handleLikeComment(comment._id, parentId)}
-            className={`flex items-center gap-1.5 text-[11px] font-bold tracking-tight transition-colors ${comment.likes?.includes(user?._id) ? 'text-pink-400' : 'text-slate-600 hover:text-slate-400'}`}
-          >
-            <Heart className={`w-3.5 h-3.5 ${comment.likes?.includes(user?._id) ? 'fill-current' : ''}`} />
-            {comment.likes?.length || 0}
-          </button>
-
-          {!isReply && (
+        {editingComment !== comment._id && (
+          <div className="flex items-center mt-1.5 ml-2 space-x-4">
             <button 
-              onClick={() => setReplyTo(replyTo === comment._id ? null : comment._id)}
-              className={`flex items-center gap-1.5 text-[11px] font-bold tracking-tight transition-colors ${replyTo === comment._id ? 'text-blue-400' : 'text-slate-600 hover:text-blue-400'}`}
+              onClick={() => handleLikeComment(comment._id)}
+              className={`flex items-center gap-1.5 text-[11px] font-bold tracking-tight transition-colors ${comment.likes?.includes(user?._id) ? 'text-pink-400' : 'text-slate-600 hover:text-slate-400'}`}
             >
-              <Reply className="w-3.5 h-3.5" />
-              Reply
+              <Heart className={`w-3.5 h-3.5 ${comment.likes?.includes(user?._id) ? 'fill-current' : ''}`} />
+              {comment.likes?.length || 0}
             </button>
-          )}
 
-          {(user?._id === comment.author._id || user?.role === 'admin') && (
-            <button 
-              onClick={() => deleteComment(comment._id, parentId)}
-              className="text-[10px] text-red-400/50 hover:text-red-400 font-bold transition-colors uppercase tracking-widest"
-            >
-              Delete
-            </button>
-          )}
-        </div>
+            {!isReply && (
+              <button 
+                onClick={() => setReplyTo(replyTo === comment._id ? null : comment._id)}
+                className={`flex items-center gap-1.5 text-[11px] font-bold tracking-tight transition-colors ${replyTo === comment._id ? 'text-blue-400' : 'text-slate-600 hover:text-blue-400'}`}
+              >
+                <Reply className="w-3.5 h-3.5" />
+                Reply
+              </button>
+            )}
 
-        {/* Inline Reply Form */}
+            {user?._id === comment.author._id && (
+              <button 
+                onClick={() => startEditing(comment)}
+                className="text-[10px] text-slate-600 hover:text-blue-400 font-bold transition-colors uppercase tracking-widest"
+              >
+                <Pencil className="w-3 h-3" />
+              </button>
+            )}
+
+            {(user?._id === comment.author._id || user?.role === 'admin') && (
+              <button 
+                onClick={() => confirmDelete(comment._id, parentId)}
+                className="text-[10px] text-slate-600 hover:text-red-400 font-bold transition-colors uppercase tracking-widest"
+              >
+                <Trash2 className="w-3 h-3" />
+              </button>
+            )}
+          </div>
+        )}
+
         <AnimatePresence>
           {replyTo === comment._id && (
             <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} className="mt-3">
@@ -210,7 +308,6 @@ const PostDetail = () => {
           )}
         </AnimatePresence>
 
-        {/* Nested Replies */}
         {comment.replies && comment.replies.length > 0 && (
           <div className="space-y-1">
             {comment.replies.map(reply => (
@@ -232,46 +329,52 @@ const PostDetail = () => {
         <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" /> Back
       </button>
 
+      {post.repostOf && (
+        <div className="mb-3 text-[12px] text-slate-500">
+          Reposted by{' '}
+          <button onClick={() => navigate(`/profile/${post.author._id}`)} className="text-blue-400 hover:text-blue-300 font-semibold">
+            {post.author.name}
+          </button>
+          {' · '}
+          <button onClick={() => navigate(`/post/${post.repostOf}`)} className="text-slate-400 hover:text-white transition-colors underline underline-offset-2">
+            view original
+          </button>
+        </div>
+      )}
+
       <PostCard post={post} onDelete={() => navigate('/')} />
 
       <div className="mt-6 glass-card rounded-3xl p-6 sm:p-10">
-        <div className="flex items-center space-x-3 mb-8">
-          <div className="w-10 h-10 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-400 shadow-inner">
-            <MessageSquare className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-white tracking-tight">Community Discussion</h3>
-            <p className="text-[11px] text-slate-500 font-bold uppercase tracking-widest">{post.commentsCount || 0} Comments</p>
-          </div>
+        <div className="flex items-center space-x-2 mb-6">
+          <MessageSquare className="w-4 h-4 text-slate-500" />
+          <h3 className="text-sm font-bold text-slate-400">{post.commentsCount || 0} {post.commentsCount === 1 ? 'Comment' : 'Comments'}</h3>
         </div>
 
-        {/* Main Comment Form */}
-        <form onSubmit={handleComment} className="mb-10 p-1 bg-white/2 rounded-2xl border border-white/4 focus-within:border-blue-500/20 transition-all">
-          <div className="flex items-end p-2 gap-3">
-            <img src={user?.profilePicture} className="w-10 h-10 rounded-xl object-cover ring-2 ring-white/6 mb-1" alt="" />
+        <form onSubmit={handleComment} className="mb-8">
+          <div className="flex items-start gap-3">
+            <img src={user?.profilePicture} className="w-9 h-9 rounded-xl object-cover shrink-0" alt="" />
             <div className="flex-1">
               <textarea 
-                className="w-full bg-transparent border-none py-2 px-1 focus:ring-0 outline-none resize-none text-slate-300 placeholder:text-slate-600 font-medium text-sm" 
-                placeholder="Join the discussion..." 
+                className="w-full bg-white/3 border border-white/6 rounded-xl py-2.5 px-3 text-sm text-white placeholder:text-slate-600 outline-none focus:border-blue-500/20 resize-none transition-colors" 
+                placeholder="Write a comment..." 
                 value={commentText} 
                 onChange={(e) => setCommentText(e.target.value)} 
                 rows="2"
-              ></textarea>
-              <div className="flex justify-end pt-1">
-                <motion.button 
-                  whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} 
+              />
+              <div className="flex justify-end mt-2">
+                <button 
                   type="submit" 
                   disabled={submitting || !commentText.trim()} 
-                  className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-1.5 px-5 rounded-xl flex items-center transition-all text-xs disabled:opacity-40"
+                  className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-1.5 px-4 rounded-lg flex items-center transition-all text-xs disabled:opacity-40"
                 >
-                  {submitting ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-2" /> : <><Send className="w-3.5 h-3.5 mr-2" /> Post</>}
-                </motion.button>
+                  {submitting ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <Send className="w-3.5 h-3.5 mr-1.5" />}
+                  Post
+                </button>
               </div>
             </div>
           </div>
         </form>
 
-        {/* Comments List */}
         <div className="space-y-6">
           {comments.length > 0 ? (
             <>
@@ -283,22 +386,66 @@ const PostDetail = () => {
                 <button 
                   onClick={() => fetchComments(page + 1, true)} 
                   disabled={loadingMore}
-                  className="w-full py-4 text-xs font-bold text-slate-500 hover:text-blue-400 transition-colors uppercase tracking-widest flex items-center justify-center gap-2"
+                  className="w-full py-3 text-xs font-medium text-slate-500 hover:text-blue-400 transition-colors flex items-center justify-center gap-2"
                 >
-                  {loadingMore ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Load More Comments'}
+                  {loadingMore ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Load More'}
                 </button>
               )}
             </>
           ) : (
-            <div className="text-center py-16 bg-white/1 rounded-3xl border border-dashed border-white/6">
-              <div className="w-16 h-16 bg-white/2 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/4">
-                 <MessageSquare className="w-6 h-6 text-slate-700" />
-              </div>
-              <p className="text-slate-600 font-bold uppercase tracking-widest text-[10px]">Be the first to share a thought</p>
+            <div className="text-center py-12">
+              <MessageSquare className="w-8 h-8 text-slate-700 mx-auto mb-3" />
+              <p className="text-slate-500 text-sm">No comments yet. Be the first to share your thoughts.</p>
             </div>
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <AnimatePresence>
+        {deleteTarget && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
+            onClick={() => setDeleteTarget(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-[#0d1428] border border-white/10 rounded-2xl p-6 max-w-sm w-full shadow-2xl"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center">
+                  <AlertTriangle className="w-5 h-5 text-red-400" />
+                </div>
+                <div>
+                  <h3 className="text-white font-bold text-sm">Delete Comment</h3>
+                  <p className="text-slate-500 text-xs">This action cannot be undone.</p>
+                </div>
+              </div>
+              <p className="text-slate-400 text-xs mb-6">Are you sure you want to delete this comment? All replies will also be removed.</p>
+              <div className="flex items-center gap-3 justify-end">
+                <button
+                  onClick={() => setDeleteTarget(null)}
+                  className="px-4 py-2 text-xs font-medium text-slate-400 hover:text-white rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="px-4 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-500 rounded-lg transition-colors"
+                >
+                  Delete
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };
