@@ -42,14 +42,30 @@ io.on('connection', (socket) => {
     }
   })();
 
-  socket.on('typing', ({ receiverId }) => {
-    if (receiverId) {
+  socket.on('join_conversation', ({ conversationId }) => {
+    if (conversationId) {
+      socket.join(conversationId);
+    }
+  });
+
+  socket.on('leave_conversation', ({ conversationId }) => {
+    if (conversationId) {
+      socket.leave(conversationId);
+    }
+  });
+
+  socket.on('typing', ({ receiverId, conversationId }) => {
+    if (conversationId) {
+      socket.to(conversationId).emit('typing_status', { senderId: userId, conversationId, isTyping: true });
+    } else if (receiverId) {
       io.to(receiverId).emit('typing_status', { senderId: userId, isTyping: true });
     }
   });
 
-  socket.on('stop_typing', ({ receiverId }) => {
-    if (receiverId) {
+  socket.on('stop_typing', ({ receiverId, conversationId }) => {
+    if (conversationId) {
+      socket.to(conversationId).emit('typing_status', { senderId: userId, conversationId, isTyping: false });
+    } else if (receiverId) {
       io.to(receiverId).emit('typing_status', { senderId: userId, isTyping: false });
     }
   });
