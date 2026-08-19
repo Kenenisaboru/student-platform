@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import API from '../api/axios';
 import PostCard from '../components/PostCard';
-import { Plus, Calendar, Zap, MessageCircle } from 'lucide-react';
+import { Plus, Calendar, Zap, MessageCircle, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { PostSkeleton } from '../components/Skeleton';
@@ -113,6 +113,27 @@ const Home = () => {
               <Zap className="w-4 h-4 mr-2 text-amber-400" /> Announcements
             </Link>
           </Button>
+        </div>
+      </div>
+
+      {/* About Card */}
+      <div className="mx-4 mb-6 p-5 rounded-2xl bg-linear-to-br from-blue-900/20 to-transparent border border-blue-500/10 hover:border-blue-500/25 transition-all duration-300">
+        <div className="flex items-start gap-4">
+          <div className="w-10 h-10 shrink-0 rounded-xl bg-blue-500/10 border border-blue-500/15 flex items-center justify-center">
+            <BookOpen className="w-5 h-5 text-blue-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-bold text-white mb-1">About Arsi Aseko</h3>
+            <p className="text-slate-500 text-xs leading-relaxed mb-3">
+              Learn about our university's mission, the student platform built by students, and the community stories that make Aseko special.
+            </p>
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1.5 text-[11px] font-bold text-blue-400 hover:text-blue-300 transition-colors"
+        >
+              Learn More →
+            </Link>
+          </div>
         </div>
       </div>
 
