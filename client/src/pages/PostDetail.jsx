@@ -123,7 +123,7 @@ const PostDetail = () => {
       
       fetchPost();
       toast.success('Comment deleted');
-    } catch (err) {
+    } catch {
       toast.error('Failed to delete comment');
     } finally {
       setDeleteTarget(null);
@@ -140,7 +140,7 @@ const PostDetail = () => {
     setEditText('');
   };
 
-  const saveEdit = async (commentId, parentId = null) => {
+  const saveEdit = async (commentId) => {
     if (!editText.trim()) return;
     try {
       const { data } = await API.put(`/comments/${commentId}`, { content: editText });
@@ -155,14 +155,14 @@ const PostDetail = () => {
       setEditingComment(null);
       setEditText('');
       toast.success('Comment updated');
-    } catch (err) {
+    } catch {
       toast.error('Failed to update comment');
     }
   };
 
-  const handleEditKeyDown = (e, commentId, parentId) => {
+  const handleEditKeyDown = (e, commentId) => {
     if (e.key === 'Escape') cancelEditing();
-    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) saveEdit(commentId, parentId);
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) saveEdit(commentId);
   };
 
   const handleLikeComment = async (commentId) => {
@@ -224,7 +224,7 @@ const PostDetail = () => {
                 ref={editRef}
                 value={editText}
                 onChange={(e) => setEditText(e.target.value)}
-                onKeyDown={(e) => handleEditKeyDown(e, comment._id, parentId)}
+                onKeyDown={(e) => handleEditKeyDown(e, comment._id)}
                 className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white placeholder:text-slate-600 outline-none focus:border-blue-500/30 resize-none"
                 rows={3}
               />
@@ -233,7 +233,7 @@ const PostDetail = () => {
                   Cancel
                 </button>
                 <button
-                  onClick={() => saveEdit(comment._id, parentId)}
+                  onClick={() => saveEdit(comment._id)}
                   disabled={!editText.trim()}
                   className="text-[11px] bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1 rounded-lg disabled:opacity-40 transition-colors"
                 >
