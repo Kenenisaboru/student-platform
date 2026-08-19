@@ -95,6 +95,7 @@ const Navbar = ({ onMenuToggle }) => {
               <Globe className="w-3 h-3" />
               <span>Arsi Aseko University</span>
             </div>
+            <Link to="/platform" className="text-blue-400 hover:text-blue-300 transition-colors">About</Link>
           </div>
           <div className="flex items-center space-x-6 text-slate-500">
              <div className="flex items-center space-x-1.5 group cursor-help">
