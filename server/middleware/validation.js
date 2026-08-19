@@ -72,6 +72,12 @@ const createCommentRules = [
   body('parentComment').optional({ nullable: true, checkFalsy: true }).isMongoId().withMessage('Invalid parent comment ID'),
 ];
 
+// Comment edit validations
+const updateCommentRules = [
+  body('content').trim().notEmpty().withMessage('Comment content is required')
+    .isLength({ min: 1, max: 2000 }).withMessage('Comment must be 1-2,000 characters'),
+];
+
 // Message validations
 const sendMessageRules = [
   body('content').trim().notEmpty().withMessage('Message cannot be empty')
@@ -164,6 +170,7 @@ module.exports = {
   createPostRules,
   updatePostRules,
   createCommentRules,
+  updateCommentRules,
   sendMessageRules,
   createGroupRules,
   updateConversationRules,
