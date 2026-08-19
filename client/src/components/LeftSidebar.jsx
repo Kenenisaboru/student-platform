@@ -17,8 +17,7 @@ import {
   CreditCard,
   ChevronRight,
   Calendar,
-  Image as ImageIcon,
-  Info
+  Image as ImageIcon
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -38,7 +37,6 @@ const LeftSidebar = () => {
     { path: '/notifications', icon: Bell, label: 'Notifications', badge: true },
     { path: '/messages', icon: MessageSquare, label: 'Messages' },
     { path: '/library', icon: BookOpen, label: 'Library' },
-    { path: '/platform', icon: Info, label: 'About Platform' },
     { path: '/virtual-id', icon: CreditCard, label: 'ID Card' },
     { path: '/settings', icon: Settings, label: 'Settings' },
   ];
