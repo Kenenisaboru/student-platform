@@ -47,6 +47,23 @@ const postSchema = new mongoose.Schema({
     options: [pollOptionSchema],
     endsAt: Date,
   },
+  reposts: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  originalPost: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Post',
+    default: null
+  },
+  isRepost: {
+    type: Boolean,
+    default: false
+  },
+  quoteContent: {
+    type: String,
+    trim: true
+  },
   // Report tracking
   reportCount: {
     type: Number,
