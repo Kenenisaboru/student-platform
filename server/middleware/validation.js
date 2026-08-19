@@ -12,9 +12,9 @@ const passwordRules = (field = 'password') =>
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ 
+    return res.status(400).json({
       message: errors.array()[0].msg,
-      errors: errors.array() 
+      errors: errors.array()
     });
   }
   next();
@@ -78,6 +78,20 @@ const sendMessageRules = [
     .isLength({ max: 5000 }).withMessage('Message must be under 5,000 characters'),
 ];
 
+// Group conversation validations
+const createGroupRules = [
+  body('name').trim().notEmpty().withMessage('Group name is required')
+    .isLength({ min: 3, max: 50 }).withMessage('Group name must be 3-50 characters'),
+  body('participantIds').isArray({ min: 2 }).withMessage('At least 2 participants are required'),
+  body('participantIds.*').isMongoId().withMessage('Invalid participant ID'),
+];
+
+// Update conversation validations
+const updateConversationRules = [
+  body('name').optional().trim()
+    .isLength({ min: 3, max: 50 }).withMessage('Group name must be 3-50 characters'),
+];
+
 // Profile validations
 const updateProfileRules = [
   body('name').optional().trim()
@@ -117,6 +131,12 @@ const createReportRules = [
   body('targetId').isMongoId().withMessage('Invalid target ID'),
 ];
 
+// Repost validations
+const repostRules = [
+  body('quoteContent').optional().trim()
+    .isLength({ max: 500 }).withMessage('Quote content must be under 500 characters'),
+];
+
 // Poll validations
 const createPollRules = [
   body('poll.question').optional().trim()
@@ -145,11 +165,14 @@ module.exports = {
   updatePostRules,
   createCommentRules,
   sendMessageRules,
+  createGroupRules,
+  updateConversationRules,
   updateProfileRules,
   forgotPasswordRules,
   resetPasswordRules,
   createReportRules,
   createPollRules,
+  repostRules,
   searchRules,
   paginationRules,
 };
