@@ -248,3 +248,102 @@ exports.getCommunityStats = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.repostPost = async (req, res) => {
+  try {
+    const originalPost = await Post.findById(req.params.id);
+    if (!originalPost) return res.status(404).json({ message: 'Post not found' });
+
+    const userId = req.user._id;
+    const isReposted = originalPost.reposts.includes(userId);
+
+    if (isReposted) {
+      // Remove repost
+      originalPost.reposts = originalPost.reposts.filter(
+        id => id.toString() !== userId.toString()
+      );
+      await originalPost.save();
+
+      // Delete the repost post
+      await Post.findOneAndDelete({ author: userId, originalPost: originalPost._id, isRepost: true });
+
+      return res.json({ message: 'Repost removed', post: originalPost });
+    }
+
+    // Create repost entry on original
+    originalPost.reposts.push(userId);
+    await originalPost.save();
+
+    // Create a new repost post
+    const repostData = {
+      title: originalPost.title,
+      content: originalPost.content,
+      author: userId,
+      tags: originalPost.tags,
+      images: originalPost.images,
+      isRepost: true,
+      originalPost: originalPost._id,
+      quoteContent: req.body.quoteContent || undefined
+    };
+
+    const repostPost = await Post.create(repostData);
+    const populated = await repostPost.populate('author', 'name profilePicture university');
+
+    // Notification
+    try {
+      if (originalPost.author.toString() !== userId.toString()) {
+        await Notification.create({
+          recipient: originalPost.author,
+          sender: userId,
+          type: 'repost',
+          post: originalPost._id
+        });
+
+        const io = req.app.get('socketio');
+        if (io) {
+          io.to(originalPost.author.toString()).emit('new_notification', {
+            message: `${req.user.name} reposted your post`,
+            type: 'repost'
+          });
+        }
+      }
+    } catch (notifError) {
+      console.error('Repost notification error:', notifError);
+    }
+
+    res.status(201).json(populated);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getRepostedPosts = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const total = await Post.countDocuments({
+      author: req.params.userId,
+      isRepost: true
+    });
+
+    const posts = await Post.find({ author: req.params.userId, isRepost: true })
+      .populate('author', 'name profilePicture university')
+      .populate('originalPost')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    res.json({
+      posts,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalPosts: total,
+      hasMore: page * limit < total
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
