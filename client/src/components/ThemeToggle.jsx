@@ -10,7 +10,8 @@ const ThemeToggle = () => {
             onClick={toggleTheme}
             className="p-2.5 rounded-xl transition-all duration-300 relative group text-slate-500 hover:text-blue-400 hover:bg-white/[0.04]"
             title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-            aria-label="Toggle Theme"
+            aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+            aria-pressed={isDarkMode}
         >
             <motion.div
                 initial={false}
