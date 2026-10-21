@@ -39,7 +39,8 @@ const EmptyState = ({
             {actionText}
           </Link>
         ) : onAction ? (
-          <button 
+          <button
+            type="button"
             onClick={onAction}
             className="inline-flex items-center justify-center px-6 py-3 bg-white/6 hover:bg-white/10 text-white text-sm font-bold rounded-xl transition-all border border-white/8 hover:shadow-lg hover:shadow-black/20 active:scale-95"
           >
