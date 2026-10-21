@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import {
   Home,
@@ -22,6 +23,15 @@ import ProBadge from './ProBadge';
 const MobileDrawer = ({ isOpen, onClose }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!user) return null;
 
@@ -62,6 +72,9 @@ const MobileDrawer = ({ isOpen, onClose }) => {
             transition={{ type: 'spring', stiffness: 300, damping: 32 }}
             className="fixed left-0 top-0 bottom-0 w-70 sm:w-[320px] max-w-[85vw] glass z-61 flex flex-col overflow-y-auto"
             id="mobile-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Main navigation"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-5 border-b border-white/5">
@@ -78,6 +91,7 @@ const MobileDrawer = ({ isOpen, onClose }) => {
               </div>
               <button
                 onClick={onClose}
+                aria-label="Close navigation menu"
                 className="p-2 hover:bg-white/5 rounded-xl text-slate-500 hover:text-white transition-all"
               >
                 <X className="w-5 h-5" />
