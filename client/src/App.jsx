@@ -68,8 +68,12 @@ const AdminRoute = ({ children }) => {
 
 // Pages that should NOT show the 3-column layout
 const isFullWidthPath = (path) => {
-  const prefixes = ['/', '/login', '/register', '/forgot-password', '/reset-password', '/verify-email', '/verify-email-pending'];
-  return prefixes.some(prefix => path.startsWith(prefix));
+  // The landing page and authentication flows use the full-width layout.
+  // Keep "/" as an exact match so it does not swallow every application route.
+  if (path === '/') return true;
+
+  const prefixes = ['/login', '/register', '/forgot-password', '/reset-password', '/verify-email', '/verify-email-pending'];
+  return prefixes.some(prefix => path === prefix || path.startsWith(`${prefix}/`));
 };
 
 function PageTransition({ children }) {
