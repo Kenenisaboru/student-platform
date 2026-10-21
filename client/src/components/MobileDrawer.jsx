@@ -14,7 +14,8 @@ import {
   BookOpen,
   Settings,
   Sparkles,
-  MessageSquare
+  MessageSquare,
+  Compass
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProBadge from './ProBadge';
@@ -39,6 +40,7 @@ const MobileDrawer = ({ isOpen, onClose }) => {
 
   const navItems = [
     { path: '/', icon: Home, label: 'Home Feed' },
+    { path: '/campus', icon: Compass, label: 'Campus Hub' },
     { path: '/search?q=', icon: Search, label: 'Explore', matchPath: '/search' },
     { path: '/notifications', icon: Bell, label: 'Notifications' },
     { path: '/create-post', icon: PlusSquare, label: 'Create Post' },
