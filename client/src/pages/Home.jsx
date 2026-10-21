@@ -17,13 +17,16 @@ const Home = () => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const observerRef = useRef(null);
   const loadMoreRef = useRef(null);
 
   const fetchPosts = async (pageNum = 1, append = false) => {
     try {
-      if (pageNum === 1) setLoading(true);
-      else setLoadingMore(true);
+      if (pageNum === 1) {
+        setLoading(true);
+        setLoadError(false);
+      } else setLoadingMore(true);
 
       const { data } = await API.get(`/posts?page=${pageNum}&limit=10`);
 
@@ -36,8 +39,11 @@ const Home = () => {
         setPosts(newPosts);
       }
       setHasMore(more);
+      setLoadError(false);
     } catch (err) {
       console.error(err);
+      setLoadError(true);
+      toast.error('Unable to load the feed. Please try again.');
     } finally {
       setLoading(false);
       setLoadingMore(false);
@@ -148,6 +154,14 @@ const Home = () => {
         <div className="space-y-4 px-4">
           {[1, 2, 3].map(i => <PostSkeleton key={i} />)}
         </div>
+      ) : loadError && posts.length === 0 ? (
+        <EmptyState
+          icon={MessageCircle}
+          title="Could not load your feed"
+          description="Your posts could not be loaded right now. Check your connection and try again."
+          actionText="Try again"
+          onAction={() => fetchPosts(1)}
+        />
       ) : posts.length > 0 ? (
         <>
           <div className="space-y-4 px-4">
