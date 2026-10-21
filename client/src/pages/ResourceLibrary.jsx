@@ -28,10 +28,12 @@ const ResourceLibrary = () => {
   const fetchResources = async () => {
     try {
       if (!search && !category) setLoading(true);
-      const { data } = await API.get(`/resources?category=${category}&search=${search}`);
+      const params = new URLSearchParams({ category, search: search.trim() });
+      const { data } = await API.get(`/resources?${params.toString()}`);
       setResources(data);
     } catch (err) {
       console.error(err);
+      toast.error('Unable to load resources. Please try again.');
     } finally {
       setLoading(false);
     }
