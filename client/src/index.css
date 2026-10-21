@@ -87,8 +87,8 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
   overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -367,4 +367,117 @@ body {
   font-family: monospace;
   font-size: 0.85em;
   color: #cbd5e1;
+}
+
+
+/* ==========================================================================
+   Enterprise UI foundation
+   These shared rules refine the existing design without changing page logic.
+   ========================================================================== */
+:root {
+  --surface-elevated: #101827;
+  --surface-muted: #111c2d;
+  --border-subtle: rgba(148, 163, 184, 0.14);
+  --border-strong: rgba(148, 163, 184, 0.24);
+  --text-muted: #94a3b8;
+  --focus-ring: rgba(96, 165, 250, 0.72);
+}
+
+html {
+  min-height: 100%;
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button,
+a,
+input,
+textarea,
+select,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(a, button, input, textarea, select, [role="button"], [tabindex]):focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+:where(input, textarea, select) {
+  accent-color: #3b82f6;
+}
+
+::placeholder {
+  opacity: 1;
+}
+
+.glass,
+.glass-card {
+  border-color: var(--border-subtle);
+  box-shadow: 0 12px 32px rgba(2, 6, 23, 0.16);
+}
+
+.glass-card {
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.glass-card-hover:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+  box-shadow: 0 16px 36px rgba(2, 6, 23, 0.24);
+}
+
+#left-sidebar,
+#right-sidebar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.24) transparent;
+}
+
+#mobile-bottom-nav {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+#mobile-drawer {
+  padding-bottom: env(safe-area-inset-bottom);
+  overscroll-behavior: contain;
+}
+
+img {
+  max-width: 100%;
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: 15px;
+  }
+
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -77,7 +77,7 @@ const Navbar = ({ onMenuToggle }) => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (searchQuery.trim()) navigate(`/search?q=${searchQuery}`);
+    if (searchQuery.trim()) navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
   };
 
   const isActive = (path) => location.pathname === path;
@@ -98,7 +98,7 @@ const Navbar = ({ onMenuToggle }) => {
           </div>
           <div className="flex items-center space-x-6 text-slate-500">
              <div className="flex items-center space-x-1.5 group cursor-help">
-                <div className={`w-1 h-1 rounded-full ${serverStatus === 'online' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'bg-rose-500'}`}></div>
+                <div className={`w-1.5 h-1.5 rounded-full ${serverStatus === 'online' ? 'bg-emerald-500' : serverStatus === 'offline' ? 'bg-rose-500' : 'bg-slate-500 animate-pulse'}`}></div>
                 <span className="group-hover:text-slate-300 transition-colors">Server: {serverStatus}</span>
              </div>
              <span className="opacity-10 text-white">|</span>
