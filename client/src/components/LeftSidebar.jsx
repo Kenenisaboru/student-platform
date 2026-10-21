@@ -17,7 +17,8 @@ import {
   CreditCard,
   ChevronRight,
   Calendar,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Compass
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -31,6 +32,7 @@ const LeftSidebar = () => {
 
   const mainNav = [
     { path: '/', icon: Home, label: 'Home' },
+    { path: '/campus', icon: Compass, label: 'Campus Hub' },
     { path: '/search?q=', icon: Search, label: 'Explore', matchPath: '/search' },
     { path: '/events', icon: Calendar, label: 'Events' },
     { path: '/gallery', icon: ImageIcon, label: 'Gallery' },

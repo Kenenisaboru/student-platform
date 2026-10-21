@@ -38,6 +38,7 @@ const CampusGallery = lazy(() => import('./pages/CampusGallery'));
 const Landing = lazy(() => import('./pages/Landing'));
 const AcademicCalendar = lazy(() => import('./pages/AcademicCalendar'));
 const Announcements = lazy(() => import('./pages/Announcements'));
+const CampusHub = lazy(() => import('./pages/CampusHub'));
 
 import { Toaster } from 'sonner';
 import { HelmetProvider } from 'react-helmet-async';
@@ -127,6 +128,7 @@ function AppContent() {
                     <Route path="/gallery" element={<ProtectedRoute><PageTransition><CampusGallery /></PageTransition></ProtectedRoute>} />
                     <Route path="/announcements" element={<ProtectedRoute><PageTransition><Announcements /></PageTransition></ProtectedRoute>} />
                     <Route path="/academic-calendar" element={<ProtectedRoute><PageTransition><AcademicCalendar /></PageTransition></ProtectedRoute>} />
+                    <Route path="/campus" element={<ProtectedRoute><PageTransition><CampusHub /></PageTransition></ProtectedRoute>} />
                     <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
                   </Routes>
                 </AnimatePresence>
