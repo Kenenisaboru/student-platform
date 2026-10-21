@@ -128,6 +128,7 @@ function AppContent() {
                     <Route path="/gallery" element={<ProtectedRoute><PageTransition><CampusGallery /></PageTransition></ProtectedRoute>} />
                     <Route path="/announcements" element={<ProtectedRoute><PageTransition><Announcements /></PageTransition></ProtectedRoute>} />
                     <Route path="/academic-calendar" element={<ProtectedRoute><PageTransition><AcademicCalendar /></PageTransition></ProtectedRoute>} />
+                    <Route path="/campus" element={<ProtectedRoute><PageTransition><CampusHub /></PageTransition></ProtectedRoute>} />
                     <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
                   </Routes>
                 </AnimatePresence>
