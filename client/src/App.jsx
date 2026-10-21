@@ -38,6 +38,7 @@ const CampusGallery = lazy(() => import('./pages/CampusGallery'));
 const Landing = lazy(() => import('./pages/Landing'));
 const AcademicCalendar = lazy(() => import('./pages/AcademicCalendar'));
 const Announcements = lazy(() => import('./pages/Announcements'));
+const CampusHub = lazy(() => import('./pages/CampusHub'));
 
 import { Toaster } from 'sonner';
 import { HelmetProvider } from 'react-helmet-async';
